@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+.login-wrapper {
+	position: relative;
+	padding: 20px;
+	text-align: center;
+}
+.login-wrapper > div {
+ margin-bottom: 20px;
+} 
+
+.login-wrapper > .logo ,
+.login-wrapper > .form-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.login-wrapper > .form-wrapper a {
+	position: absolute;
+	left: 5px;
+}
+
+input[name=id] , 
+input[name=password] {
+	width: 500px;
+}
+
+
+.login-wrapper > .btns {
+	margin-top: 70px;	
+}
+button { height: 60px; padding: 5px; width: 500px; margin: 5px 0; border: none; }
+#kakaoLogin {
+	background-color: yellow;
+}

@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+/* ★ 중고 거래 글 쓰기 */
+.write {
+	padding: 20px;
+	text-align: center;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+.write:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}

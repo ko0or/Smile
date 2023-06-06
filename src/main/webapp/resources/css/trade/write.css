@@ -1,0 +1,35 @@
+@charset "UTF-8";
+.input-tel {
+	display: flex;		
+	justify-content: space-between;
+}
+.input-tel > .left { flex: 10; }
+.input-tel > .left > input { width: 99% }
+.input-tel > .right { flex: 2;}
+.input-tel > .right > button {
+	width: 100%;
+	height: 59px;
+}
+
+#map {
+	width: 100%; 
+	height: 500px; 
+	box-shadow: 5px 5px 15px rgba(0,0,0, 0.15);
+	position: relative;
+}
+
+#map > #address {
+    z-index: 2;
+    
+    text-align: center;
+    position: absolute;
+    left: 38%;
+    bottom: 7%;
+    
+    color: white;
+    background: black;
+    
+    width: 30%;
+    padding: 10px;
+    
+}

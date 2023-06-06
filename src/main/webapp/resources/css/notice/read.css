@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+
+/* ★ 공지사항  */
+.content-wrapper {
+	padding: 30px;
+	margin: 20px 0;
+	position: relative;
+	
+	border: 1px solid #eee;
+	border-radius: 10px;
+}
+.content-wrapper > .content-header {
+	position: relative;
+	display: flex;
+	padding: 10px;
+	
+	border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.content-wrapper > .content-header:not(:first-child)  {
+	margin-left: 20px;
+}
+.content-wrapper > .content-header > p:last-child  {
+	position: absolute;
+	right: 5px; 
+}
+
+
+.content-wrapper > .content-body {
+	padding: 10px;
+	white-space: pre;
+	min-height: 600px;
+	
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+ 
+ 
+ 
+.content-wrapper > .content-footer {	
+	padding: 20px;		
+}
+
+.comment-footer > button {
+	border: none;
+	background: white;	
+	color: grey;
+}

@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+/* ★ 게시글 쓰기 */
+.write {
+	padding: 20px;
+	text-align: center;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+.write:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+/* ★ 게시글 컨텐츠 */
+.content-wrapper {
+	padding: 30px;
+	margin: 20px 0;
+	position: relative;
+	
+	border: 1px solid #eee;
+	border-radius: 10px;
+}
+.content-wrapper > .content-header {
+	position: relative;
+	display: flex;
+	padding: 10px;
+	
+	border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.content-wrapper > .content-header:not(:first-child)  {
+	margin-left: 20px;
+}
+.content-wrapper > .content-header > p:last-child  {
+	position: absolute;
+	right: 5px; 
+}
+
+
+.content-wrapper > .content-body {
+	padding: 10px;
+	white-space: pre;
+	min-height: 600px;
+	
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+ 
+.content-wrapper > .content-footer {
+	padding20px;
+	display: flex;
+	justify-content: space-between;
+	
+}
+.content-wrapper > .content-footer > button {
+	height: 60px;
+	background: none;
+	border: none;
+	color: grey;
+}
+.content-wrapper > .content-footer > button:nth-child(1) {
+	flex: 1;
+	margin-right: 20px; 
+}
+.content-wrapper > .content-footer > button:nth-child(2) {
+	flex: 3;
+}
