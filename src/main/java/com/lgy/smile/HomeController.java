@@ -12,9 +12,13 @@ public class HomeController {
 	    .. 배포시엔 /smile 패키지 경로가 포함되면 페이지를 못찾는 에러(HTTP 404) 발생하니,  /smile 내용을 뺴줘야함
 	  
 	[2] views/trade/write.jsp
+	[3] views/trade/list.jsp
       .. <script> 부분에 REST API KEY 를 변경해줘야함
       .. 개발 테스트 단계에서 사용하는 IP, PORT에 맞는 REST API 키 ->  배포시 사용하는 IP, PORT에 맞는 REST API 키
 
+    [4] webapp/resources/js/api/kakaoLogin.js
+      .. aws 배포용 REST API KEY 로 변경해줘야함 ★
+      
       
 << ============================================================================================================ */
 	

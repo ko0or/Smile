@@ -50,38 +50,39 @@
   			<label for="floatingInput">휴대폰 번호 입력</label>
   		</div>  		
   		<div class="right">
-  			<button class="btn btn-primary" type="button">
+  			<button id="authentication" class="btn btn-primary" type="button">
   			확인</button>
   		</div>
 	</div>
 	<br><br><br><br><br><br>
 	
-	
-	<!-- ★ 대면 결제여부 선택 -->
-	<h1>(선택사항) 구매자와 만나실 장소를 선택해주세요</h1>
-	<p>원치 않으실경우 비대면결제로 진행하실 수 있습니다</p>
-	<sub><i>* 비대면 결제시 싱글페이 포인트가 충전되며, 충전된 포인트는 현금으로 입금 요청하실 수 있습니다.</i></sub>
-	<div class="form-check form-switch mt-5">
-  		<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-  		<label class="form-check-label" for="flexSwitchCheckDefault">비대면 결제여부</label>
-	</div>
-	
-	
-	<!--  대면결제일경우, 주소 선택  -->
-	<div class="contected">
-			<button onclick="execDaumPostcode()" class="btn btn-primary mt-3" type="button">
-  			주소 선택하기</button>
-	
-			<div id="map" class="mt-2" >
-					<input type="text" id="address" name="address" placeholder="선택된 주소가 없습니다." required readonly>
+	<div id="then" style="display: none;">
+			<!-- ★ 대면 결제여부 선택 -->
+			<h1>(선택사항) 구매자와 만나실 장소를 선택해주세요</h1>
+			<p>원치 않으실경우 비대면결제로 진행하실 수 있습니다</p>
+			<sub><i>* 비대면 결제시 싱글페이 포인트가 충전되며, 충전된 포인트는 현금으로 입금 요청하실 수 있습니다.</i></sub>
+			<div class="form-check form-switch mt-5">
+		  		<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+		  		<label class="form-check-label" for="flexSwitchCheckDefault">비대면 결제여부</label>
 			</div>
-	</div>
-	
-	<div style="width: 100%; height: 500px; display: flex; justify-content: center; align-items: center;" >
-	
-		<button id="writeBtn" type="button" class="btn btn-primary" style="padding: 20px;"><i class="fa-solid fa-check"></i>
-		물품 등록하기</button>
-	
+			
+			
+			<!--  대면결제일경우, 주소 선택  -->
+			<div class="contected">
+					<button onclick="execDaumPostcode()" class="btn btn-primary mt-3" type="button">
+		  			주소 선택하기</button>
+			
+					<div id="map" class="mt-2" >
+							<input type="text" id="address" name="address" placeholder="선택된 주소가 없습니다." required readonly>
+					</div>
+			</div>
+			
+			<div style="width: 100%; height: 500px; display: flex; justify-content: center; align-items: center;" >
+			
+				<button id="writeBtn" type="button" class="btn btn-primary" style="padding: 20px;"><i class="fa-solid fa-check"></i>
+				물품 등록하기</button>
+			
+			</div>
 	</div>
 </form>
 
@@ -92,10 +93,7 @@
 <script>
 $(document).ready(function() {
 	
-	// 카카오맵 API 불러오기
-	getMap("부산광역시 연제구 중앙대로 1001");
-	
-	// 비대면 결제여부 스위칭 (분기처리: 주소선택하기 화면 슬라이딩)	
+	// 비대면 결제여부 스위칭 (분기처리: 주소선택하기 화면 슬라이딩)	  ========================================================== >>
 	$("#flexSwitchCheckDefault").change(function() {
 		  if ($(this).is(":checked")) {
 		    $(".contected").slideUp(500);
@@ -105,17 +103,44 @@ $(document).ready(function() {
 	});
 	
 	
-	// ★ 물품 등록하기 버튼 눌렀을때 ( 가장 하단에 있는 작성 버튼 )
+	
+	// ★ 휴대폰 인증하기 버튼 눌렀을때 ( 중간에 있는 버튼 ) ========================================================== >>
+	$("#authentication").click(function() {
+		Swal.fire({
+			  title : '인증된 회원',
+			  icon : 'success',
+			  html : `본인인증에 성공했습니다 !`,
+			  confirmButtonText : '확인',
+			})
+	  
+		$("#then").slideDown(500);
+  		getMap("부산광역시 연제구 중앙대로 1001");
+	}) // ~ 버튼 이벤트 끝 !
+	
+	
+	
+	// ★ 물품 등록하기 버튼 눌렀을때 ( 가장 하단에 있는 작성 버튼 )  ========================================================== >>
 	$("#writeBtn").click(function() {
 		
 		// 만약 비대면 결제여부가 off 이면서,  어디서 만날지 안정했다면 ?
 		if ($("#flexSwitchCheckDefault").prop("checked") == false && $("#address").val().length == 0) {
-			alert("대면 거래를 위해 만나실 주소가 선택되지않았습니다.");
+			
+			Swal.fire({
+				  title : '등록 실패',
+				  icon : 'warning',
+				  html : `거래하실 위치를 선택해주시거나<br>
+				  혹은 비대면 결제로 변경해주세요.`,
+				  confirmButtonText : '확인',
+				})
+			
 		}
 		
 	}) // ~ 버튼 이벤트 끝 !
 	
 
+	
+
+	
 })// ~~ end
 </script>
 </html>

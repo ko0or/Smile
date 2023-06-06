@@ -12,3 +12,96 @@
 .write:hover {
 	background-color: rgba(0, 0, 0, 0.05);
 }
+
+
+/* ★ 게시글 컨텐츠 */
+.content-wrapper {
+	padding: 20px;
+	display: flex;
+	justify-content: space-around;
+	transition: all 0.3s;	
+	position: relative;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-radius: 10px;
+}
+.content-wrapper > .content-left {  
+	flex: 5;
+	border-radius: 20px;	
+	height: 350px;
+	overflow: hidden;
+	
+	justify-content: center;
+	align-items: center;
+
+	background-position: center;
+}
+.content-wrapper::before {
+  cursor: pointer;
+  content: "더보기"; /* 가상 요소에 표시될 텍스트 추가 */
+  display: none; /* 초기에는 가상 요소를 숨김 */
+  position: absolute; /* 가상 요소의 위치를 조정하기 위해 절대 위치로 설정 */
+  top: 50%; /* 가상 요소를 수직 중앙으로 위치시킴 */
+  left: 50%; /* 가상 요소를 수평 중앙으로 위치시킴 */
+  transform: translate(-50%, -50%); /* 가상 요소를 정중앙으로 정렬 */
+  background: rgba(0, 0, 0, 0.15);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  
+  width: 100%;
+  height: 100%;
+}
+
+.content-wrapper:hover::before {
+  display: flex; /* 가상 요소를 활성화할 때 보이도록 변경 */
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper > .content-right { 
+	border-left: 1px solid #eee;
+	margin-left: 20px;
+	padding-left: 20px;
+	flex: 7;	
+}
+
+.content-wrapper > .content-right > .title > h1 > p {
+	display: inline-block;
+}
+.content-wrapper > .content-right > .price {
+}
+.content-wrapper > .content-right > .date {
+	color: grey;
+}
+
+
+/* ★ 모달창 */
+.swal2-container .trade-info-wrapper {
+	min-height: 70vh; 
+	position: relative; 
+	padding:10px; 
+	overflow-x: hidden;
+	text-align:left;
+}
+.swal2-container .trade-info-wrapper .trade-header {
+}
+.swal2-container .trade-info-wrapper .trade-info {
+	margin-bottom: 40px; 
+	text-align:left;
+	
+	white-space: pre;
+	min-height: 500px;
+}
+.swal2-container .contact-btn {
+	width: 100%; 
+	border: 1px solid #eee; 
+	border-radius: 10px; 
+	padding: 20px; 
+	text-align: center;	
+	cursor: pointer;
+}
+
+.swal2-container .contact-btn:hover {
+	background-color: rgba(0, 0, 0, 0.15);
+}

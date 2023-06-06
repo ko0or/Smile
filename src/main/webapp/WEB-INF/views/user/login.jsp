@@ -52,9 +52,15 @@
 </section>
 <%@ include file="../common/footer.jsp" %>
 </body>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="../resources/js/api/kakaoLogin.js"></script>
 <script>
 $(document).ready(function() {
     
+	// ★ 카카오 간편 로그인 버튼눌렀을경우 ============================================================= >>
+	$("#kakaoLogin").click(function() {
+		kakaoLogin();
+	})
 
 })// ~~ end
 </script>
