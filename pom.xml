@@ -27,6 +27,13 @@
 			<version>8.0.28</version>
 		</dependency>
 
+		<!-- 비밀번호 암호화  -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>5.7.3</version>
+		</dependency>
+	
 		<!-- 롬복 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -42,7 +49,7 @@
 			<version>2.12.0</version>
 		</dependency>
 
-		<!-- 파일 업로드 쉽게 해주는 디펜던시 -->
+		<!-- 파일 업로드 쉽게 해주는 디펜던시  -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
