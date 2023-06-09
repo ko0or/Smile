@@ -29,19 +29,13 @@ public class HomeController {
 	// 기본 루트 사이트에 대한 정의 ★
 	
 	@GetMapping("/")
-	public String root() {
-		return "redirect:main/home";		
-	}
+	public String root() { return "redirect:main/home"; }
 	
 	@GetMapping("/main/home")
-	public String home() {
-		return "default/home";		
-	}
+	public String home() { return "default/home"; 	}
 	
 	@GetMapping("/main")
-	public String rootMain() {
-		return "redirect:main/list";
-	}
+	public String rootMain() { return "redirect:main/list"; }
 	
 	
 }
