@@ -32,8 +32,17 @@
   		text-decoration: none;  	
   		list-style: none; 		
   }
-a { color: black; text-decoration: none;}
-section { min-height: 100vh; width: 960px; margin: 100px auto; }
+a { 
+	color: black; 
+	text-decoration: none;
+}
+section { 
+	padding: 10px;
+	width: 100%;  
+	max-width: 960px; 
+	min-height: 100vh; 
+	margin: 100px auto; 
+}
 
 
 /*
