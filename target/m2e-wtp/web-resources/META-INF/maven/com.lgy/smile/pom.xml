@@ -18,92 +18,6 @@
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
 	<dependencies>
-	
-
-		<!-- 데이터베이스 MySQL -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.28</version>
-		</dependency>
-
-		<!-- 비밀번호 암호화  -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>5.7.3</version>
-		</dependency>
-	
-		<!-- 롬복 -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.28</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- 파일 업로드, 다운로드 기본 -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.12.0</version>
-		</dependency>
-
-		<!-- 파일 업로드 쉽게 해주는 디펜던시  -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.4</version>
-		</dependency>
-		
-		<!-- 썸네일 -->
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-			<version>0.4.8</version>
-		</dependency>
-
-		<!--  이메일 발송용 디펜던시  -->
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>1.6.2</version>
-		</dependency>
-
-		<!-- 휴대폰 문자 발송용 디펜던시 -->
-		<dependency>
-			<groupId>net.nurigo</groupId>
-			<artifactId>sdk</artifactId>
-			<version>4.3.0</version>
-		</dependency>
-		
-		<!-- JSON -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
-		</dependency>
-
-		<!-- AOP -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.4</version>
-		</dependency>
-
-		<!-- CGLIB -->
-		<dependency>
-			<groupId>com.kenai.nbpwr</groupId>
-			<artifactId>net-sf-cglib</artifactId>
-			<version>2.1.3-201003011305</version>
-		</dependency>
-
-
-
-
-
-
-
 
 		<!-- Spring -->
 		<dependency>
@@ -207,6 +121,107 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
+		
+		
+		
+		
+		
+		<!-- JDBC 템플릿 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.1.4.RELEASE</version>
+		</dependency>
+			
+		<!-- 마이바티스 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.2.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+	
+
+
+		<!-- 비밀번호 암호화  -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>5.7.3</version>
+		</dependency>
+	
+		<!-- 롬복 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.28</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- 파일 업로드, 다운로드 기본 -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.12.0</version>
+		</dependency>
+
+		<!-- 파일 업로드 쉽게 해주는 디펜던시  -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- 썸네일 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+
+		<!--  이메일 발송용 디펜던시  -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<!-- 휴대폰 문자 발송용 디펜던시 -->
+		<dependency>
+			<groupId>net.nurigo</groupId>
+			<artifactId>sdk</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+		
+		<!-- JSON -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+
+		<!-- CGLIB -->
+		<dependency>
+			<groupId>com.kenai.nbpwr</groupId>
+			<artifactId>net-sf-cglib</artifactId>
+			<version>2.1.3-201003011305</version>
+		</dependency>
+		
+		
+		
+		
+		
 	</dependencies>
 	<build>
 		<plugins>

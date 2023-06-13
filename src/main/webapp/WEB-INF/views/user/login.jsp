@@ -21,7 +21,7 @@
 	
 	<!-- 아디, 비밀번호 입력 폼 화면 -->
 	<div class="form-wrapper">
-		<form action="#" method="GET">
+		<form id="loginForm" action="login" method="POST">
 		
 			<div class="form-floating mb-3">
 				<input name="id" type="email" class="form-control" id="floatingInput" placeholder="name@example.com"> 
@@ -61,6 +61,19 @@ $(document).ready(function() {
 	$("#kakaoLogin").click(function() {
 		kakaoLogin();
 	})
+	
+	// 패스워드 입력란에서 엔터(키코드 13) 누르면 로그인 버튼 클릭하게 만들기
+	$("input[name='password']").keydown(function (e) {
+		if ( e.keyCode == 13 ) {
+			$("#loginCheck").click();
+		} 
+	})
+	
+	// 로그인 버튼 눌렀을때 처리
+	$("#loginCheck").click(function() {
+		$("#loginForm").submit();
+	})
+	
 
 })// ~~ end
 </script>

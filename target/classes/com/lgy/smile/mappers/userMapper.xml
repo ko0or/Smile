@@ -4,8 +4,7 @@
 
 <!-- <mapper namespace="인터페이스있는경로.인터페이스파일명"> -->
 <mapper namespace="com.lgy.smile.user.mapperInterface">
-
-  	<select id="login" resultType="com.lgy.smile.user.userDto">
+  	<select id="login" resultType="com.lgy.smile.user.UserDto">
 	    SELECT * FROM user WHERE ID = #{param1} AND PW = #{param2}
   	</select>
 

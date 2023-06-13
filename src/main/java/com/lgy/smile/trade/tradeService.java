@@ -4,7 +4,7 @@ import com.lgy.smile.comment.CommentService;
 import com.lgy.smile.common.BoardCRUD;
 import com.lgy.smile.common.DevUtils;
 
-public class tradeService implements BoardCRUD {
+public class TradeService implements BoardCRUD {
 	
 	/* ☆ 댓글 생성,변경,삭제 서비스 ☆ */ 
 	private CommentService commentService;
