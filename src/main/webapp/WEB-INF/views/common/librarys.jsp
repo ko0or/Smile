@@ -44,6 +44,17 @@ section {
 	margin: 100px auto; 
 }
 
+.profileImageIcon {
+	
+    width: 35px;
+    height: 35px;
+    background-size: contain;
+
+    border: 2px solid white;
+    border-radius: 25px;
+	margin-right: 15px;
+	
+}
 
 /*
 body{ -ms-overflow-style: none; } 

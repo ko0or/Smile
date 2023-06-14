@@ -13,21 +13,21 @@
 <!-- 글 쓰기 버튼 -->
 <div class="write" onclick="location.href='write'">+</div>
 
-<!-- 랜더링 될 부분 -->
+<!-- 랜더링 될 부분 (★시작) -->
 <div class="main-content">
 
 	<!--  AJAX 응답 값으로 해당 부분을 랜더링 해야함 ★ -->
 
 	<div class="content-wrapper">	
 		<div class="content-header">
-			<div class="user-icon"></div>
+			<div class="profileImageIcon"></div>
 			<p><b>(데이터 바인딩 필요★) 유저 닉네임 </b></p>
 			<p><font color="grey">(데이터 바인딩 필요★) 게시글 작성일자</font> </p>
 			
 			<!-- 만약 본인이 작성한 게시글이라면 표시 -->
-			<div class="btn-group" style="position: absolute; bottom: 20px; right: 10px; height: 40px; background-color: white;">
-			  <button type="button" style="border: none; background-color: white;" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
-			  <ul class="dropdown-menu" style="padding: 10px;">
+			<div class="btn-group" >
+			  <button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
+			  <ul class="dropdown-menu">
 					<li><a class="dropdown-item" href="#">수정</a></li>
 					<li><a class="dropdown-item" href="#">삭제</a></li>
 			  </ul>
@@ -42,11 +42,23 @@
 			댓글달기</button>
 		</div>
 	</div>
+	
+<!-- @@@ -->	
+	
 	<div class="content-wrapper">	
 		<div class="content-header">
-			<div class="user-icon"></div>
+			<div class="profileImageIcon"></div>
 			<p><b>(데이터 바인딩 필요★) 유저 닉네임 </b></p>
 			<p><font color="grey">(데이터 바인딩 필요★) 게시글 작성일자</font> </p>
+			
+			<!-- 만약 본인이 작성한 게시글이라면 표시 -->
+			<div class="btn-group" >
+			  <button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
+			  <ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#">수정</a></li>
+					<li><a class="dropdown-item" href="#">삭제</a></li>
+			  </ul>
+			</div>
 		</div>
 		
 		<div class="content-body">(데이터 바인딩 필요★) 게시글 본문내용</div>
@@ -57,11 +69,23 @@
 			댓글달기</button>
 		</div>
 	</div>
+	
+<!-- @@@ -->	
+
 	<div class="content-wrapper">	
 		<div class="content-header">
-			<div class="user-icon"></div>
+			<div class="profileImageIcon"></div>
 			<p><b>(데이터 바인딩 필요★) 유저 닉네임 </b></p>
 			<p><font color="grey">(데이터 바인딩 필요★) 게시글 작성일자</font> </p>
+			
+			<!-- 만약 본인이 작성한 게시글이라면 표시 -->
+			<div class="btn-group" >
+			  <button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
+			  <ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#">수정</a></li>
+					<li><a class="dropdown-item" href="#">삭제</a></li>
+			  </ul>
+			</div>
 		</div>
 		
 		<div class="content-body">(데이터 바인딩 필요★) 게시글 본문내용</div>
@@ -72,6 +96,39 @@
 			댓글달기</button>
 		</div>
 	</div>
+	
+<!-- @@@ -->	
+
+	<div class="content-wrapper">	
+		<div class="content-header">
+			<div class="profileImageIcon"></div>
+			<p><b>(데이터 바인딩 필요★) 유저 닉네임 </b></p>
+			<p><font color="grey">(데이터 바인딩 필요★) 게시글 작성일자</font> </p>
+			
+			<!-- 만약 본인이 작성한 게시글이라면 표시 -->
+			<div class="btn-group" >
+			  <button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
+			  <ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#">수정</a></li>
+					<li><a class="dropdown-item" href="#">삭제</a></li>
+			  </ul>
+			</div>
+		</div>
+		
+		<div class="content-body">(데이터 바인딩 필요★) 게시글 본문내용</div>
+		<div class="content-footer">
+			<button class="like"><i class="fa-regular fa-heart"></i>
+			좋아요</button>
+			<button class="comment"><i class="fa-regular fa-comment"></i>
+			댓글달기</button>
+		</div>
+	</div>
+	
+
+	
+	
+	
+<!-- 랜더링 될 부분 (★종료) -->
 </div>
 
 <!-- -------------------------------------------------------------------------- -->
@@ -80,6 +137,13 @@
 </body>
 <script>
 $(document).ready(function() {
+	
+	// 테스트용으로 작성
+	$(".profileImageIcon").css("background-image", "url('../resources/imgs/userDefaultIcon.png')");
+	
+	
+	
+	
     
 	// ★ 버튼 이벤트 [좋아요]
 	$(".like").click(function() {
@@ -123,10 +187,28 @@ $(document).ready(function() {
 			  <div class="feed-comment-wrapper" style="min-height: 70vh; position: relative; padding:10px; overflow-x: hidden;">
 				
 			  
-			  <!-- feed-comment-wrappe 클래스 안에 랜더링해주기 -->			  
+			  <!-- feed-comment-wrapper 클래스 안에 랜더링해주기 -->			  
 			  <div class="feed-comments" style="margin-bottom: 40px; text-align:left;">
 						
 						<!-- 댓글 내용 -->
+						<div class="profileImageIcon"></div>
+						<h4 style="display: inline">(데이터 바인딩 필요★) 작성자 이름</h4>
+						<sub style="color:grey">(데이터 바인딩 필요★)2023.01.13</sub>	
+						<div style="margin-top: 20px; white-space: pre;">댓글 내용이 여기에 표시</div>
+						
+						<!-- 작성자 본인일때만 표시 (수정, 삭제) -->
+						<button style="border:none;background:white;color:grey;">
+						수정</button>
+						<button style="border:none;background:white;color:grey;">
+						삭제</button>
+					</div>
+				
+			  
+			  <!-- feed-comment-wrapper 클래스 안에 랜더링해주기 -->			  
+			  <div class="feed-comments" style="margin-bottom: 40px; text-align:left;">
+						
+						<!-- 댓글 내용 -->
+						<div class="profileImageIcon"></div>
 						<h4 style="display: inline">(데이터 바인딩 필요★) 작성자 이름</h4>
 						<sub style="color:grey">(데이터 바인딩 필요★)2023.01.13</sub>	
 						<div style="margin-top: 20px; white-space: pre;">댓글 내용이 여기에 표시</div>
@@ -139,20 +221,6 @@ $(document).ready(function() {
 					</div>
 					
 
-				  	
-					<div class="feed-comments" style="margin-bottom: 20px; text-align:left;">
-						
-						<!-- 댓글 내용 -->
-						<h4 style="display: inline">(데이터 바인딩 필요★) 작성자 이름</h4>
-						<sub style="color:grey">(데이터 바인딩 필요★)2023.01.13</sub>	
-						<div style="margin-top: 20px; white-space: pre;">댓글 내용이 여기에 표시</div>
-						
-						<!-- 작성자 본인일때만 표시 (수정, 삭제) -->
-						<button style="border:none;background:white;color:grey;">
-						수정</button>
-						<button style="border:none;background:white;color:grey;">
-						삭제</button>
-					</div>
 					
 
 					
@@ -168,7 +236,8 @@ $(document).ready(function() {
 			  `
 			})		
 			
-
+		
+		
 	    autosize($('textarea'));				
 		$("#InputComment").on("input keydwon keyup", function() {			
 			if ( $("#InputComment").height() > 160 ) {
@@ -180,7 +249,11 @@ $(document).ready(function() {
 		
 		
 
-	
+		
+		
+		$(".feed-comments > .profileImageIcon").css("background-image", "url('../resources/imgs/userDefaultIcon.png')");
+		
+		
 		
 	}) //~~ 댓글 보기 버튼 끝
 	
