@@ -64,7 +64,7 @@
 	    <beans:property name="dataSource" ref="dataSource" />
         <!-- ★ 매퍼 xml이 있는 패키지 경로를 입력 ▼ -->
         <!-- <beans:property name="mapperLocations" value="classpath:패키지경로1/경로2/경로n/매퍼파일이름.xml" /> -->
-	    <beans:property name="mapperLocations" value="classpath:com/lgy/smile/mappers/*.xml" />
+	    <beans:property name="mapperLocations" value="classpath:com/lgy/smile/dao/mapper/*.xml" />
 	</beans:bean>
 	
 	

@@ -1,6 +1,33 @@
 package com.lgy.smile.service;
 
-public class UserService {
+import java.util.HashMap;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lgy.smile.dao.UserMapperInterface;
+import com.lgy.smile.dto.UserDto;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
+public class UserService implements UserMapperInterface {
+
+	@Autowired
+	private SqlSession sqlSession;
+	
+	
+	@Override
+	public UserDto login(@RequestParam HashMap<String, String> params) {
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		UserDto dto = userDao.login( params );
+		
+		return dto;
+	}
 
 	
 	// ☆ 유저 정보조회 기능 필요 ( pk로 검색 )

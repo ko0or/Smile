@@ -1,11 +1,11 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.smile.dao.UserMapperInterface">
 
-<!-- <mapper namespace="인터페이스있는경로.인터페이스파일명"> -->
-<mapper namespace="com.lgy.smile.user.mapperInterface">
-  	<select id="login" resultType="com.lgy.smile.user.UserDto">
-	    SELECT * FROM user WHERE ID = #{param1} AND PW = #{param2}
+
+  	<select id="login" resultType="com.lgy.smile.dto.UserDto" parameterType="hashmap">
+	    SELECT * FROM user WHERE ID = #{id} AND PW = #{password}
   	</select>
 
   

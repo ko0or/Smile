@@ -1,7 +1,6 @@
 package com.lgy.smile.service;
 import javax.servlet.http.HttpSession;
-import com.lgy.smile.comment.CommentService;
-import com.lgy.smile.common.BoardCRUD;
+import com.lgy.smile.service.CommentService;
 import com.lgy.smile.common.DevUtils;
 
 public class TradeService implements BoardCRUD {

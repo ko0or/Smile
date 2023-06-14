@@ -1,16 +1,20 @@
 package com.lgy.smile.controller;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lgy.smile.dao.UserMapperInterface;
+import com.lgy.smile.dto.UserDto;
+import com.lgy.smile.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	@Autowired
-	private SqlSession sqlSession;
+	private UserService userService;
 
 	
 	// ★ user(유저) 정보 조회화면
@@ -51,13 +55,9 @@ public class UserController {
 //================================================================================ >
 	
 	@PostMapping("/login")
-	public void login(HttpServletRequest req) {
+	public void login(@RequestParam HashMap<String, String> params) {
 		
-		UserMapperInterface userMapper = sqlSession.getMapper(UserMapperInterface.class);
-		UserDto dto = userMapper.login(
-				req.getParameter("id") ,
-				req.getParameter("password")
-		);
+		UserDto dto = userService.login( params );
 		
 		if ( dto != null ) {
 			log.info("@ => 로그인 성공 ( 닉네임 : " + dto.getNickname() + ") " );

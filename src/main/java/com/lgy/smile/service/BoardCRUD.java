@@ -1,4 +1,4 @@
-package com.lgy.smile.common;
+package com.lgy.smile.service;
 
 import javax.servlet.http.HttpSession;
 

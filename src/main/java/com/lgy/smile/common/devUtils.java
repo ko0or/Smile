@@ -1,6 +1,5 @@
 package com.lgy.smile.common;
-
-import com.lgy.smile.user.UserService;
+import com.lgy.smile.service.UserService;
 
 /*   =====   ★   모든 곳에서 사용할 수 있는 공용 메소드     ★  ======   */
 public class DevUtils {
