@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.smile.dao.MainBoardMapperInterface">
+
+
+  	<insert id="write" parameterType="hashmap">
+	    INSERT INTO board_main VALUES (
+	    	null , #{title} , #{content} , #{date} , 0 , #{userPK}
+	    )
+  	</insert>
+
+  	<select id="list" resultType="com.lgy.smile.dto.MainBoardDto">
+	    SELECT * 
+	    FROM board_main
+	    ORDER BY identity DESC
+  	</select>
+
+  
+  	
+  	
+  	
+  	
+</mapper>

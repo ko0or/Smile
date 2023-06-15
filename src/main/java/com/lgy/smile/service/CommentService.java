@@ -1,8 +1,14 @@
 package com.lgy.smile.service;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.stereotype.Service;
+
 import com.lgy.smile.common.DevUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
 public class CommentService {
 	
 	/* ☆ 게시글 타입 MAIN(피드),  TRADE(중고거래),  NOTICE(공지사항) ☆ */ 

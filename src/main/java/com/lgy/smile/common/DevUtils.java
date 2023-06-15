@@ -1,10 +1,30 @@
 package com.lgy.smile.common;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Locale;
+
+import org.springframework.stereotype.Service;
+
 import com.lgy.smile.service.UserService;
 
 /*   =====   ★   모든 곳에서 사용할 수 있는 공용 메소드     ★  ======   */
+@Service
 public class DevUtils {
 
 	private UserService userService;
+	
+	
+	public String getDate() {
+		LocalDateTime now = LocalDateTime.now();
+		Date date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 작성", new Locale("ko", "KR"));
+		String formattedDate = sdf.format(date);
+		
+		return formattedDate;
+	}
+	
 	
 	// ☆ 작성자 or 관리자 인지 확인후 boolean 타입으로 리턴 
 	// => 유저 서비스 계층에서 만들어둔 메소드 가져오기
