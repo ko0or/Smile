@@ -3,7 +3,7 @@ import javax.servlet.http.HttpSession;
 import com.lgy.smile.service.CommentService;
 import com.lgy.smile.common.DevUtils;
 
-public class TradeService implements BoardCRUD {
+public class TradeService {
 	
 	/* ☆ 댓글 생성,변경,삭제 서비스 ☆ */ 
 	private CommentService commentService;
@@ -22,25 +22,21 @@ public class TradeService implements BoardCRUD {
 	// Delete 공지 삭제
 	
 	
-	@Override
 	public void create(HttpSession session) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void read() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void update(HttpSession session) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void delete(HttpSession session) {
 		// TODO Auto-generated method stub
 		
