@@ -137,6 +137,7 @@
 </body>
 <script>
 $(document).ready(function() {
+
 	
 	// 테스트용으로 작성
 	$(".profileImageIcon").css("background-image", "url('../resources/imgs/userDefaultIcon.png')");
