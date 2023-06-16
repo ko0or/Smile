@@ -5,12 +5,13 @@
 
 
   	<select id="login" resultType="com.lgy.smile.dto.UserDto" parameterType="hashmap">
-	    SELECT * FROM user WHERE id = #{id} AND pwd = #{password}
+	    SELECT * FROM user WHERE id = #{id}
   	</select>
 
-  
-  	
+<!--   회원가입 쿼리 -->
+<!--   	INSERT INTO smile.user VALUES(null, 'zh', '123', 'kozomdoci', 0, 'user'); -->
   	
   	
   	
 </mapper>
+
