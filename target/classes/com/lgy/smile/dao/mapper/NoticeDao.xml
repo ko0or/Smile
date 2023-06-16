@@ -15,7 +15,7 @@
 						(MVC_BOARD_SEQ.NEXTVAL,#{bname},#{btitle},#{bcontent},0)
     </insert>
     
-    <select id="contentView" parameterType="hashmap" resultType="com.lgy.spring_mvc_board_std.dto.BDto">
+    <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
 <!--         select bid, bname, btitle, bcontent, bdate, bhit from mvc_board where bid=#{param1} -->
         select bid, bname, btitle, bcontent, bdate, bhit from mvc_board where bid=#{bid}
     </select>
