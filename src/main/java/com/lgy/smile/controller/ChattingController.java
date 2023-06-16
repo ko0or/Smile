@@ -8,37 +8,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lgy.smile.dto.ChattingRoomDto;
-import com.lgy.smile.service.ChattingRoomService;
+import com.lgy.smile.dto.ChattingDto;
+import com.lgy.smile.service.ChattingService;
 
 @Controller
-@RequestMapping("/chatroom")
-public class ChattingRoomController {
+@RequestMapping("/chat")
+public class ChattingController {
 	
 	@Autowired
-	private ChattingRoomService chattingRoomService;
+	ChattingService chattingService;
 	
 	@GetMapping("/list")
-	public ResponseEntity<List<ChattingRoomDto>> getChattingRooms(@RequestParam HashMap<String, String> params) {
-		ArrayList<ChattingRoomDto> list = chattingRoomService.list();
+	public ResponseEntity<List<ChattingDto>> getChattings(@RequestParam HashMap<String, String> params) {
+		ArrayList<ChattingDto> list = chattingService.list();
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
 	@GetMapping("/contentView")
-	public ResponseEntity<ChattingRoomDto> getChattingRoom(@RequestParam HashMap<String, String> params) {
-		ChattingRoomDto dto = chattingRoomService.contentView(params);
+	public ResponseEntity<ChattingDto> getChatting(@RequestParam HashMap<String, String> params) {
+		ChattingDto dto = chattingService.contentView(params);
 		return ResponseEntity.status(HttpStatus.OK).body(dto);
 	}
 	
 	@GetMapping("/write")
 	public String chattingRoomWrite(@RequestParam HashMap<String, String> params) {
-		chattingRoomService.write(params);
+		chattingService.write(params);
 		return "/write";
 	}
-	
+
 }

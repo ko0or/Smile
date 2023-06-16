@@ -25,9 +25,9 @@ public class ChattingRoomService implements ChattingRoomInterface{
 	}
 
 	@Override
-	public ChattingRoomDto contentView() {
+	public ChattingRoomDto contentView(HashMap<String, String> params) {
 		ChattingRoomInterface dao = sqlSession.getMapper(ChattingRoomInterface.class);
-		return dao.contentView();
+		return dao.contentView(params);
 	}
 
 	@Override

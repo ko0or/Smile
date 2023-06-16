@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.ChattingDto;
 
-public interface ChattingRoomInterface {
-	public ArrayList<ChattingRoomDto> list();
-	public ChattingRoomDto contentView(@RequestParam HashMap<String, String> params);
+public interface ChattingInterface {
+	public ArrayList<ChattingDto> list();
+	public ChattingDto contentView(@RequestParam HashMap<String, String> params);
 	public void write(@RequestParam HashMap<String, String> params);
 }
