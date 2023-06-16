@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.smile.dao.TradeMapperInterface">
+
+<!-- {imgFile=화면 캡처 2023-04-19 125309.png, =teng, content=<p>teng222</p>, files=, price=3300, address=충남 서천군 서면 갯벌체험로 56-45} -->
+<!-- insert into smile.board_trade values(null, 'teng', 'teng1234', sysdate(), 'contacted' , 'c:/dev/', 'wait', 5000, '부산광역시 진구 무슨무슨대로 342번길 32길', 3);  	 -->
+  	<insert id="write" parameterType="hashmap">
+	    INSERT INTO board_trade VALUES (
+	    	identity, #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, #{status}, #{user}
+	    )
+  	</insert>
+
+  	<select id="list" resultType="com.lgy.smile.dto.TradeDto">
+	    SELECT * FROM board_trade ORDER BY identity DESC
+  	</select>
+
+  	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
+        SELECT identity, title, content, created, contacted, imgPath, status, price, address, user 
+        	from board_trade where identity=#{identity}
+    </select>
+  	
+  	<update id="modify" parameterType="hashmap">
+		UPDATE board_trade SET title = #{title}, content = #{content} 
+			where identity=#{identity}
+    </update>
+  	
+  	<delete id="delete" parameterType="hashmap">
+		DELETE from board_trade where identity=#{identity}
+    </delete>
+</mapper>
