@@ -5,8 +5,11 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Service;
 
+import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.UserService;
 
 /*   =====   ★   모든 곳에서 사용할 수 있는 공용 메소드     ★  ======   */
@@ -15,7 +18,7 @@ public class DevUtils {
 
 	private UserService userService;
 	
-	
+	// 작성일자를 반환하는 메소드
 	public String getDate() {
 		LocalDateTime now = LocalDateTime.now();
 		Date date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
@@ -23,6 +26,15 @@ public class DevUtils {
 		String formattedDate = sdf.format(date);
 		
 		return formattedDate;
+	}
+	
+	
+	// 세션이 있으면 유저 정보를 반환하는 메소드 ( 없으면 null,  따라서 null 여부로 분기처리 가능 )
+	public UserDto getUserInfo(HttpSession httpSession) {
+		if ( httpSession.getAttribute("userInfo") != null ) {
+			return (UserDto) httpSession.getAttribute("userInfo");			
+		}
+		return null;
 	}
 	
 	

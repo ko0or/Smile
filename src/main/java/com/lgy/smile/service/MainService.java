@@ -13,6 +13,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lgy.smile.service.CommentService;
 
@@ -57,6 +58,35 @@ public class MainService implements MainBoardMapperInterface {
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
 		return dao.list();
 		
+	}
+
+
+
+	@Override
+	public void delete(@RequestParam HashMap<String, String> params) {
+
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
+		dao.delete(params);
+		
+	}
+
+
+
+	@Override
+	public void modify(HashMap<String, String> params) {
+		
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
+		dao.modify(params);
+		
+	}
+
+
+
+	@Override
+	public MainBoardDto content_view(HashMap<String, String> params) {
+		
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
+		return dao.content_view(params);
 	}
 	
 	
