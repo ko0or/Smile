@@ -14,17 +14,19 @@
 	<div class="content-wrapper">	
 		<div class="content-header">
 			<div class="user-icon"></div>
-			<p><b>(데이터 바인딩 필요★) 공지사항 제목 </b></p>
+			<p><b>공지사항 제목 </b></p>
 			<p><font color="grey">(데이터 바인딩 필요★) 공지사항 작성일자</font> </p>
 			
 			<!-- 운영자일때만 표시 -->
+			<c:if test="${role == 'admin'}">
 			<div class="btn-group" style="position: absolute; bottom: 20px; right: 10px; height: 40px; background-color: white;">
 			  <button type="button" style="border: none; background-color: white;" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
 			  <ul class="dropdown-menu" style="padding: 10px;">
-					<li><a class="dropdown-item" href="#">수정</a></li>
-					<li><a class="dropdown-item" href="#">삭제</a></li>
+					<li><a class="dropdown-item" href="edit?identity=${read.identity}">수정</a></li>
+					<li><a class="dropdown-item" href="delete?identity=${read.identity}">삭제</a></li>
 			  </ul>
 			</div>
+			</c:if>
 		</div>
 		
 		<div class="content-body">(데이터 바인딩 필요★) 공지사항 본문내용</div><hr>

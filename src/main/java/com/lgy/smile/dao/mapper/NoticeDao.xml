@@ -2,34 +2,36 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.lgy.smile.dao.NoticeDao">
+<mapper namespace="com.lgy.smile.dao.NoticeMapperinterface">
 
-    <select id="list" resultType="com.lgy.smile.dto.NoticeDto">
-        select identity, title, contnet, created, view, author, user from board_notice
+    <select id="list" resultType="com.lgy.smile.dto.NoticeDto" parameterType="int">
+        <![CDATA[
+        SELECT
+            identity, title, content, created, view, author, user 
+        FROM
+            board_notice
+        ORDER BY identity 
+        LIMIT #{pageNum*10-10}, #{pageNum*10}
+        ]]>
     </select>
     
     <insert id="write" parameterType="hashmap">
-<!-- 		insert into mvc_board(bid, bname, btitle, bcontent, bhit) values -->
-<!-- 						(MVC_BOARD_SEQ.NEXTVAL,#{param1},#{param2},#{param3},0) -->
-		insert into board_notice(identity, title, contnet, created, view, author, user) values
-						(MVC_BOARD_SEQ.NEXTVAL,#{bname},#{btitle},#{bcontent},0)
+		insert into board_notice(identity, title, content, created, view, author, user) values(
+			null , #{title} , #{content} , #{created} , 0 , #{author} , #{user}
+		)
     </insert>
     
-    <select id="contentView" parameterType="hashmap" resultType="com.lgy.spring_mvc_board_std.dto.BDto">
-<!--         select bid, bname, btitle, bcontent, bdate, bhit from mvc_board where bid=#{param1} -->
-        select bid, bname, btitle, bcontent, bdate, bhit from mvc_board where bid=#{bid}
+    <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
+        select identity, title, content, created, view, author, user from board_notice where identity=#{identity}
     </select>
     
     <update id="modify" parameterType="hashmap">
-<!-- 		update mvc_board set bname = #{param2}, btitle = #{param3}, bcontent = #{param4}  -->
-<!-- 		 where bid=#{param1} -->
-		update mvc_board set bname = #{bname}, btitle = #{btitle}, bcontent = #{bcontent} 
-		 where bid=#{bid}
+		update board_notice set title = #{title}, content = #{content} 
+		 where identity=#{identity}
     </update>
     
     <delete id="delete" parameterType="hashmap">
-<!-- 		delete from mvc_board where bid=#{bid} -->
-		delete from mvc_board where bid=#{param1}
+		delete from board_notice where identity=#{identity}
     </delete>
 
 </mapper>

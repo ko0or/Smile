@@ -1,7 +1,5 @@
 package com.lgy.smile.dto;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDto {
+public class NoticeCommentDto {
 	private int identity;
-	private String title;
 	private String content;
 	private String created;
-	private int view;
-	private String author;
 	private int user;
+	private int board;
 }
