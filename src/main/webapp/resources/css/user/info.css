@@ -1,1 +1,16 @@
 @charset "UTF-8";
+
+
+
+
+.form-wrapper > #floatingEmail div {
+	color: "red";
+}
+
+
+
+.createAccount-wrapper > .btns {
+	margin-top: 70px;	
+}
+
+button { height: 60px; padding: 5px; width: 500px; margin: 5px 0; border: none; }
