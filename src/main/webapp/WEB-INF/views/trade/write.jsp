@@ -27,11 +27,11 @@
 <section>
 <h1>중고거래 등록하기</h1>
 
-<form action="#" method="POST" class="was-validated">
+<form action="write" method="POST" class="was-validated">
 	
 	<!-- 제목및 내용 -->
   <div class="mb-3">
-    	<input type="file" class="form-control" aria-label="file example" required accept="image/*">
+    	<input name="imgPath" type="file" class="form-control" aria-label="file example" required accept="image/*">
     	<div class="invalid-feedback">미리보기용 사진을 선택해주세요</div>
   	</div>
 
@@ -62,7 +62,7 @@
 			<p>원치 않으실경우 비대면결제로 진행하실 수 있습니다</p>
 			<sub><i>* 비대면 결제시 싱글페이 포인트가 충전되며, 충전된 포인트는 현금으로 입금 요청하실 수 있습니다.</i></sub>
 			<div class="form-check form-switch mt-5">
-		  		<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+		  		<input name="contacted" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
 		  		<label class="form-check-label" for="flexSwitchCheckDefault">비대면 결제여부</label>
 			</div>
 			
