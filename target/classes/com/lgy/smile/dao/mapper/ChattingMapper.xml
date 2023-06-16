@@ -15,7 +15,7 @@
 	    ORDER BY identity DESC
   	</select>
   	
-  	<select id="contentView" resultType="com.lgy.smile.dto.ChattingDto" parameterType="hashmap">
+  	<select id="contentView" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
 	    SELECT * 
 	    FROM chatting
 	    WHERE chattingroom = #{chattingroom}

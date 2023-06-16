@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lgy.smile.dto.ChattingDto;
+import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
 
 @Controller
@@ -22,6 +24,9 @@ public class ChattingController {
 	@Autowired
 	ChattingService chattingService;
 	
+	@Autowired
+	ChattingRoomService chatttingRoomService;
+	
 	@GetMapping("/list")
 	public ResponseEntity<List<ChattingDto>> getChattings(@RequestParam HashMap<String, String> params) {
 		ArrayList<ChattingDto> list = chattingService.list();
@@ -30,7 +35,8 @@ public class ChattingController {
 	
 	@GetMapping("/contentView")
 	public ResponseEntity<ChattingDto> getChatting(@RequestParam HashMap<String, String> params) {
-		ChattingDto dto = chattingService.contentView(params);
+		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
+		ChattingDto dto = chattingService.contentView(roomDto.getIdentity());
 		return ResponseEntity.status(HttpStatus.OK).body(dto);
 	}
 	
