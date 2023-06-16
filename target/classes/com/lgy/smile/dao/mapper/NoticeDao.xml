@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lgy.smile.dao.NoticeMapperinterface">
+
+    <select id="list" resultType="com.lgy.smile.dto.NoticeDto" parameterType="int">
+        <![CDATA[
+        SELECT
+            identity, title, content, created, view, author, user 
+        FROM
+            board_notice
+        ORDER BY identity 
+        LIMIT #{pageNum*10-10}, #{pageNum*10}
+        ]]>
+    </select>
+    
+    <insert id="write" parameterType="hashmap">
+		insert into board_notice(identity, title, content, created, view, author, user) values(
+			null , #{title} , #{content} , #{created} , 0 , #{author} , #{user}
+		)
+    </insert>
+    
+    <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
+        select identity, title, content, created, view, author, user from board_notice where identity=#{identity}
+    </select>
+    
+    <update id="modify" parameterType="hashmap">
+		update board_notice set title = #{title}, content = #{content} 
+		 where identity=#{identity}
+    </update>
+    
+    <delete id="delete" parameterType="hashmap">
+		delete from board_notice where identity=#{identity}
+    </delete>
+
+</mapper>

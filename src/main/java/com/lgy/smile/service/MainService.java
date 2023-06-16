@@ -45,7 +45,6 @@ public class MainService implements MainBoardMapperInterface {
 		
 		params.put("date",  devUtils.getDate() );
 		params.put("userPK", "3");
-		//null , ${title} , ${content} , ${date} , 0 , ${userPK}
 		
 		dao.write(params);
 		
