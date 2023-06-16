@@ -6,18 +6,32 @@
 
   	<insert id="write" parameterType="hashmap">
 	    INSERT INTO board_main VALUES (
-	    	null , #{title} , #{content} , #{date} , 0 , #{userPK}
+	    	null ,  #{content} , #{date} , 0 , #{userPK}
 	    )
   	</insert>
 
+  	<select id="content_view" resultType="com.lgy.smile.dto.MainBoardDto">
+	    SELECT * 
+	    FROM board_main
+	    WHERE identity = #{identity}
+  	</select>
+  	
   	<select id="list" resultType="com.lgy.smile.dto.MainBoardDto">
 	    SELECT * 
 	    FROM board_main
 	    ORDER BY identity DESC
   	</select>
 
-  
+	<insert id="modify" parameterType="hashmap">
+		UPDATE board_main
+		SET content = #{content}
+		WHERE identity = ${identity}
+  	</insert>
   	
+  	<delete id="delete" parameterType="hashmap">
+  		DELETE FROM board_main
+  		WHERE identity = #{identity}
+  	</delete>
   	
   	
   	

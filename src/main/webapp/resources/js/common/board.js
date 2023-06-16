@@ -1,6 +1,29 @@
 $(document).ready(function () {
 
-	// 써머노트 에디터 입력 폼에서 제목과 내용에 대한 유효성 검사  
+	// 메인(피드) 게시판  ======================================================================================== >
+	$("#writeFeed").click(function() {
+	
+	
+		if ( $(".note-placeholder").css("display") == "block" )   {
+			Swal.fire({
+  				icon: 'warning',
+  				title: '필수 입력항목 체크',
+  				text: '내용을 입력해주시기 바랍니다.',
+			 	confirmButtonText: '확인'
+			})
+			
+		}  else {
+		
+			$("body > section > form").submit();
+		
+		}
+	
+	});
+	
+	
+	
+	
+	// 공지사항 게시판  ======================================================================================== >
 	$("#writeOk").click(function() {
 	
 	
@@ -12,9 +35,7 @@ $(document).ready(function () {
 			 	confirmButtonText: '확인'
 			})
 			
-		} 
-		
-		if ( $("input[name=title]").val().length == 0 ) {
+		} else 	if ( $("input[name=title]").val().length == 0 ) {
 			Swal.fire({
 				icon: 'warning',
 				title: '필수 입력항목 체크',
@@ -22,7 +43,11 @@ $(document).ready(function () {
 				confirmButtonText: '확인'
 			}) 
 			
-		} 
+		}  else {
+		
+			$("body > section > form").submit();
+		
+		}
 	
 	});
 

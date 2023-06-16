@@ -12,10 +12,10 @@
 <h1>새로운 피드 작성</h1>
 
 <form action="write" method="POST">
-	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 "><br>
-	<textarea name="content" id="summernote"></textarea><br>
+
+	<textarea name="content" id="summernote" rows="30"></textarea><br>
 	
-	<button id="writeOk" class="btn btn-primary" type="button">
+	<button id="writeFeed" class="btn btn-primary" type="button">
 	작성 완료</button>
 	<button onclick="history.back()" class="btn btn-primary" type="button">
 	작성 취소</button>

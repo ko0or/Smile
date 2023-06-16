@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,15 @@ public class MainController {
 	}
 	
 	
+	// ★ main(피드) 글 수정 (화면)
+	@GetMapping("/modify") // <== 로그인된 상태인지 확인필요
+	public String mainEdit(@RequestParam HashMap<String, String> params, Model model) {
+		
+		 model.addAttribute("content" , mainService.content_view(params));		
+		return "feed/edit";
+	}
+	
+		
 //========================================================================================	
 		
 	// ★ main(피드) 글 쓰기 (처리)
@@ -52,6 +62,16 @@ public class MainController {
 		return "redirect:list";
 		
 	}
+
+	
+	// ★ main(피드) 글 수정 (처리)
+	@PostMapping("/modify") //
+	public String mainEdit(@RequestParam HashMap<String, String> params) {
+
+		mainService.modify(params);
+		return "redirect:list";
+	}
+	
 	
 
 	@GetMapping("/getPosts")
@@ -72,5 +92,13 @@ public class MainController {
 	// ★ main(피드) 글 삭제
 	// ... 내용 ...
 	
+	@GetMapping("/delete")
+	public String delete(@RequestParam HashMap<String, String> params) {
+	 
+		mainService.delete(params);
+		
+		
+		return "redirect:list";
+	}
 	
 }
