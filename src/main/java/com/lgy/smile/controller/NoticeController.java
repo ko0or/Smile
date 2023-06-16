@@ -28,16 +28,14 @@ public class NoticeController {
 
 	// ★ notice(공지) 목록
 	@GetMapping("/list")
-	public String noticeList(Model model, @RequestParam(name = "pageNum" , defaultValue = "1") int page) {
+	public String noticeList(Model model, @RequestParam HashMap<String, String> params, NoticeCriteria cri) {
 		
-		NoticeCriteria cri = new NoticeCriteria();
-		cri.setPageNum(page);
 
 
 		
 		
 		log.info("@# list");
-		ArrayList<NoticeDto> list = service.list(page);
+		ArrayList<NoticeDto> list = service.list(params);
 		model.addAttribute("list", list);
 		log.info( "list 갯수 => " + list.size() );
 		

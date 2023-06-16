@@ -11,7 +11,7 @@
         FROM
             board_notice
         ORDER BY identity 
-        LIMIT #{pageNum*10-10}, #{pageNum*10}
+        LIMIT ${start}, ${end}
         ]]>
     </select>
     

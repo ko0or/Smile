@@ -52,8 +52,8 @@
       <ul>
 <!-- 이전 버튼 -->
          <c:if test="${pageMaker.prev}">
-	    	<li class="page-item disabled">
-             	<a class="page-link" href="${pageMaker.startPage - 1}">
+	    	<li class="page-item">
+             	<a class="page-link" href="list?pageNum=${pageMaker.startPage - 1}">
       				<i class="fa-solid fa-circle-left" style="padding: 4px;"></i>
     			</a>          
             </li>
@@ -63,7 +63,7 @@
     <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
     
     <li class="page-item" ${pageMaker.cri.pageNum == num ? "style='border-bottom: 2px solid blue;'" :""}>
-    <a class="page-link" href=" ${num}">
+    <a class="page-link" href="list?pageNum=${num}">
     ${num}
     </a></li>
 	</c:forEach>
@@ -73,7 +73,7 @@
     <!-- 다음 버튼 -->
    <c:if test="${pageMaker.next}">
     <li class="page-item">
-     <a class="page-link" href="${pageMaker.endPage + 1}">
+     <a class="page-link" href="list?pageNum=${pageMaker.endPage + 1}">
      <i class="fa-solid fa-circle-right" style="padding: 4px;"></i></a>
          </li>
          </c:if> 

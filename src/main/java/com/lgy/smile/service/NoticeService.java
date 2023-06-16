@@ -46,14 +46,29 @@ public class NoticeService implements NoticeMapperinterface {
 	
 	
 	@Override
-	public ArrayList<NoticeDto> list(int param) {
+	public ArrayList<NoticeDto> list(@RequestParam HashMap<String, String> params) {
 		log.info("@# NoticeService.list() start");
 		
 		
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+
+		log.info("pageNum => " + params.get("pageNum"));
+		log.info("pageNum Type => " + params.get("pageNum").getClass().getName());
+		
+		
+		int page = Integer.parseInt( params.get("pageNum") );
+		int s = page * 10 - 10;
+		int e = page * 10;
+		
+		String start = String.valueOf(s);
+		String end = String.valueOf(e);
+
+		
+		params.put("start", start );
+		params.put("end", end );
 		
 		log.info("@# NoticeService.list() end");
-		return dao.list(param);
+		return dao.list(params);
 	}
 
 
