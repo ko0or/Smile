@@ -11,7 +11,7 @@
 <section>
 <h1>새로운 피드 작성</h1>
 
-<form action="#" method="POST">
+<form action="write" method="POST">
 	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 "><br>
 	<textarea name="content" id="summernote"></textarea><br>
 	

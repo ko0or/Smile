@@ -30,7 +30,8 @@
 	
 	border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-.content-wrapper > .content-header:not(:first-child)  {
+.content-wrapper > .content-header:not(:first-child) ,
+.content-wrapper > .content-header font {
 	margin-left: 20px;
 }
 .content-wrapper > .content-header > p:last-child  {
@@ -46,6 +47,8 @@
 	
 	margin-top: 20px;
 	margin-bottom: 40px;
+	
+    overflow-x: hidden; 
 }
  
 .content-wrapper > .content-footer {
@@ -88,6 +91,7 @@
 	top: 8px;
 	margin-right: 5px;
 }
+
 .content-wrapper > .content-header > .btn-group > button {
 			border: none; 
 			background-color: white;

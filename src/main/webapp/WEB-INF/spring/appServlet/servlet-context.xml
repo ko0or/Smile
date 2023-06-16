@@ -44,7 +44,7 @@
 		
 		<beans:property 
 			name="url"
-			value="jdbc:mysql://ls-e9139bea478179d6abb1bc90e752c3986992700d.cdij7azx2mvd.ap-northeast-2.rds.amazonaws.com:3306/test" 
+			value="jdbc:mysql://ls-e9139bea478179d6abb1bc90e752c3986992700d.cdij7azx2mvd.ap-northeast-2.rds.amazonaws.com:3306/smile" 
 		/>
 		
 		<beans:property 

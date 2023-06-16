@@ -26,6 +26,7 @@ public class UserService implements UserMapperInterface {
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
 		UserDto dto = userDao.login( params );
 		
+		
 		return dto;
 	}
 
