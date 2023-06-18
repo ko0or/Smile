@@ -12,8 +12,9 @@
 <h1>작성된 피드 수정</h1>
 
 <form action="modify" method="POST">
-	<input name="identity" type="hidden" value="${content.identity}">
-	<textarea name="content" id="summernote"  rows="30">${content.content}</textarea><br>
+	<input name="identity" type="hidden" value="${board.identity}">
+	<input name="user" type="hidden" value="${board.user}">
+	<textarea name="content" id="summernote"  rows="30">${board.content}</textarea><br>
 	
 	<button id="writeFeed" class="btn btn-primary" type="button">
 	작성 완료</button>

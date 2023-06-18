@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.smile.dao.MainCommentMapperInterface">
+
+  	<select id="list" resultType="com.lgy.smile.dto.MainCommentDto" parameterType="hashmap">
+				SELECT 
+					comment.* ,
+				    user.nickname
+				FROM 	
+					smile.comment_main comment ,
+				    smile.user user
+				WHERE 
+					comment.board = #{boardIdentity}
+				    AND comment.user = user.identity;
+  	</select>
+  	
+  	
+  	
+</mapper>

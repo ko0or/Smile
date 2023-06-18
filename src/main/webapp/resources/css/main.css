@@ -85,12 +85,7 @@
 			height: 40px; 
 			background-color: white;
  }
-#swal2-html-container > div .profileImageIcon {
-	display: inline-block;
-	position: relative;;
-	top: 8px;
-	margin-right: 5px;
-}
+
 
 .content-wrapper > .content-header > .btn-group > button {
 			border: none; 
@@ -100,3 +95,33 @@
 .content-wrapper > .content-header > .btn-group > .dropdown-menu {
 	padding: 10px;
 }
+
+
+
+
+
+
+/* 모달창 */
+#swal2-html-container > div .profileImageIcon {
+	display: inline-block;
+	position: relative;;
+	top: 8px;
+	margin-right: 5px;
+}
+
+.feed-comment-wrapper {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+.feed-comment-wrapper::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+#swal2-html-container > div {
+	max-height: 700px;
+}
+
+#swal2-html-container {
+	position: relative;
+}
+

@@ -17,9 +17,19 @@
   	</select>
   	
   	<select id="list" resultType="com.lgy.smile.dto.MainBoardDto">
-	    SELECT * 
-	    FROM board_main
-	    ORDER BY identity DESC
+		SELECT 
+			board.* 
+		    , user.nickname
+		FROM 
+			smile.board_main board,
+			(
+				SELECT *
+				FROM smile.user user
+			) user
+		WHERE
+			board.user = user.identity
+		ORDER BY 
+			board.identity DESC;
   	</select>
 
 	<insert id="modify" parameterType="hashmap">

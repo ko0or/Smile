@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<p style="text-align: right;">로그아웃상태입니다.</p>
  
  <!-- aws 배포할땐  앞에 /smile 빼고 배포하기 ★ -->
 <nav>
