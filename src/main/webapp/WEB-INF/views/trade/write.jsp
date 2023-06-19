@@ -27,13 +27,13 @@
 <section>
 <h1>중고거래 등록하기</h1>
 
-<form action="write" method="POST" class="was-validated">
+<form id="tradeForm" action="write" method="POST" class="was-validated" enctype="multipart/form-data">
 	
 	<!-- 제목및 내용 -->
   <div class="mb-3">
     	<input name="imgPath" type="file" class="form-control" aria-label="file example" required accept="image/*">
     	<div class="invalid-feedback">미리보기용 사진을 선택해주세요</div>
-  	</div>
+  </div>
 
 	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 " required><br>
 	<textarea name="content" id="summernote"></textarea><br>
@@ -132,6 +132,10 @@ $(document).ready(function() {
 				  혹은 비대면 결제로 변경해주세요.`,
 				  confirmButtonText : '확인',
 				})
+			
+		} else {
+			
+			$("#tradeForm").submit();
 			
 		}
 		

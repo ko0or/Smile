@@ -16,7 +16,8 @@
 	
 	<!-- 회원정보 수정 배너부분 -->
 	<div class="logo">
-		<h1>회원 정보</h1>
+		<h1>회원 정보 수정 화면</h1>
+		<p>회원정보 수정 화면입니다! </p>
 	</div>
 		
 	<!-- 아디, 비밀번호 수정 화면 -->
@@ -24,42 +25,39 @@
 		<form id="modifyForm" action="modify" method="POST">
 		
 			<div class="form-floating mb-3">
-				<div name="nickname" type="text" class="form-control" id="floatingNickname">
-				${ user.nickname }</div> 
+				<input name="nickname" type="text" class="form-control" id="floatingNickname" value="${ user.nickname }" placeholder="번쩍점프 장인"> 
 				<label for="floatingNickname"><i>*</i>
 				닉네임</label>
 			</div>
 							
 			<div class="form-floating mb-3">
-				<div name="id" type="email" class="form-control" id="floatingEmail">
+				<div name="id" type="email" class="form-control" id="floatingEmail" placeholder="name@example.com" style="color:grey">
 				${ user.id }</div> 
 				<label for="floatingEmail"><i>*</i>
 				이메일 계정</label>
 			</div>
 			
 			<div class="form-floating mb-3">
-				<div name="password" type="password" class="form-control" id="floatingPassword">
-				${ user.pwd }</div> 
+				<input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
 				<label for="floatingPassword"><i>*</i>
 				비밀번호</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
-				<div name="password2" type="password" class="form-control" id="floatingPassword2">
-				${ user.pwd }</div>
+				<input name="password2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
 				<label for="floatingPassword2"><i>*</i>
 				비밀번호 재확인</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
-				<div name="point" type="text" class="form-control" id="floatingPoint">
+				<div name="point" type="text" class="form-control" id="floatingPoint" placeholder="point" style="color:grey">
 				${ user.point }</div>
 				<label for="floatingPassword2"><i>*</i>
 				포인트</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
-				<div name="role" type="text" class="form-control" id="floatingRole">
+				<div name="role" type="text" class="form-control" id="floatingRole" placeholder="role" style="color:grey">
 				${ user.role }</div>
 				<label for="floatingPassword2"><i>*</i>
 				회원구분</label>				

@@ -8,10 +8,12 @@
 	    SELECT * FROM user WHERE id = #{id}
   	</select>
 
-<!--   회원가입 쿼리 -->
-<!--   	INSERT INTO smile.user VALUES(null, 'zh', '123', 'kozomdoci', 0, 'user'); -->
-  	
-  	
+	<update id="modify" parameterType="hashmap">
+		UPDATE user SET pwd=#{password}, nickname=#{nickname} where id = #{id}
+	</update>  	
   	
 </mapper>
+
+
+
 

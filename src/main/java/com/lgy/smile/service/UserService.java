@@ -2,11 +2,14 @@ package com.lgy.smile.service;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dao.UserMapperInterface;
 import com.lgy.smile.dto.UserDto;
 
@@ -19,17 +22,43 @@ public class UserService implements UserMapperInterface {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	
 	@Override
 	public UserDto login(@RequestParam HashMap<String, String> params) {
 		
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
 		UserDto dto = userDao.login( params );
 		
-		
 		return dto;
 	}
 
+	@Override
+	public void modify(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> modify start");
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		
+		
+		log.info("UserService ===> modify ===> userDao ===> " + userDao);
+		
+		UserDto user = new DevUtils().getUserInfo(session);
+		params.put("id", user.getId() );
+		log.info( params.toString() );
+		
+		userDao.modify(params);
+		
+		log.info("UserService ===> modify end");
+		
+	}
+
+	@Override
+	public void modify(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+	
+	
 	
 	// ☆ 유저 정보조회 기능 필요 ( pk로 검색 )
 	// public 유저DTO findByPK(int userPK) { ... return 유저dto  }
