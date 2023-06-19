@@ -139,7 +139,6 @@ public class EmailSender {
 		// 의존성 주입
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:applicationCTX.xml");
 		mailConfig = ctx.getBean("mailConfig", EmailSenderConfig.class);
-		System.out.println(mailConfig.toString());
 
 		// SMTP 설정
 		properties = System.getProperties();
