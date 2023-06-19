@@ -30,10 +30,6 @@ public class UserController {
 	// ★ user(유저) 로그인 화면
 	@GetMapping("/login")
 	public String userLogin() {
-		
-		int number = devUtils.emailSenderByCreate("taehwa10404@naverc.com");
-		log.info("발송한 인증번호 받아보기 => " + number );
-				
 		return "user/login";
 	}
 
