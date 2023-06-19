@@ -2,10 +2,12 @@ package com.lgy.smile.controller;
 
 import java.util.HashMap;
 
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeCommentController {
 	@Autowired private NoticeCommentService commentService;
 	
+	
 	@PostMapping("/write")
 	public String noticeWrite(@RequestParam HashMap<String, String> params) {
 		log.info("@# write");
@@ -29,16 +32,17 @@ public class NoticeCommentController {
 	}
 	
 	
-	// ★ notice(공지) 글 읽기
+	// ★ notice(공지) 댓글 읽기
 	@GetMapping("/read")
-	public String noticeRead(@RequestParam HashMap<String, String> params) {
+	public String noticeRead(Model model, @RequestParam HashMap<String, String> params) {
 		log.info("@# read");
 		commentService.contentViewcomment(params);
+		model.addAttribute("comment", commentService.contentViewcomment(params));
 		return "notice/read";
 	}
 	
 	
-	// ★ notice(공지) 글 수정
+	// ★ notice(공지) 댓글 수정
 	@GetMapping("/edit")
 	public String noticeEdit(@RequestParam HashMap<String, String> params) {
 		log.info("@# edit");
@@ -46,7 +50,7 @@ public class NoticeCommentController {
 		return "notice/edit";
 	}
 
-	// ★ notice(공지) 글 삭제
+	// ★ notice(공지) 댓글 삭제
 	@GetMapping("/delete")
 	public String noticeDelete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# delete");

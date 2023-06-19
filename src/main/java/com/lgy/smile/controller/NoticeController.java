@@ -61,9 +61,10 @@ public class NoticeController {
 	
 	// ★ notice(공지) 글 읽기
 	@GetMapping("/read")
-	public String noticeRead(@RequestParam HashMap<String, String> params) {
+	public String noticeRead(Model model, @RequestParam HashMap<String, String> params) {
 		log.info("@# read");
 		service.contentView(params);
+		model.addAttribute("board",service.contentView(params));
 		return "notice/read";
 	}
 	
