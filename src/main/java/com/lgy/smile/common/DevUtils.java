@@ -92,11 +92,11 @@ public class DevUtils  {
 	
 	
 	
-	public boolean emailSenderByCreate(String to) {
+	public int emailSenderByCreate(String to) {
 		return emailSender.sendEmail(to, sendType.create);
 	}
 	
-	public boolean emailSenderByForget(String to) {
+	public int emailSenderByForget(String to) {
 		return emailSender.sendEmail(to, sendType.forget);
 	}
 

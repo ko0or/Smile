@@ -9,7 +9,7 @@
 	location="classpath:application.properties"
 />
 
-<bean id="mailConfig" class="com.lgy.second.MailConfig">
+<bean id="mailConfig" class="com.lgy.smile.common.EmailSenderConfig">
 	<property name="naverId" value="${email.naverId}" />
 	<property name="naverPw" value="${email.naverPw}" />
 	<property name="host" value="${email.host}" />
@@ -17,6 +17,7 @@
 	<property name="auth" value="${email.ssl}" />
 	<property name="ssl" value="${email.port}" />
 </bean>
+
 
 
 </beans>

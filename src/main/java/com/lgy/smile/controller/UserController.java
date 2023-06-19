@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.UserService;
 
@@ -23,12 +24,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserController {
 	
-	@Autowired
-	private UserService userService;
+	@Autowired private UserService userService;
+	@Autowired private DevUtils devUtils;
 
 	// ★ user(유저) 로그인 화면
 	@GetMapping("/login")
 	public String userLogin() {
+		
+		int number = devUtils.emailSenderByCreate("taehwa10404@naverc.com");
+		log.info("발송한 인증번호 받아보기 => " + number );
+				
 		return "user/login";
 	}
 
@@ -36,6 +41,7 @@ public class UserController {
 	@PostMapping("/login")
 //	public ResponseEntity<Void> login(@RequestParam HashMap<String, String> params, HttpSession session) {
 	public ResponseEntity<Integer> login(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
 		UserDto dto = userService.login( params );
 		
 		if ( dto != null ) {

@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
 /* ======================================================================================================== >>
 
@@ -66,7 +67,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 	    
 	  	
 << ========================================================================================================  */
-
+@Service
 public class EmailSender {
 
 	// sendEmail() 메소드의 2번째 매개변수에 사용될 타입 ( 본인인증 : checkForUser, 임시 비밀번호발급 :
@@ -89,13 +90,16 @@ public class EmailSender {
 				+ certificationNumber + "] 으로 발급되었습니다.</p><sub><i>*</i> 로그인 후 꼭 비밀번호를 변경해주세요 !</sub> </div> </div>";
 	}
 
-	public boolean sendEmail(String to, sendType type) {
+	public int sendEmail(String to, sendType type) {
+		
+		int certificationNumber = -1;
+		
 		try {
 
 			emailTitle = "메일 제목";
 
 			ready(to); // ==> 이메일 발송을 위해 필요한 정보를 세팅해주는 ready() 메소드 호출
-			int certificationNumber = (int) (Math.random() * 99999) + 10000; // ==> 인증번호 준비
+			certificationNumber = (int) (Math.random() * 99999) + 10000; // ==> 인증번호 준비
 
 			/* ===== 매개변수로 받은 Enum 타입에 따라 발송될 내용을 분기처리 ( 본인인증용 or 임시비밀번호 발급용 ) ===== */
 			if (type.equals(sendType.create) == true) {
@@ -123,15 +127,15 @@ public class EmailSender {
 
 			Transport.send(message);
 			System.out.println("이메일 전송 완료 :) ");
-			return true;
 
 		} catch (MessagingException me) {
 			me.printStackTrace();
-			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
+		
+		
+		return certificationNumber;
 	}
 
 	private void ready(String to) throws MessagingException {
