@@ -7,7 +7,7 @@
 <!-- insert into smile.board_trade values(null, 'teng', 'teng1234', sysdate(), 'contacted' , 'c:/dev/', 'wait', 5000, '부산광역시 진구 무슨무슨대로 342번길 32길', 3);  	 -->
   	<insert id="write" parameterType="hashmap">
 	    INSERT INTO board_trade VALUES (
-	    	null , #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, 'wait', #{user}
+	    	null , #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, 'wait', #{price} , #{address} , #{user}
 	    )
   	</insert>
 

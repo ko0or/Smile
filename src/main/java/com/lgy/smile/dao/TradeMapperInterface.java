@@ -13,7 +13,7 @@ import com.lgy.smile.dto.TradeDto;
 public interface TradeMapperInterface {
 	
 	public ArrayList<TradeDto> list();
-	public void write(@RequestParam HashMap<String, String> param, MultipartFile[] uploadFile);
+	public void write(@RequestParam HashMap<String, String> param);
 	public void write(@RequestParam HashMap<String, String> param, MultipartFile[] uploadFile, HttpSession session);
 	
 	public TradeDto contentView(@RequestParam HashMap<String, String> param);
