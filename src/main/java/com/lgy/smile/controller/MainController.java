@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lgy.smile.common.DevUtils;
+import com.lgy.smile.common.EmailSender;
 import com.lgy.smile.dto.MainBoardDto;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.MainService;
@@ -35,6 +36,8 @@ public class MainController {
 	// ★ main(피드) 목록
 	@GetMapping("/list")
 	public String mainList(Model model, HttpSession session) {
+		
+		
 		
 		UserDto dto = devUtils.getUserInfo(session);
 		if ( dto == null ) {

@@ -11,13 +11,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lgy.smile.common.EmailSender.sendType;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.UserService;
 
 @Service
-public class DevUtils {
+public class DevUtils  {
 
 	@Autowired private UserService userService;
+	@Autowired private EmailSender emailSender;
 
 /* ================================================================================================================= >  
 	  
@@ -89,6 +91,15 @@ public class DevUtils {
 	
 	
 	
+	
+	public boolean emailSenderByCreate(String to) {
+		return emailSender.sendEmail(to, sendType.create);
+	}
+	
+	public boolean emailSenderByForget(String to) {
+		return emailSender.sendEmail(to, sendType.forget);
+	}
+
 	
 	// ☆ 작성자 or 관리자 인지 확인후 boolean 타입으로 리턴 
 	// => 유저 서비스 계층에서 만들어둔 메소드 가져오기
