@@ -1,17 +1,23 @@
 package com.lgy.smile.controller;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lgy.smile.dto.TradeDto;
@@ -36,6 +42,15 @@ public class TradeController {
 
 		return "trade/list";
 	}
+	
+	
+	@GetMapping("/getPosts")
+	public ResponseEntity< ArrayList<TradeDto> > getPosts() {
+		return ResponseEntity.status(HttpStatus.OK).body( service.list() );
+	}
+	
+	
+	
 
 	
 	@GetMapping("/write")
@@ -44,10 +59,9 @@ public class TradeController {
 	}
 	
 	
-	
 	// ★ trade(중고 거래) 글 쓰기
 	@PostMapping("/write")
-	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile imgPath) {
+	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath) {
 		log.info("@# write");
 
 		service.write(params, imgPath);
@@ -82,36 +96,27 @@ public class TradeController {
 		return "trade/delete";
 	}
 	
-	// 파일업로드
-	@Controller
-	public class UploadController {
-		
-		@PostMapping("/uploadFormAction")
-		public void uploadFormAction(MultipartFile[] uploadFile) {
+	// ======= ★<img src="요기들어갈꺼 리턴해주는 메소드"> ============================= >
+		@ResponseBody
+		@GetMapping("/display")
+		public ResponseEntity<byte[]> getFile(String fileName) {
+	    
+	 
+	    	// 리턴용 객체와 파일 조회용 객체생성
+			ResponseEntity<byte[]> result = null;		
+			File file = new File(fileName);
+
 			
-			for (MultipartFile multipartFile : uploadFile) {
-				log.info("========================================================");
-				/* 파일이름 출력 */log.info("multipartFile.getOriginalFilename() => " + multipartFile.getOriginalFilename()); 
-				/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );			
-				log.info("========================================================");
+			try {
 				
-				try { 				
-					
-					File uploadFolder = new File( "C:/upload/temp3/" );
-					if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
-					// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
-					
-					
-					File saveFile = new File(uploadFolder.getPath(), multipartFile.getOriginalFilename());
-					// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
-					
-					multipartFile.transferTo( saveFile ); 
-					// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
-					// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
-					
-				} catch (Exception e) { e.printStackTrace(); }
+				// 화면에 무슨 타입으로 보여줄지 + 해당 타입으로 뭘 보여줄지 작성
+				HttpHeaders header = new HttpHeaders();
+				header.add("Content-Type", Files.probeContentType(file.toPath()));
+				result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
 				
-			} // ~ for 반복문 종료
+
+	        // 오류발생했을땐 해당 메시지 + null 값 리턴
+			} catch (Exception e) { e.printStackTrace();}		
+			return result;
 		}
-	}	
 }

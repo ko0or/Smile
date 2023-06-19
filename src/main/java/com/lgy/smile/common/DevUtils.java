@@ -15,7 +15,6 @@ public class DevUtils {
 
 	private UserService userService;
 	
-	
 	public String getDate() {
 		LocalDateTime now = LocalDateTime.now();
 		Date date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());

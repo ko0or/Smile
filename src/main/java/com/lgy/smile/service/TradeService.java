@@ -1,4 +1,5 @@
 package com.lgy.smile.service;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,7 +43,7 @@ public class TradeService implements TradeMapperInterface {
 	}
 
 	@Override
-	public void write(@RequestParam HashMap<String, String> params, MultipartFile uploadFile) {
+	public void write(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		
 		//=> ☆ 넘어온 값 보기
 		log.info("@# TradeService.write() start");
@@ -53,29 +54,50 @@ public class TradeService implements TradeMapperInterface {
 		params.put( "created", devUtils.getDate() );		
 		if ( params.get("contacted") != null ) {
 			// 비대면 결제에 체크했다면,   contacted 값을 uncontacted(비대면) 으로 저장하고
-			params.replace("contacted", "uncontacted");
+			params.replace("contacted", "비대면");
 		} else {
 			// 비대면 결제에 체크하지않았다면,  contacted 값을 contacted(대면) 으로 저장한다.
-			params.put("contacted", "contacted");
+			params.put("contacted", "만나요");
 		}
 		
-		/*
-		 * 
-		 *     파일 업로드
-		 * 
+		/* 
+		 *     파일 업로드 
 		 */
+		for (MultipartFile multipartFile : uploadFile) {
+			log.info("========================================================");
+			/* 파일이름 출력 */log.info("multipartFile.getOriginalFilename() => " + multipartFile.getOriginalFilename()); 
+			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );
 			
-		/*
-		 파일이름 출력 log.info("multipartFile.getOriginalFilename() => " + uploadFile.getOriginalFilename()); 
-		 파일크기 출력  log.info( "multipartFile.getSize() => " + uploadFile.getSize() );		
-		*/
-
-		
-		
-		
-		
+			
+			
+			log.info("========================================================");
+			
+			try { 				
+				
+				File uploadFolder = new File( "C:/upload/temp3/" );
+				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
+				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
+				
+				File saveFile = new File(uploadFolder.getPath(), multipartFile.getOriginalFilename());
+				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
+				
+				
+				params.put("imgPath", saveFile.getPath() ); 
+				
+				//params.put("user", );
+				
+				
+				
+				multipartFile.transferTo( saveFile ); 
+				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
+				// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
+				
+			} catch (Exception e) { e.printStackTrace(); }
+			
+		} // ~ for 반복문 종료
+			
 		//=> ☆ 쿼리 실행
-		//dao.write(params, uploadFile);
+		dao.write(params, uploadFile);
 		
 		log.info("@# TradeService.write() end");
 	}
@@ -110,6 +132,12 @@ public class TradeService implements TradeMapperInterface {
 		dao.delete(params);
 		
 		log.info("@# TradeService.delete() end");
+		
+	}
+
+	@Override
+	public void write(HashMap<String, String> param, MultipartFile[] uploadFile) {
+		// TODO Auto-generated method stub
 		
 	}
 }

@@ -7,12 +7,13 @@
 <!-- insert into smile.board_trade values(null, 'teng', 'teng1234', sysdate(), 'contacted' , 'c:/dev/', 'wait', 5000, '부산광역시 진구 무슨무슨대로 342번길 32길', 3);  	 -->
   	<insert id="write" parameterType="hashmap">
 	    INSERT INTO board_trade VALUES (
-	    	identity, #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, #{status}, #{user}
+	    	null , #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, 'wait', #{user}
 	    )
   	</insert>
 
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto">
-	    SELECT * FROM board_trade ORDER BY identity DESC
+		SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
+		FROM board_trade
   	</select>
 
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
