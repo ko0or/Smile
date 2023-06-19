@@ -1,5 +1,6 @@
 package com.lgy.smile.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dao.NoticeCommentMapperinterface;
 import com.lgy.smile.dto.NoticeCommentDto;
 import com.lgy.smile.dto.UserDto;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeCommentService implements NoticeCommentMapperinterface {
 
 	@Autowired SqlSession sqlSession;
+	@Autowired DevUtils devUtils;
 	
 	@Override
 	public int getCount() {
@@ -29,21 +32,25 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	}
 
 	@Override
-	public void writecomment(HashMap<String, String> param) {
+	public void writecomment(HashMap<String, String> param, HttpSession session) {
 		NoticeCommentMapperinterface dao =sqlSession.getMapper(NoticeCommentMapperinterface.class);
+		
+		param.put("created", devUtils.getDate());
+		param.put("user", String.valueOf(devUtils.getUserInfo(session).getIdentity()) );
+		log.info("@# => " + param.toString());
+		
 		dao.writecomment(param);
 		
 	}
 
 	@Override
-	public NoticeCommentDto contentViewcomment(HashMap<String, String> param) {
+	public ArrayList<NoticeCommentDto> contentViewcomment(HashMap<String, String> param) {
 		NoticeCommentMapperinterface dao =sqlSession.getMapper(NoticeCommentMapperinterface.class);
-		NoticeCommentDto dto = dao.contentViewcomment(param);
-		return dto;
+		return dao.contentViewcomment(param);
 	}
 
 	@Override
-	public void modifycomment(HashMap<String, String> param) {
+	public void modifycomment(HashMap<String, String> param, HttpSession session) {
 		NoticeCommentMapperinterface dao =sqlSession.getMapper(NoticeCommentMapperinterface.class);
 		dao.modifycomment(param);
 		
@@ -51,19 +58,38 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 
 	@Override
 	public void deletecomment(HashMap<String, String> param, HttpSession session) {
-	
-		//UserDto user = (UserDto) session.getAttribute("userInfo");		
-		
-		// 삭제버튼  href="delete?identity=숫자"
-		// @RequsetParam  params 에 전달됌
-		// 그렇게 전달받은걸 여기서 씀
-		//if ( param.get("identity").equals(user.getIdentity()) == true ) {
 			
-			NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
-			dao.deletecomment(param, session);
-		// }
+		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
+		dao.deletecomment(param);
 		
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void modifycomment(HashMap<String, String> param) {
+		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void deletecomment(HashMap<String, String> param) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writecomment(HashMap<String, String> param) {
+		// TODO Auto-generated method stub
 		
 	}
 
