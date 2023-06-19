@@ -39,16 +39,65 @@ public class MainCommentService implements MainCommentMapperInterface {
 	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 
-	
+	/* ☆ 매퍼 오버라이딩 + 오버로딩 */
+	@Override public void write(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */	 	}
+	@Override public void modify(HashMap<String, String> params) 	{	 	/* TODO Auto-generated method stub */		}
+	@Override public void delete(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
 
+	
+	
+	
+	
 
 	@Override
 	public ArrayList<MainCommentDto> list(HashMap<String, String> params) {
 		
+		//=> ★ 댓글 목록 보여주기
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
 		return dao.list(params);
 		
 	}
 
+
+
+
+
+
+	@Override
+	public void write(HashMap<String, String> params, HttpSession session) {
+
+		//=> ★ 댓글 새로 작성하기
+		params.put("created", devUtils.getDate());
+		params.put("user", devUtils.getUserIdentityToString(session));
+		
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		dao.write(params);
+		
+	}
+
+
+
+
+	@Override
+	public void modify(HashMap<String, String> params, HttpSession session) {
+
+		//=> ★ 댓글 내용 수정하기
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		dao.modify(params);
+	}
+
 	
+	
+	
+
+
+	@Override
+	public void delete(HashMap<String, String> params, HttpSession session) {
+
+		//=> ★ 등록된 댓글 삭제하기
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		log.info("@# delete start()");
+		dao.delete(params);
+		log.info("@# delete end()");
+	}
 }
