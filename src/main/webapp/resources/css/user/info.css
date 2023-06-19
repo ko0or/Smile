@@ -1,5 +1,40 @@
 @charset "UTF-8";
 
+.info-wrapper {
+	position: relative;
+	padding: 20px;
+}
+
+.info-wrapper > .logo {
+	text-align: center;
+}
+
+.info-wrapper > div {
+	margin-bottom: 20px;
+}
+
+.info-wrapper > .logo,
+.info-wrapper > .from-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+}
+
+.info-wrapper > .form-wrapper a {
+	position: absolute;
+	left: 5px;
+}
+
+input[name=nickname],
+input[name=password],
+input[name=password2],
+div[name=id],
+div[name=point],
+div[name=role],
+h3 {
+	width: 500px;
+}
 
 
 
@@ -9,7 +44,7 @@
 
 
 
-.createAccount-wrapper > .btns {
+..info-wrapper > .btns {
 	margin-top: 70px;	
 }
 

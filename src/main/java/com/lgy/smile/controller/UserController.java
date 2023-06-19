@@ -26,37 +26,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	// ★ user(유저) 정보 조회화면
-	@GetMapping("/info")
-	public String userInfo(HttpSession session, Model model) {
-		
-		log.info("GET방식으로 info 사이트로 들어옴");
-		
-		if (session.getAttribute("userInfo") == null ) {
-			return "redirect:login";
-		}else {
-			UserDto user = (UserDto) session.getAttribute("userInfo");
-			model.addAttribute("user", user);
-		}
-		
-		return "user/info";
-	}
-
 	// ★ user(유저) 로그인 화면
 	@GetMapping("/login")
 	public String userLogin() {
 		return "user/login";
 	}
 
-	// ★ user(유저) 회원가입 화면
-	@GetMapping("/createAccount")
-	public String userCreateAccount() {
-		return "user/createAccount";
-	}
-	
-	
-//================================================================================ >
-	
+	// ★ user(유저) 로그인 처리 (아이디 조회되고 비밀번호 일치하면 로그인 완료 후 메인 게시판으로 이동, 아니면 다시 로그인 화면)
 	@PostMapping("/login")
 //	public ResponseEntity<Void> login(@RequestParam HashMap<String, String> params, HttpSession session) {
 	public ResponseEntity<Integer> login(@RequestParam HashMap<String, String> params, HttpSession session) {
@@ -101,6 +77,41 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(400);
 		}
 	}	
+	
+	// ★ user(유저) 정보 조회화면
+	@GetMapping("/info")
+	public String userInfo(HttpSession session, Model model) {
+		
+		log.info("GET방식으로 info 사이트로 들어옴");
+		
+		if (session.getAttribute("userInfo") == null ) {
+			return "redirect:login";
+		}else {
+			UserDto user = (UserDto) session.getAttribute("userInfo");
+			model.addAttribute("user", user);
+		}
+		
+		return "user/info";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	// ★ user(유저) 회원가입 화면
+	@GetMapping("/createAccount")
+	public String userCreateAccount() {
+		return "user/createAccount";
+	}
+	
+	
+//================================================================================ >
+	
+
 }
 
 
