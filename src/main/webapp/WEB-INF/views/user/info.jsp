@@ -7,11 +7,76 @@
 <body>
 <%@ include file="../common/navbar.jsp" %>
 <!-- -------------------------------------------------------------------------- -->
-<style>@import '../resources/css/user.css'</style>
+<!-- <style>@import '../resources/css/user.css'</style> -->
+<style>@import '../resources/css/user/info.css'</style>
 <section>
 <!-- -------------------------------------------------------------------------- -->
 
+<div class="info-wrapper">
+	
+	<!-- 회원정보 수정 배너부분 -->
+	<div class="logo">
+		<h1>회원 정보</h1>
+	</div>
+		
+	<!-- 아디, 비밀번호 수정 화면 -->
+	<div class="form-wrapper">	
+		<form id="modifyForm" action="modify" method="POST">
+		
+			<div class="form-floating mb-3">
+				<div name="nickname" type="text" class="form-control" id="floatingNickname">
+				${ user.nickname }</div> 
+				<label for="floatingNickname"><i>*</i>
+				닉네임</label>
+			</div>
+							
+			<div class="form-floating mb-3">
+				<div name="id" type="email" class="form-control" id="floatingEmail">
+				${ user.id }</div> 
+				<label for="floatingEmail"><i>*</i>
+				이메일 계정</label>
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="password" type="password" class="form-control" id="floatingPassword">
+				${ user.pwd }</div> 
+				<label for="floatingPassword"><i>*</i>
+				비밀번호</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="password2" type="password" class="form-control" id="floatingPassword2">
+				${ user.pwd }</div>
+				<label for="floatingPassword2"><i>*</i>
+				비밀번호 재확인</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="point" type="text" class="form-control" id="floatingPoint">
+				${ user.point }</div>
+				<label for="floatingPassword2"><i>*</i>
+				포인트</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="role" type="text" class="form-control" id="floatingRole">
+				${ user.role }</div>
+				<label for="floatingPassword2"><i>*</i>
+				회원구분</label>				
+			</div>
+		</form>
+	</div>
 
+	<div class="btns">
+		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정</button>
+		<button id="logOut" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
+		로그아웃</button>
+	</div>
+	
+	<h1 style="color: grey;">OR</h1><br>
+	<a href="createAccount">회원탈퇴 (클릭)</a>
+
+</div>
 
 
 <!-- -------------------------------------------------------------------------- -->
@@ -20,7 +85,29 @@
 </body>
 <script>
 $(document).ready(function() {
-    
+	
+	// 회원정보 수정 버튼 눌렀을 때 처리
+    $("#modifyInfo").click(function(){
+    	//$("#modifyForm").submit();
+
+		var formData = $("#modifyForm").serialize();
+		console.log("@# ====> " + formData);
+		
+		$.ajax({
+			type: "POST"
+		   ,data: formData
+		   ,url: "modify"
+		   ,success: function(data, status){
+			   alert(status);
+			   console.log("@# success");
+			   
+		   }
+		   ,error : function(){
+			   console.log("@# error");
+			   
+		   }
+		})
+    });
 
 })// ~~ end
 </script>

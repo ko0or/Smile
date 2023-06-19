@@ -14,5 +14,9 @@ public class UserDto {
 	private String nickname;
 	private int point;
 	private String role;
-	
 }
+
+
+
+
+

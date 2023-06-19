@@ -28,5 +28,12 @@
 </section>
 <!-- <%@ include file="../common/footer.jsp" %> -->
 </body>
+<script>
+
+// UserDto dto = devUtils.getUserInfo(session);
+// model.addAttribute("userIdentity", dto.getIdentity()  );
+var userIdentity = ${userIdentity};
+
+</script>
 <script src="../resources/js/feed/list.js"></script>
 </html>

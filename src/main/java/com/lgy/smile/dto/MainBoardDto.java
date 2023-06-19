@@ -6,10 +6,11 @@ import lombok.Data;
 public class MainBoardDto {
 
 	private int identity;
-	private String title;
 	private String content;
 	private String created;
-	private String LIKE;
+	private String likes;
 	private int user;
 	
+	
+	private String nickname;
 }

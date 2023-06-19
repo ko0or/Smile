@@ -27,9 +27,9 @@ public class ChattingService implements ChattingInterface{
 	}
 
 	@Override
-	public ChattingDto contentView(HashMap<String, String> params) {
+	public ChattingDto contentView(int chattingroom) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
-		return dao.contentView(params);
+		return dao.contentView(chattingroom);
 	}
 
 	@Override

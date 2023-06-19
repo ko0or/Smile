@@ -26,11 +26,19 @@
   
   <!-- 전역 CSS 설정 -->
 <style>
+
+@font-face {
+    font-family: 'Jal_Onuel';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
-  		margin: 0px;
-  		padding: 0px;
-  		text-decoration: none;  	
-  		list-style: none; 		
+ 	margin: 0px;
+ 	padding: 0px;
+ 	text-decoration: none;  	
+ 	list-style: none;
   }
 a { 
 	color: black; 
@@ -42,6 +50,11 @@ section {
 	max-width: 960px; 
 	min-height: 100vh; 
 	margin: 100px auto; 
+	
+}
+section 
+table, th, td, a, p, div, span, li, button, input, textarea, select, option, h1, h2, h3, h4, h5, h6 {
+	font-family: 'Jal_Onuel'
 }
 
 .profileImageIcon {
@@ -60,4 +73,5 @@ section {
 body{ -ms-overflow-style: none; } 
 ::-webkit-scrollbar { display: none; }
 */
+
 </style>

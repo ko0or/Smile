@@ -12,7 +12,7 @@
 <!-- -------------------------------------------------------------------------- -->
 
 <div class="login-wrapper">
-	
+
 	<!-- 로그인 배너부분 -->
 	<div class="logo">
 		<h1>회원 로그인</h1>
@@ -45,6 +45,7 @@
 	
 	<h1 style="color: grey;">OR</h1><br>
 	<a href="createAccount">사이트 회원가입 (클릭)</a>
+	
 </div>
 
 
@@ -71,10 +72,50 @@ $(document).ready(function() {
 	
 	// 로그인 버튼 눌렀을때 처리
 	$("#loginCheck").click(function() {
-		$("#loginForm").submit();
+// 		$("#loginForm").submit();
+		
+		var formData = $("#loginForm").serialize();
+		console.log("@# ====> " + formData);
+		
+		$.ajax({
+			type: "POST"
+		   ,data: formData
+		   ,url: "login"
+// 		   ,statusCode: {404 : function(data){console.log(data);}}
+		
+		   ,success: function(data, status){
+// 		   ,success: function(data){
+			   
+			   console.log("data before");
+			   console.log(data);			//200	// HTTP에러 발생하면 데이터 수신 못함(200만 받음)
+			   console.log(status); 		//success
+			   console.log("after data");
+			   
+			    if (data === 200) {
+			    	console.log("로그인 성공")
+				    location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+// 				★ aws 배포시 => location.href = "/main/list";		
+			    	
+// 			    }else if(data === 404) {
+// 			    	console.log("로그인 실패 => 비밀번호 불일치")
+// 				    $(".loginFailed").html("<br><h3>wrong password</h3>");
+			    	
+// 			    }else if(data === 400) {
+// 			    	console.log("로그인 실패 => 회원 아이디 조회 불가")
+// 				    $(".loginFailed").html("<br><h3>no id found</h3>");
+			    	
+			    }
+		   }
+		   ,error: function(){
+			   alert("로그인 실패했습니다.");
+// 			   $(".loginFailed").html("<br><h3>로그인 실패. 아이디 혹은 비밀번호 확인해주세요.</h3>");
+			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
+		   }
+		});
 	})
 	
-
 })// ~~ end
 </script>
 </html>
+
+

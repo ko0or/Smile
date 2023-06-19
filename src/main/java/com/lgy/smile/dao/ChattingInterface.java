@@ -9,6 +9,6 @@ import com.lgy.smile.dto.ChattingDto;
 
 public interface ChattingInterface {
 	public ArrayList<ChattingDto> list();
-	public ChattingDto contentView(@RequestParam HashMap<String, String> params);
+	public ChattingDto contentView(int chattingroom);
 	public void write(@RequestParam HashMap<String, String> params);
 }
