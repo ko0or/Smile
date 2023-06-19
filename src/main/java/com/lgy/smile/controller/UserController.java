@@ -27,12 +27,14 @@ public class UserController {
 	@Autowired private UserService userService;
 	@Autowired private DevUtils devUtils;
 
+//================================================================================ >
+	
 	// ★ user(유저) 로그인 화면
 	@GetMapping("/login")
 	public String userLogin() {
 		
-		int number = devUtils.emailSenderByCreate("taehwa10404@naverc.com");
-		log.info("발송한 인증번호 받아보기 => " + number );
+//		int number = devUtils.emailSenderByCreate("taehwa10404@naver.com");
+//		log.info("발송한 인증번호 받아보기 => " + number );
 				
 		return "user/login";
 	}
@@ -50,6 +52,7 @@ public class UserController {
 				log.info("@ => 로그인 성공 ( 닉네임 : " + dto.getNickname() + ") " );
 				
 				session.setAttribute("userInfo", dto);
+				session.setMaxInactiveInterval(1800);	// 세션 30분 설정 
 				log.info("@ => session " + session.getAttribute("userInfo"));
 				
 //				log.info("@# HttpStatus.OK ===>"+ ResponseEntity.status(HttpStatus.OK).build());
@@ -61,7 +64,6 @@ public class UserController {
 				
 			} else {
 				log.info("@ => 로그인 실패 => 비밀번호 불일치");
-				
 				
 //				log.info("@# HttpStatus.NOT_FOUND ===>"+ ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 //				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -84,7 +86,9 @@ public class UserController {
 		}
 	}	
 	
-	// ★ user(유저) 정보 조회화면
+//================================================================================ >
+	
+	// ★ user(유저) 회원정보 조회화면
 	@GetMapping("/info")
 	public String userInfo(HttpSession session, Model model) {
 		
@@ -100,20 +104,37 @@ public class UserController {
 		return "user/info";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	// ★ user(유저) 회원정보 수정처리 (비밀번호와 비밀번호 확인 일치하면 회원정보 수정 후 메인 게시판으로 이동, 아니면 경고창)
+	@PostMapping("/modify")
+	public ResponseEntity<String> modify(@RequestParam HashMap<String, String> params, HttpSession session) {
+		log.info("UserController ===> modify method ====> start");
+		
+		String password = params.get("password");
+		String password2 = params.get("password2");
+		log.info(password);
+		log.info(password2);
+		
+		if(password.equals(password2)) {
+			
+			userService.modify(params, session);
+			
+			log.info("UserController ===> modify method ====> end");
+			
+			//return "/smile/main/list";
+			return ResponseEntity.status(HttpStatus.OK).body("success");
+		}else {
+			log.info("@# UserController ===> modify ===> else ");
+			//return "login";
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+		}
+	}
+
 
 	// ★ user(유저) 회원가입 화면
 	@GetMapping("/createAccount")
 	public String userCreateAccount() {
 		return "user/createAccount";
 	}
-	
 	
 //================================================================================ >
 	
