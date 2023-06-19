@@ -19,7 +19,9 @@ public class HomeController {
     [4] webapp/resources/js/api/kakaoLogin.js
       .. aws 배포용 REST API KEY 로 변경해줘야함 ★
       
-      
+    
+    [5] login.jsp 파일에도 내용 변경 필요 
+    location.href = "/smile/main/list";
 << ============================================================================================================ */
 	
 	
@@ -29,13 +31,18 @@ public class HomeController {
 	// 기본 루트 사이트에 대한 정의 ★
 	
 	@GetMapping("/")
-	public String root() { return "redirect:main/home"; }
+	public String rootMain1() { return "redirect:/main/list"; }
+	
+	@GetMapping("/main")
+	public String rootMain2() { return "redirect:/main/list"; }
+	
+	@GetMapping("/main/")
+	public String rootMain3() { return "redirect:/main/list"; }
+	
+	
 	
 	@GetMapping("/main/home")
 	public String home() { return "default/home"; 	}
-	
-	@GetMapping("/main")
-	public String rootMain() { return "redirect:main/list"; }
 	
 	
 }

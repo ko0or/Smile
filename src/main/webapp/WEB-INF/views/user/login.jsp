@@ -94,6 +94,7 @@ $(document).ready(function() {
 			    if (data === 200) {
 			    	console.log("로그인 성공")
 				    location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+// 				★ aws 배포시 => location.href = "/main/list";		
 			    	
 // 			    }else if(data === 404) {
 // 			    	console.log("로그인 실패 => 비밀번호 불일치")
@@ -108,7 +109,7 @@ $(document).ready(function() {
 		   ,error: function(){
 			   alert("로그인 실패했습니다.");
 // 			   $(".loginFailed").html("<br><h3>로그인 실패. 아이디 혹은 비밀번호 확인해주세요.</h3>");
-			   location.href = "/smile/user/login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
+			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
 		});
 	})
