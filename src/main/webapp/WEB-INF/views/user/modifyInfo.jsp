@@ -65,10 +65,12 @@
 		</form>
 	</div>
 
+	<p>회원정보 수정을 저장하시겠습니까? </p>
+
 	<div class="btns">
-		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정</button>
-		<button id="logOut" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
-		로그아웃</button>
+		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정 저장</button>
+		<button id="goBack" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
+		뒤로가기</button>
 	</div>
 	
 	<h1 style="color: grey;">OR</h1><br>
@@ -96,16 +98,21 @@ $(document).ready(function() {
 		   ,data: formData
 		   ,url: "modify"
 		   ,success: function(data, status){
-			   alert(status);
-			   console.log("@# success");
-			   
+			   alert("회원정보 수정을 완료했습니다!");
+			   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+// 			   ★ aws 배포시 => location.href = "/main/list";		
 		   }
 		   ,error : function(){
-			   console.log("@# error");
-			   
+			   alert("비밀번호가 일치하지 않습니다!");
+// 			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
-		})
+		});
     });
+	
+	// 뒤로가기 버튼 눌렀을 때 처리
+	$("#goBack").click(function(){
+		history.back();
+	});
 
 })// ~~ end
 </script>

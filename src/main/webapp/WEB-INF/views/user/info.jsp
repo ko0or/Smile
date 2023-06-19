@@ -14,9 +14,9 @@
 
 <div class="info-wrapper">
 	
-	<!-- 회원정보 수정 배너부분 -->
 	<div class="logo">
 		<h1>회원 정보</h1>
+		<p>회원정보 화면입니다! </p>
 	</div>
 		
 	<!-- 아디, 비밀번호 수정 화면 -->
@@ -68,16 +68,12 @@
 	</div>
 
 	<div class="btns">
-		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정</button>
+		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정으로 가기</button>
 		<button id="logOut" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
 		로그아웃</button>
 	</div>
-	
-	<h1 style="color: grey;">OR</h1><br>
-	<a href="createAccount">회원탈퇴 (클릭)</a>
 
 </div>
-
 
 <!-- -------------------------------------------------------------------------- -->
 </section>
@@ -86,28 +82,15 @@
 <script>
 $(document).ready(function() {
 	
-	// 회원정보 수정 버튼 눌렀을 때 처리
+	// 회원정보 수정 버튼 눌렀을 때 회원정보 수정 화면으로 이동
     $("#modifyInfo").click(function(){
-    	//$("#modifyForm").submit();
-
-		var formData = $("#modifyForm").serialize();
-		console.log("@# ====> " + formData);
-		
-		$.ajax({
-			type: "POST"
-		   ,data: formData
-		   ,url: "modify"
-		   ,success: function(data, status){
-			   alert(status);
-			   console.log("@# success");
-			   
-		   }
-		   ,error : function(){
-			   console.log("@# error");
-			   
-		   }
-		})
+    	location.href = "modify";
     });
+	
+	// 로그아웃 버튼 눌렀을 때 세션 종료 후 메인 게시판으로 이동
+	$("#logOut").click(function(){
+		location.href = "logOut";
+	});
 
 })// ~~ end
 </script>
