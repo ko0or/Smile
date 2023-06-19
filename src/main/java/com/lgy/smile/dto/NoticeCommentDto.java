@@ -11,6 +11,7 @@ public class NoticeCommentDto {
 	private int identity;
 	private String content;
 	private String created;
+	private String nickname;
 	private int user;
 	private int board;
 }

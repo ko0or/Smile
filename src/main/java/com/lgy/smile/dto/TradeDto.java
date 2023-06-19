@@ -16,5 +16,10 @@ public class TradeDto {
 	private String contacted;
 	private String imgPath;
 	private String status;
+	private String address;	
+	private String price;
 	private int user;
+	
 }
+
+

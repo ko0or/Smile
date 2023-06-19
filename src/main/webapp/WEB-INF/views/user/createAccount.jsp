@@ -22,12 +22,6 @@
 	<!-- 아디, 비밀번호 입력 폼 화면 -->
 	<div class="form-wrapper">
 		<form action="#" method="POST">
-		
-<!-- 			<div class="form-floating"> -->
-<!-- 				<input name="password2" type="text" class="form-control" id="floatingName" placeholder="홍길동">  -->
-<!-- 				<label for="floatingName"><i>*</i> -->
-<!-- 				이름</label>				 -->
-<!-- 			</div>			 -->
 			
 			<div class="form-floating mb-3">
 				<input name="nickname" type="text" class="form-control" id="floatingNickname" placeholder="번쩍점프 장인"> 
@@ -97,6 +91,10 @@ $(document).ready(function() {
 			}
 		}
 	})
+	
+	
+	
+	
 
 })// ~~ end
 </script>

@@ -1,4 +1,5 @@
 package com.lgy.smile.common;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,8 +19,13 @@ import com.lgy.smile.service.UserService;
 @Service
 public class DevUtils  {
 
+	/* ===== 파일 저장되는 공간 ===== */
+	public String getSavePath() { return savePath;	}
+	
 	@Autowired private UserService userService;
 	@Autowired private EmailSender emailSender;
+	private String savePath = "C:/upload/temp3/";
+	 
 
 /* ================================================================================================================= >  
 	  
@@ -122,6 +128,12 @@ public class DevUtils  {
 	..
 	
 */
+	
+	
+	
+	
+	
+
 	
 	
 }

@@ -52,6 +52,10 @@ public class NoticeService implements NoticeMapperinterface {
 		
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 
+		if ( params.get("pageNum") == null ) {
+			params.put("pageNum", "1");
+		}
+		
 		log.info("pageNum => " + params.get("pageNum"));
 		log.info("pageNum Type => " + params.get("pageNum").getClass().getName());
 		

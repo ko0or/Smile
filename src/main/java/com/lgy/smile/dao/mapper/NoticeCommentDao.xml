@@ -9,11 +9,21 @@
     </select>
     <insert id="writecomment" parameterType="hashmap">
     insert into comment_notice(identity, content, created, user,board) values(
-			null , #{title} , #{content} , #{created} , #{user} , #{board}
+			null , #{content} , #{created} , #{user} , #{board}
 		)
     </insert>
      <select id="contentViewcomment" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeCommentDto">
-        select identity, content, created, user,board from comment_notice where identity=#{identity}
+		SELECT 
+			user.nickname ,
+		    comment.*
+		FROM 
+			smile.board_notice board ,
+		    smile.comment_notice comment , 
+		    smile.user user
+		WHERE
+			board.identity = #{identity}
+			AND board.identity = comment.board
+		    AND user.identity = comment.user
     </select>
     
     <update id="modifycomment" parameterType="hashmap">
