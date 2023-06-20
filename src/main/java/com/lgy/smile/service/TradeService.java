@@ -47,7 +47,7 @@ public class TradeService implements TradeMapperInterface {
 		
 		//=> ☆ 넘어온 값 보기
 		log.info("@# TradeService.write() start");
-		log.info( params.toString() );
+		
 		
 		//=> ☆ 저장할 값 세팅하기
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);		
@@ -74,18 +74,18 @@ public class TradeService implements TradeMapperInterface {
 			
 			try { 				
 				
-				File uploadFolder = new File( "C:/upload/temp3/" );
+				File uploadFolder = new File( devUtils.getSavePath() );
 				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
 				
-				File saveFile = new File(uploadFolder.getPath(), multipartFile.getOriginalFilename());
+				File saveFile = new File( devUtils.getSavePath() , multipartFile.getOriginalFilename());
 				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
 				
 				
-				params.put("imgPath", saveFile.getPath() ); 
-				
-				//params.put("user", );
-				
+				// params.put("imgPath", saveFile.getPath() );
+				params.put("imgPath", devUtils.getSavePath() + multipartFile.getOriginalFilename() );
+				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
+				log.info( params.toString() );
 				
 				
 				multipartFile.transferTo( saveFile ); 
@@ -97,7 +97,7 @@ public class TradeService implements TradeMapperInterface {
 		} // ~ for 반복문 종료
 			
 		//=> ☆ 쿼리 실행
-		dao.write(params, uploadFile);
+		dao.write(params);
 		
 		log.info("@# TradeService.write() end");
 	}
@@ -135,8 +135,9 @@ public class TradeService implements TradeMapperInterface {
 		
 	}
 
+
 	@Override
-	public void write(HashMap<String, String> param, MultipartFile[] uploadFile) {
+	public void write(HashMap<String, String> param) {
 		// TODO Auto-generated method stub
 		
 	}

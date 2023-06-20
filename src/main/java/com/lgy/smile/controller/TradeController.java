@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -61,10 +63,11 @@ public class TradeController {
 	
 	// ★ trade(중고 거래) 글 쓰기
 	@PostMapping("/write")
-	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath) {
+	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		log.info("@# write");
 
-		service.write(params, imgPath);
+		service.write(params, imgPath, session);
+		
 		
 		return "redirect:list";
 	}

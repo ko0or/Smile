@@ -1,4 +1,5 @@
 package com.lgy.smile.common;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,8 +19,13 @@ import com.lgy.smile.service.UserService;
 @Service
 public class DevUtils  {
 
+	/* ===== 파일 저장되는 공간 ===== */
+	public String getSavePath() { return savePath;	}
+	
 	@Autowired private UserService userService;
 	@Autowired private EmailSender emailSender;
+	private String savePath = "C:/upload/temp3/";
+	 
 
 /* ================================================================================================================= >  
 	  
@@ -46,6 +52,11 @@ public class DevUtils  {
 	  		
 	  		.. ★ 중요 : input 태그의 name 속성 값이 user 로 되어있어야함 ! 
 	  
+	  
+	  [5] public String getUserIdentityToString(HttpSession session) 
+	  		.. 언제 사용 => params 에 put 으로 유저 pk값을 문자열로 추가해야할때 이거 쓰면 간단함
+	  		.. 무슨 기능 => 유저 세션에 있는 identity (PK값)을 문자열로 반환하는 메소드
+	
 	  
 < ================================================================================================================= */
 	
@@ -89,6 +100,14 @@ public class DevUtils  {
 		return false;
 	}
 	
+	// [5] 유저 세션에 있는 identity (PK값)을 문자열로 반환하는 메소드
+	public String getUserIdentityToString(HttpSession session) {
+		UserDto user = getUserInfo(session);
+		if ( user != null ) {
+			return String.valueOf( user.getIdentity() );
+		}
+		return null;
+	}
 	
 	
 	
@@ -122,6 +141,12 @@ public class DevUtils  {
 	..
 	
 */
+	
+	
+	
+	
+	
+
 	
 	
 }
