@@ -12,9 +12,28 @@
 				    smile.user user
 				WHERE 
 					comment.board = #{boardIdentity}
-				    AND comment.user = user.identity;
+				    AND comment.user = user.identity
   	</select>
   	
-  	
+
+	<insert id="write" parameterType="hashmap">
+				INSERT INTO smile.comment_main VALUES(
+					null , #{content} , #{created} , #{user} , #{board}
+				)
+	</insert>  	
+
+	<insert id="modify" parameterType="hashmap">
+				UPDATE 
+					smile.comment_main 
+				SET 
+					content = #{content}
+				WHERE 
+					identity = #{identity}
+	</insert>  	
+
+	<delete id="delete" parameterType="hashmap">
+				DELETE FROM smile.comment_main 
+				WHERE identity = #{identity}
+	</delete>  	
   	
 </mapper>

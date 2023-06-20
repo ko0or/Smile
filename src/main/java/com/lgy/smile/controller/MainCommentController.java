@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,17 +32,50 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/main/comment")
 public class MainCommentController {
-
+	
 	@Autowired private MainCommentService commentService;
 	@Autowired private DevUtils devUtils;
 
 	
-	@GetMapping("/getComments")
-	@ResponseBody
+	
+	//=> ★ 댓글 목록 보여주기
+	@GetMapping("/getComments") @ResponseBody
 	public ResponseEntity<List<MainCommentDto>> getPosts(@RequestParam HashMap<String, String> params) {
 
 		ArrayList<MainCommentDto> dtos = commentService.list(params);
 		return ResponseEntity.status(HttpStatus.OK).body(dtos);
 	}
-
+	
+	
+	
+	//=> ★ 댓글 새로 작성하기
+	@PostMapping("/write") @ResponseBody
+	public ResponseEntity<Void> write(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		commentService.write(params, session);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	
+	
+	//=> ★ 댓글 내용 수정하기
+	@GetMapping("/modfiy") @ResponseBody
+	public ResponseEntity<Void> modfiy(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		commentService.modify(params, session);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	
+	
+	//=> ★ 등록된 댓글 삭제하기
+	@GetMapping("/delete") @ResponseBody
+	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		log.info("@# delete Controller start()");
+		log.info("@# modify Controller params => " + params.toString());
+		commentService.delete(params, session);
+		log.info("@# delete Controller end()");
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }
