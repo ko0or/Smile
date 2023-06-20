@@ -35,7 +35,7 @@ public class UserController {
 		
 //		int number = devUtils.emailSenderByCreate("taehwa10404@naver.com");
 //		log.info("발송한 인증번호 받아보기 => " + number );
-				
+		
 		return "user/login";
 	}
 
@@ -76,7 +76,6 @@ public class UserController {
 		}else {
 			log.info("@ => 로그인 실패 => 회원 아이디 조회 불가");
 			
-			
 //			log.info("@# HttpStatus.BAD_REQUEST ===>"+ ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 //			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 //			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
@@ -99,9 +98,20 @@ public class UserController {
 		}else {
 			UserDto user = (UserDto) session.getAttribute("userInfo");
 			model.addAttribute("user", user);
+			return "user/info";
 		}
-		
-		return "user/info";
+	}
+	
+	// ★ user(유저) 회원정보 수정화면
+	@GetMapping("/modify")
+	public String modify(HttpSession session, Model model) {
+		if (devUtils.getUserInfo(session) == null) {
+			return "redirect:login";
+		}else {
+			UserDto user = devUtils.getUserInfo(session);
+			model.addAttribute("user", user);
+			return "user/modifyInfo";
+		}
 	}
 	
 	// ★ user(유저) 회원정보 수정처리 (비밀번호와 비밀번호 확인 일치하면 회원정보 수정 후 메인 게시판으로 이동, 아니면 경고창)
@@ -111,28 +121,48 @@ public class UserController {
 		
 		String password = params.get("password");
 		String password2 = params.get("password2");
-		log.info(password);
-		log.info(password2);
 		
-		if(password.equals(password2)) {
+		if(password.equals(password2) && (password!=null)) {
 			
 			userService.modify(params, session);
 			
 			log.info("UserController ===> modify method ====> end");
 			
-			//return "/smile/main/list";
 			return ResponseEntity.status(HttpStatus.OK).body("success");
 		}else {
 			log.info("@# UserController ===> modify ===> else ");
-			//return "login";
+			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
 		}
 	}
+	
+	// ★ user(유저) 회원가입 화면
+	@GetMapping("/logOut")
+	public String logOut(HttpSession session) {
+		
+		log.info("UserController ===> logOut ===> session ");
+		session.invalidate();
+		
+		return "redirect:/main/list";
+	}
+	
+	//================================================================================ >
+	
+//	UserDto user = (UserDto) session.getAttribute("userInfo");
+//	model.addAttribute("user", user);
 
+	
+	
+	
 
 	// ★ user(유저) 회원가입 화면
 	@GetMapping("/createAccount")
 	public String userCreateAccount() {
+		
+		
+		
+		
+		
 		return "user/createAccount";
 	}
 	

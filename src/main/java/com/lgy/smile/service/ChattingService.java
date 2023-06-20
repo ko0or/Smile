@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lgy.smile.common.DevUtils;
@@ -16,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ChattingService implements ChattingInterface{
 	
+	@Autowired
 	private SqlSession sqlSession;
+	@Autowired
 	private DevUtils devUtils;
 	
 	@Override
@@ -27,7 +30,7 @@ public class ChattingService implements ChattingInterface{
 	}
 
 	@Override
-	public ChattingDto contentView(int chattingroom) {
+	public ArrayList<ChattingDto> contentView(int chattingroom) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
 		return dao.contentView(chattingroom);
 	}
@@ -36,6 +39,8 @@ public class ChattingService implements ChattingInterface{
 	public void write(HashMap<String, String> params) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
 		params.put("sendtime", devUtils.getDate());
+	
+		log.info(""+params);
 		dao.write(params);
 	}
 

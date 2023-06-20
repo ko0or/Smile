@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,23 +29,36 @@ public class ChattingController {
 	@Autowired
 	ChattingRoomService chatttingRoomService;
 	
-	@GetMapping("/list")
+	@GetMapping("/getChattings")
 	public ResponseEntity<List<ChattingDto>> getChattings(@RequestParam HashMap<String, String> params) {
 		ArrayList<ChattingDto> list = chattingService.list();
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
-	@GetMapping("/contentView")
-	public ResponseEntity<ChattingDto> getChatting(@RequestParam HashMap<String, String> params) {
+	@PostMapping("/getChatting")
+	public ResponseEntity<List<ChattingDto>> getChatting(@RequestParam HashMap<String, String> params) {
 		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
-		ChattingDto dto = chattingService.contentView(roomDto.getIdentity());
-		return ResponseEntity.status(HttpStatus.OK).body(dto);
+		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
-	@GetMapping("/write")
+	@PostMapping("/write")
 	public String chattingRoomWrite(@RequestParam HashMap<String, String> params) {
 		chattingService.write(params);
 		return "/write";
+	}
+	
+	@RequestMapping("/chatCreateTest")
+	public String chatCreateTest() {
+		
+		return "/trade/test/chatCreateTest";
+	}
+	
+	@GetMapping("/chatListTest")
+	public String list(@RequestParam HashMap<String, String> params, Model model) {
+		ArrayList<ChattingDto> list = chattingService.list();
+		model.addAttribute("list", list);
+		return "/trade/test/chatListTest";
 	}
 
 }

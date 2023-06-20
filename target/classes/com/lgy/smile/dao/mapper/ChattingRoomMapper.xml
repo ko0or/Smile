@@ -21,4 +21,8 @@
 	    WHERE board = #{board} AND buyer = #{buyer}
   	</select>
 
+    <delete id="delete" parameterType="hashmap">
+		DELETE FROM chattingroom WHERE board = #{board} AND seller = #{seller} 
+    </delete>
+
 </mapper>

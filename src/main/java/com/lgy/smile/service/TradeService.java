@@ -60,16 +60,12 @@ public class TradeService implements TradeMapperInterface {
 			params.put("contacted", "만나요");
 		}
 		
-		/* 
-		 *     파일 업로드 
-		 */
+
+		//=> ☆ 파일 업로드
 		for (MultipartFile multipartFile : uploadFile) {
 			log.info("========================================================");
 			/* 파일이름 출력 */log.info("multipartFile.getOriginalFilename() => " + multipartFile.getOriginalFilename()); 
-			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );
-			
-			
-			
+			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );					
 			log.info("========================================================");
 			
 			try { 				
