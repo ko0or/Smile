@@ -28,6 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeCommentController {
 	@Autowired private NoticeCommentService commentService;
 	
+//	@GetMapping("/list")
+//	public int  count() {
+//		return commentService.getCount();
+//	}
+	
 	
 	@PostMapping("/write")
 	@ResponseBody

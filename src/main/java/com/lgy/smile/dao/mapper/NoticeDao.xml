@@ -6,23 +6,32 @@
 
     <select id="list" resultType="com.lgy.smile.dto.NoticeDto" parameterType="int">
         <![CDATA[
-        SELECT
-            identity, title, content, created, view, author, user 
-        FROM
-            board_notice
-        ORDER BY identity 
-        LIMIT ${start}, ${end}
+		SELECT
+			board.identity, board.title, board.content, board.created, board.view, board.user 
+		    , IFNULL(COUNT(comment.identity), 0) AS "comments"
+		FROM
+			smile.board_notice board
+		LEFT JOIN 
+		    smile.comment_notice comment ON board.identity = comment.board
+		GROUP BY 
+		    smile.board.identity
+		ORDER BY 
+			smile.board.identity DESC
+		LIMIT ${start}, ${end}
         ]]>
     </select>
     
     <insert id="write" parameterType="hashmap">
-		insert into board_notice(identity, title, content, created, view, author, user) values(
-			null , #{title} , #{content} , #{created} , 0 , #{author} , #{user}
+		insert into board_notice(identity, title, content, created, view, user) values(
+			null , #{title} , #{content} , #{created} , 0 , #{user}
 		)
+<!-- 		insert into board_notice(identity, title, content) values( -->
+<!-- 			null , #{title} , #{content}  -->
+<!-- 		) -->
     </insert>
     
     <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
-        select identity, title, content, created, view, author, user from board_notice where identity=#{identity}
+        select identity, title, content, created, view, user from board_notice where identity=#{identity}
     </select>
     
     <update id="modify" parameterType="hashmap">
@@ -33,5 +42,9 @@
     <delete id="delete" parameterType="hashmap">
 		delete from board_notice where identity=#{identity}
     </delete>
+    
+      <select id="getCount" resultType="int">
+      	SELECT COUNT(identity) FROM smile.board_notice
+    </select>
 
 </mapper>

@@ -11,7 +11,8 @@
 <section>
 <h1>공지사항 작성</h1>
 
-<form action="list" method="POST">
+<form action="write" method="POST">
+
 	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 "><br>
 	<textarea name="content" id="summernote"></textarea><br>
 	

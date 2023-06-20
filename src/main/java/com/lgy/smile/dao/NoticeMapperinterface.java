@@ -14,4 +14,5 @@ public interface NoticeMapperinterface {
 	public NoticeDto contentView(@RequestParam HashMap<String, String> param);
 	public void modify(@RequestParam HashMap<String, String> param);
 	public void delete(@RequestParam HashMap<String, String> param);
+	int getCount();
 }

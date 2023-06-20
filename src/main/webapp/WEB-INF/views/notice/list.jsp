@@ -19,7 +19,7 @@
 
 <!-- 글 쓰기 버튼 ( ★ 운영자 권한 가진 사람만 볼 수 있게 해야함 ) -->
 <c:if test="${role == 'admin'}">
-	<div class="write" onclick="location.href='write'">+ (운영자만 볼 수 있도록 변경해야함 ★)</div>
+	<div class="write" onclick="location.href='write'">+ </div>
 </c:if>
 
 <table class="table table-responsive table-borderless">
@@ -37,7 +37,7 @@
 			<td><a class="move_link" href="read?identity=${dto.identity}">${dto.title}</a></td>
 			<td>${dto.created}</td>
 			<td>${dto.view}</td>
-			<td>${commnetCount}</td>
+ 			<td>${dto.comments}</td> 
 		</tr>
 	</c:forEach>
 	</tbody>
