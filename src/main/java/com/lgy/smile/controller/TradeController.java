@@ -45,7 +45,7 @@ public class TradeController {
 		return "trade/list";
 	}
 	
-	
+	// ★ trade(중고 거래) TradeDto에서 받아온 값들
 	@GetMapping("/getPosts")
 	public ResponseEntity< ArrayList<TradeDto> > getPosts() {
 		return ResponseEntity.status(HttpStatus.OK).body( service.list() );
@@ -54,14 +54,14 @@ public class TradeController {
 	
 	
 
-	
+	// ★ trade(중고 거래) 글 쓰기(get방식)	
 	@GetMapping("/write")
 	public String tradeWrite() {
 		return "trade/write";
 	}
 	
 	
-	// ★ trade(중고 거래) 글 쓰기
+	// ★ trade(중고 거래) 글 쓰기(post방식)
 	@PostMapping("/write")
 	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		log.info("@# write");

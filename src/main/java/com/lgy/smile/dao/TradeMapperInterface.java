@@ -13,10 +13,13 @@ import com.lgy.smile.dto.TradeDto;
 public interface TradeMapperInterface {
 	
 	public ArrayList<TradeDto> list();
+	// ★ trade(중고 거래) 글 작성
 	public void write(@RequestParam HashMap<String, String> param);
 	public void write(@RequestParam HashMap<String, String> param, MultipartFile[] uploadFile, HttpSession session);
-	
+	// ★ trade(중고 거래) 글 내용 보기
 	public TradeDto contentView(@RequestParam HashMap<String, String> param);
+	// ★ trade(중고 거래) 글 수정
 	public void modify(@RequestParam HashMap<String, String> param);
+	// ★ trade(중고 거래) 글 삭제
 	public void delete(@RequestParam HashMap<String, String> param);
 }
