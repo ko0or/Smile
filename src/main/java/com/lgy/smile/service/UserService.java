@@ -31,6 +31,8 @@ public class UserService implements UserMapperInterface {
 		return dto;
 	}
 
+	
+	
 	@Override
 	public void modify(HashMap<String, String> params, HttpSession session) {
 		log.info("UserService ===> modify start");
@@ -55,6 +57,7 @@ public class UserService implements UserMapperInterface {
 		
 	}
 
+
 	
 	
 	
@@ -74,6 +77,14 @@ public class UserService implements UserMapperInterface {
 	
 	// ☆ "중복여부체크" 눌렀을때,  해당 이메일ID 와 닉네임이 사용중인지 확인후 리턴하는 메소드 필요
 	// public boolean isDuplicated(Model model) {  ... 조건문 if-else로 return 분기처리 true/false }
+	@Override
+	public UserDto isDuplicated(HashMap<String, String> params) {
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		UserDto dto = userDao.isDuplicated(params);
+		
+		return dto;
+	}
+
 	
 	
 	

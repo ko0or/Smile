@@ -30,12 +30,21 @@
 			</div>			
 							
 			<div class="form-floating mb-3">
-				<input name="id" type="email" class="form-control" id="floatingEmail" placeholder="name@example.com"> 
+				<input name="id" type="email" class="form-control" id="floatingEmail" formaction="isDuplicated"> 
 				<label for="floatingEmail"><i>*</i>
 				이메일 계정</label>
 				
-				<button id="isDuplicated" type="button" class="btn btn-primary" >
+				<button id="isDuplicated" type="button" class="btn btn-primary">
 				중복체크</button>
+			</div>
+			
+			<div class="form-floating mb-3" style="display:none"  id="slideDown">
+				<input name="code" class="form-control" id="floatingCode">
+				<label for="floatingCode"><i>*</i>
+				이메일 인증번호를 입력하세요</label>
+				<button id="checkCode" type="button" class="btn btn-primary">
+				인증번호 확인
+				</button>
 			</div>
 			
 			<div class="form-floating">
@@ -91,6 +100,85 @@ $(document).ready(function() {
 			}
 		}
 	})
+	
+	// 이메일 중복 확인 후 인증번호 발송, 인증번호 검증
+	$("#isDuplicated").click(function(){
+		console.log("actionform 으로 이동함33")
+		var formData = $("#floatingEmail").serialize();
+		console.log("formData ===> " + formData);
+		
+		$.ajax({
+			type: "POST"
+		   ,data: formData
+		   ,url: "isDuplicated"
+		   ,success: function(data, code){
+
+			   Swal.fire({
+				    icon: 'success',
+				    title: '본인확인 필요',
+				    text: "이메일 주소로 인증번호 발송하시겠습니까?",
+				    confirmButtonText: '확인' ,
+				    showCancelButton: true ,
+			    	cancelButtonText : '취소'
+			    	
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				      // 이메일 본인인증에 동의? 확인한다는 버튼 눌렀을때
+					  Swal.fire('인증번호 발송 완료!', '', 'success')
+					  
+					  var formData = $("#floatingEmail").serialize();
+					  console.log("인증번호 전송 확인 눌렀음 formData ===> " + formData);
+					  
+					  $.ajax({
+						  type: "POST"
+						 ,data: formData
+						 ,url: "sendCode"
+						 ,success: function(data){
+							 console.log("인증번호 전송 완료")
+						 }
+					  });
+					  
+				      $("#slideDown").slideDown();
+				      
+				      $("#checkCode").click(function(){
+				    	  var formData = $("#floatingCode").serialize();
+				    	  console.log("입력한 코드를 확인하기 위해서 보내기 formData ===> " + formData);
+				    	  
+				    	  $.ajax({
+				    		  type: "POST"
+				    		 ,data: formData
+				    		 ,url: "checkCode"
+				    		 ,success: function(data){
+				    			 console.log("success")
+				    			 
+								   Swal.fire({
+									    icon: 'success',
+									    title: '인증 완료',
+									    text: "이메일 인증이 완료되었습니다!",
+									    showCancelButton: false,
+									    confirmButtonText: '확인'
+									})
+				    		 }
+				    	  	 ,error: function(){
+				    			 console.log("error")
+				    	  	 }
+				    	  });
+				      });
+				  }
+		   		})
+	   		}
+		   , error : function(data, status){
+
+			   Swal.fire({
+				    icon: 'warning',
+				    title: '이메일 중복',
+				    text: "존재하는 이메일 계정입니다.",
+				    showCancelButton: false,
+				    confirmButtonText: '확인'
+				})
+		   }
+		});
+	});
 	
 	
 	

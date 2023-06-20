@@ -12,6 +12,13 @@
 		UPDATE user SET pwd=#{password}, nickname=#{nickname} where id = #{id}
 	</update>  	
   	
+  	<select id="isDuplicated" resultType="com.lgy.smile.dto.UserDto" parameterType="hashmap">
+	    SELECT * FROM user WHERE id = #{id}
+  	</select>
+
+  	
+  	
+  	
 </mapper>
 
 
