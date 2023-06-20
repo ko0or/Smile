@@ -3,23 +3,131 @@
 <html>
 <head>
 	<%@ include file="../../common/librarys.jsp" %>
+<style>
+	.wrap {
+	    padding: 10px 0;
+	    background-color: #A8C0D6;
+	    overflow-y: scroll;
+	    height: 600px
+	}
+	
+	.wrap .chat {
+	    display: flex;
+	    align-items: flex-start;
+	    padding: 10px;
+	}
+	
+	.wrap .chat .icon {
+	    position: relative;
+	    overflow: hidden;
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	    background-color: #eee;
+	}
+	
+	.wrap .chat .icon i {
+	    position: absolute;
+	    top: 10px;
+	    left: 50%;
+	    font-size: 2.5rem;
+	    color: #aaa;
+	    transform: translateX(-50%);
+	}
+	
+	.wrap .chat .textbox {
+	    position: relative;
+	    display: inline-block;
+	    max-width: calc(100% - 70px);
+	    padding: 10px;
+	    margin-top: 7px;
+	    font-size: 13px;
+	    border-radius: 10px;
+	}
+	
+	.wrap .chat .textbox::before {
+	    position: absolute;
+	    display: block;
+	    top: 0;
+	    font-size: 1.5rem;
+	}
+	
+	.wrap .ch1 .textbox {
+	    margin-left: 20px;
+	    background-color: #ddd;
+	}
+	
+	.wrap .ch1 .textbox::before {
+	    left: -15px;
+	    content: "◀";
+	    color: #ddd;
+	}
+	
+	.wrap .ch2 {
+	    flex-direction: row-reverse;
+	}
+	
+	.wrap .ch2 .textbox {
+	    margin-right: 20px;
+	    background-color: #F9EB54;
+	}
+	
+	.wrap .ch2 .textbox::before {
+	    right: -15px;
+	    content: "▶";
+	    color: #F9EB54;
+	}
+</style>
 </head>
 <body>
 <%@ include file="../../common/navbar.jsp" %>
 <!-- -------------------------------------------------------------------------- -->
 <!-- <style>@import 'resources/css/main.css'</style>  -->
 <section>
-<h1>채팅 테스트</h1>
-
-<form action="chattingroom" method="POST">
-	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 "><br>
-	<textarea name="content" id="summernote"></textarea><br>
+<h1>Chatting Content Test</h1>
+<div style="display: flex; justify-content: space-around;">
+	<form id="frm" method="post" action="chatting">
+		<input type="hidden" name="board" value="${list[0].board}">
+		<input type="hidden" name="seller" value="${list[0].seller}">
+		<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
+		<input type="hidden" name="sender" value="${list[0].sender}">
+		<input type="hidden" name="receiver" value="${list[0].receiver}">
+		<p>메세지&nbsp;<input type="text" name="msg"> <input type="reset" onclick="fn_submit()" value="입력"></p>
+	</form>
 	
-	<button id="writeOk" class="btn btn-primary" type="button">
-	작성 완료</button>
-	<button onclick="history.back()" class="btn btn-primary" type="button">
-	작성 취소</button>
-</form>
+	<form id="frm2" method="post" action="chatting">
+		<input type="hidden" name="board" value="${list[0].board}">
+		<input type="hidden" name="seller" value="${list[0].seller}">
+		<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
+		<input type="hidden" name="sender" value="${list[0].receiver}">
+		<input type="hidden" name="receiver" value="${list[0].sender}">
+		<p>메세지&nbsp;<input type="text" name="msg"> <input type="reset" onclick="fn_submit2()" value="입력"></p>
+	</form>
+</div>
+<h2>Chatting Room : ${list[0].chattingroom}</h2>
+	<div class="wrap">
+		<div id="chattest">
+			<c:forEach items="${list}" var = "dto">
+				<c:choose>
+					<c:when test="${dto.sender == list[0].sender}">
+						<div class="chat ch1">
+				            <div class="icon"><i class="fa-solid fa-user">${dto.sender}</i></div>
+				            <div class="textbox">${dto.msg}</div>
+			   		  	</div>
+					</c:when>
+					<c:otherwise>
+						<div class="chat ch2">
+				            <div class="icon"><i class="fa-solid fa-user">${dto.sender}</i></div>
+				            <div class="textbox">${dto.msg}</div>
+			       		</div>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</div>
+	</div>
+    
+<a href="chatCreateTest">채팅 생성 테스트</a>
+&nbsp;<a href="../chatroom/chatRoomCreateTest">채팅방 생성 테스트</a>
 
 <!-- -------------------------------------------------------------------------- -->
 </section>
@@ -30,4 +138,48 @@ $(document).ready(function() {
 	autosize($('textarea'));
 })// ~~ end
 </script>
+
+<script type="text/javascript">
+		function fn_submit() {
+			var formData = $("#frm").serialize();
+			
+			$.ajax({
+				type:"post"
+				,data:formData
+				,url:"write"
+			});
+		}
+		function fn_submit2() {
+			var formData = $("#frm2").serialize();
+			
+			$.ajax({
+				type:"post"
+				,data:formData
+				,url:"write"
+			});
+		}
+		
+		const $el = document.querySelector(".wrap");
+		const start = () => { 
+		  setInterval(() => {
+		    const eh = $el.clientHeight + $el.scrollTop;
+		    const isScroll = $el.scrollHeight <= eh;
+		    if (isScroll) {
+		      $el.scrollTop = $el.scrollHeight;
+		    }
+		  }, 1000);
+		}
+		
+		$(document).ready(function(){
+			start();
+			let mySpace = document.getElementById("space"); 
+		    mySpace.scrollTop = mySpace.scrollHeight;
+		})
+		
+		setInterval(function() {
+			$("#chattest").load(window.location + ' #chattest');
+		}, 1000);
+		
+</script>
+
 </html>

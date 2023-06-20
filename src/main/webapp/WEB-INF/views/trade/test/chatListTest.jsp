@@ -12,7 +12,7 @@
 <section>
 <h1>Chatting LIST TEST</h1>
 
-<table width = "1000" border = "1">
+<table width = "1000" border = "1" class="table-primary">
 		<tr>
 			<td>채팅번호</td>
 			<td>채팅방번호</td>
@@ -36,13 +36,10 @@
 				<td>${dto.receiver}</td>
 			</tr>
 		</c:forEach>
-		<tr>
-			<td colspan="5">
-				<a href="chatCreateTest">채팅 생성 테스트</a>
-				&nbsp;<a href="../chatroom/chatRoomCreateTest">채팅방 생성 테스트</a>
-			</td>
-		</tr>
 	</table>
+	
+	<a href="chatCreateTest">채팅 생성 테스트</a>
+	&nbsp;<a href="../chatroom/chatRoomCreateTest">채팅방 생성 테스트</a>
 <!-- -------------------------------------------------------------------------- -->
 </section>
 <%@ include file="../../common/footer.jsp" %>

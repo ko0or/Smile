@@ -11,7 +11,7 @@
 <section>
 <h1>Chatting Create TEST</h1>
 
-<table width="500" border="1">
+<table width="300" border="1">
 		<form id="frm" method="post" action="chatting">
 			<tr>
 				<td>게시글번호</td>
@@ -51,15 +51,12 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-<!-- 					<input type="submit" value="입력"> -->
 					<input type="button" onclick="fn_submit()" value="입력">
-					&nbsp;&nbsp;
-					<a href="chatListTest">목록보기</a>
 				</td>
 			</tr>
 		</form>
 	</table>
-
+	<a href="chatListTest">목록보기</a>
 <!-- -------------------------------------------------------------------------- -->
 </section>
 <%@ include file="../../common/footer.jsp" %>

@@ -60,5 +60,13 @@ public class ChattingController {
 		model.addAttribute("list", list);
 		return "/trade/test/chatListTest";
 	}
+	
+	@GetMapping("/chatContentTest")
+	public String chatContentTest(@RequestParam HashMap<String, String> params, Model model) {
+		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
+		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+		model.addAttribute("list", list);
+		return "/trade/test/chatContentTest";
+	}
 
 }
