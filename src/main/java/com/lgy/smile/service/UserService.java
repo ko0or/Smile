@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -85,13 +86,39 @@ public class UserService implements UserMapperInterface {
 		return dto;
 	}
 
-	
-	
+
 	
 	// ☆ user(유저) 회원가입을 처리하는 메소드 필요	
 	// 위에서 만든 isDuplicated 메소드가 false 일때 진행 ex->  if ( isDuplicated(model) == true ) { ... }
 	// dao 객체 호출해서 insert 쿼리진행
+	@Override
+	public void register(HashMap<String, String> params) {
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.register(params);
+	}
+
+	@Override
+	public void delete(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
 		
+	}	
+
+	@Override
+	public void delete(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> delete ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+//		UserDto user = (UserDto) session.getAttribute("userInfo");
+//		log.info("user ===> "+user);
+		
+//		String id = params.get("id");
+//		String pwd = params.get("password");
+//		log.info("id ===> "+id);
+//		log.info("pwd ===> "+pwd);
+		
+		userDao.delete(params);
+		log.info("UserService ===> delete ===> end");
+	}
 
 	
 /*

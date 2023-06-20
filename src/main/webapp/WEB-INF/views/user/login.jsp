@@ -107,9 +107,18 @@ $(document).ready(function() {
 			    }
 		   }
 		   ,error: function(){
-			   alert("로그인 실패했습니다.");
-// 			   $(".loginFailed").html("<br><h3>로그인 실패. 아이디 혹은 비밀번호 확인해주세요.</h3>");
-			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
+// 			   alert("로그인 실패했습니다.");
+			   
+			   Swal.fire({
+
+				    icon: 'warning',
+				    title: '로그인 실패',
+				    text: "아이디 혹은 비밀번호를 다시 확인해주세요",
+				    showCancelButton: false,
+				    confirmButtonText: '확인'
+				})
+
+// 			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
 		});
 	})

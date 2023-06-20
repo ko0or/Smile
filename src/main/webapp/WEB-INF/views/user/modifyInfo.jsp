@@ -75,7 +75,7 @@
 	</div>
 	
 	<h1 style="color: grey;">OR</h1><br>
-	<a href="createAccount">회원탈퇴 (클릭)</a>
+	<a href="#" id="unregister">회원탈퇴 (클릭)</a>
 
 </div>
 
@@ -111,14 +111,11 @@ $(document).ready(function() {
 
 				    icon: 'warning',
 				    title: '변경 실패',
-				    text: "비밀번호가 일치하지 않습니다",
+				    text: "비밀번호를 다시 확인해주세요",
 				    showCancelButton: false,
 				    confirmButtonText: '확인'
 
 				})
-			   
-			   
-			   
 			   
 // 			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
@@ -128,6 +125,46 @@ $(document).ready(function() {
 	// 뒤로가기 버튼 눌렀을 때 처리
 	$("#goBack").click(function(){
 		history.back();
+	});
+	
+	// 회원탈퇴 링크 클릭했을 때 처리
+	$("#unregister").click(function(){
+		Swal.fire({
+			icon: 'question' ,
+			title: '회원탈퇴' ,
+			text: "회원 탈퇴하시겠습니까?" ,
+			confirmButtonText: '탈퇴' ,
+			showCancelButton: false ,
+			showDenyButton: true,
+			denyButtonText: '취소'
+// 			cancelButtonText : '취소'
+			
+		// 탈퇴 버튼 클릭하면 탈퇴 처리
+		}).then((result) => {
+			
+			if(result.isConfirmed) {
+				
+				var formData = $("#modifyForm").serialize();
+//	 			var formData = id:${ user.id }
+				console.log("@# ====> " + formData);
+				
+				$.ajax({
+					type: "POST"
+				   ,data: {"id":"${ user.id }"}
+				   ,url: "unregister"
+				   ,success: function(data){
+					   console.log("success!!!!!")
+					   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+				   }
+				  , error: function(){
+					  console.log("error!!!!!")
+					  location.href = "login";
+				  } 
+				})				
+			} else if(result.isDenied) {
+				Swal.fire('회원탈퇴를 취소하였습니다.', '', 'info')
+			}
+		})
 	});
 
 })// ~~ end
