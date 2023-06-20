@@ -1,5 +1,6 @@
 package com.lgy.smile.service;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,6 +32,7 @@ public class TradeService implements TradeMapperInterface {
 	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 
+	//* ☆ TradeMapperInterface의 list 값 가져오기 (TradeDto)
 	@Override
 	public ArrayList<TradeDto> list() {
 		log.info("@# TradeService.list() start");
@@ -42,6 +44,7 @@ public class TradeService implements TradeMapperInterface {
 		return list;
 	}
 
+	//* ☆ trade(중고 거래) 글 쓰기
 	@Override
 	public void write(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		
@@ -60,16 +63,12 @@ public class TradeService implements TradeMapperInterface {
 			params.put("contacted", "만나요");
 		}
 		
-		/* 
-		 *     파일 업로드 
-		 */
+
+		//=> ☆ 파일 업로드
 		for (MultipartFile multipartFile : uploadFile) {
 			log.info("========================================================");
 			/* 파일이름 출력 */log.info("multipartFile.getOriginalFilename() => " + multipartFile.getOriginalFilename()); 
-			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );
-			
-			
-			
+			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );					
 			log.info("========================================================");
 			
 			try { 				
@@ -102,6 +101,7 @@ public class TradeService implements TradeMapperInterface {
 		log.info("@# TradeService.write() end");
 	}
 
+	//=> ☆ trade(중고 거래) 글 내용 보기
 	@Override
 	public TradeDto contentView(@RequestParam HashMap<String, String> params) {
 		log.info("@# TradeService.contentView() start");
@@ -113,19 +113,63 @@ public class TradeService implements TradeMapperInterface {
 		return dto;
 	}
 
+	//=> ☆ trade(중고 거래) 글 수정
 	@Override
-	public void modify(@RequestParam HashMap<String, String> params) {
+	public void modify(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		log.info("@# TradeService.modify() start");
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
-		dao.modify(params);
+		
+		
+		//=> ☆ 파일 업로드
+		for (MultipartFile multipartFile : uploadFile) {
+			log.info("========================================================");
+			/* 파일이름 출력 */log.info("multipartFile.getOriginalFilename() => " + multipartFile.getOriginalFilename()); 
+			/* 파일크기 출력 */log.info("multipartFile.getSize() => " + multipartFile.getSize() );					
+			log.info("========================================================");
+			
+			try { 				
+				
+				File uploadFolder = new File( devUtils.getSavePath() );
+				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
+				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
+				
+				File saveFile = new File( devUtils.getSavePath() , multipartFile.getOriginalFilename());
+				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
+				
+				
+				// params.put("imgPath", saveFile.getPath() );
+				params.put("imgPath", devUtils.getSavePath() + multipartFile.getOriginalFilename() );
+				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
+				log.info( params.toString() );
+				
+				
+				multipartFile.transferTo( saveFile );
+				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
+				// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
+				
+				
+				dao.modifyWithImgPath(params);
+				log.info("파일 존재");
+				
+			} catch (IOException e) { 
+				
+				dao.modify(params);
+				log.info("변경할 파일 없음");
+				
+			} catch (Exception e) { 
+				e.printStackTrace(); 
+			}
+			
+		} // ~ for 반복문 종료
 		
 		log.info("@# TradeService.modify() end");
 		
 	}
 
+	// ★ trade(중고 거래) 글 삭제
 	@Override
-	public void delete(@RequestParam HashMap<String, String> params) {
+	public void delete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# TradeService.delete() start");
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
@@ -136,9 +180,48 @@ public class TradeService implements TradeMapperInterface {
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void write(HashMap<String, String> param) {
+		
+	}
+
+	@Override
+	public void delete(HashMap<String, String> param) {
+		
+	}
+
+	@Override
+	public void modify(HashMap<String, String> param) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void modifyWithImgPath(HashMap<String, String> param) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void modifyWithImgPath(HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

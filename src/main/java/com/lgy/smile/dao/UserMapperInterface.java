@@ -10,6 +10,13 @@ public interface UserMapperInterface {
 	public void modify(HashMap<String, String> params);
 	public void modify(HashMap<String, String> params, HttpSession session);
 	
+	public UserDto isDuplicated(HashMap<String, String> params);
+	
+	public void register(HashMap<String, String> params);
+	
+	public void delete(HashMap<String, String> params);
+	public void delete(HashMap<String, String> params, HttpSession session);
+	
 }
 
 
