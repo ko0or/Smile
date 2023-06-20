@@ -1,14 +1,16 @@
 $(document).ready(function() {
 	
-	
+	var count = 0;
+
 	function getComponent( data ) {
 		
 		if ( data.contacted === "만나요" ) { 			
-			return  `
-			<div class="content-wrapper item${data.identity}">		
+			
+			var row =  `
+			<div id="${data.identity}" class="content-wrapper">		
 				<div class="content-left"></div>		
 				<div class="content-right">
-					<div class="title">
+					<div id="${count}" class="title">
 						<h1>
 							<span class="badge bg-secondary">${data.contacted}</span>
 							<p>${data.title}</p>
@@ -23,14 +25,17 @@ $(document).ready(function() {
 				</div>
 			</div>
 			`;	
+
+			count ++;
+			return row;
 	 	
 	 	} else {
 	 	
-			return  `
-			<div class="content-wrapper item${data.identity}">		
+			var row =  `
+			<div id="${data.identity}" class="content-wrapper">		
 				<div class="content-left"></div>		
 				<div class="content-right">
-					<div class="title">
+					<div id="${count}" class="title">
 						<h1>
 							<span class="badge bg-primary">${data.contacted}</span>
 							<p>${data.title}</p>
@@ -43,6 +48,9 @@ $(document).ready(function() {
 			</div>
 			`;	
 	 	
+			count ++;
+			return row;
+
 	 	}
 	} // ~~ getComponent() 함수 종료
 	
@@ -60,12 +68,12 @@ $(document).ready(function() {
 		
 			for( var i=0; i<data.length; i++ ) {
 				$(".main-content").append( getComponent(data[i]) );		
-				$(".item" + data[i].identity + " > .content-left").css("background-image", `url('display?fileName=${data[i].imgPath}')`);	
+				$("#" + data[i].identity + " > .content-left").css("background-image", `url('display?fileName=${data[i].imgPath}')`);	
 			} // ~ for 반복문 끝
 	
 // ================================================================================	
 	
-			$(".content-wrapper").click(function() {
+			$(".content-wrapper").click(function( ) {
 				
 				const tradeTitle = $(this).find('.title > h1 > p').text(); 
 				const tradePrice = $(this).find('.price').text();
@@ -73,6 +81,8 @@ $(document).ready(function() {
 				var tradeType; 
 				var tradeLocation; 
 				
+				var boardIdentity = $(this).find(".title"). attr("id");
+
 				if ( tradeText == "만나요"  ) { 
 					tradeType = "<span class='badge bg-secondary'>만나요</span>"
 					tradeLocation = $(this).find(".location").text();
@@ -81,8 +91,11 @@ $(document).ready(function() {
 					tradeType = "<span class='badge bg-primary'>비대면</span>";
 				}
 													
-														
+				console.log(data);										
+				console.log(boardIdentity);
+				console.log(data[boardIdentity].content); // 배열은 0부터 4까지 ( 총 5개 ) 있는데,    boardIdentity 는 20 , 21 .. 이렇게 pk 값이라서 서로 안맞음
 				
+
 				Swal.fire({
 					  title: '상세 정보',
 					  showConfirmButton: false ,
@@ -108,9 +121,9 @@ $(document).ready(function() {
 					  		
 					  		
 					  		<div class="trade-info">
-							
-					  		
-					  		
+								
+								<h4><i class="fa-solid fa-keyboard"></i> 작성내용</h4>
+								<div style="white-space: pre-line;">${data[boardIdentity].content}</div>
 							</div>
 							
 					  		<div class="contact-btn"><i class="fa-regular fa-message"></i>

@@ -13,7 +13,7 @@
 
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto">
 		SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
-		FROM board_trade
+		FROM board_trade ORDER BY identity DESC
   	</select>
 
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
