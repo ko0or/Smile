@@ -5,10 +5,10 @@
 	padding: 20px;
 	text-align: center;
 }
+
 .createAccount-wrapper  > .form-wrapper div {
 	margin-bottom: 10px;	
 }
-
 
 .createAccount-wrapper > .logo ,
 .createAccount-wrapper > .form-wrapper {
@@ -17,6 +17,7 @@
 	justify-content: center;
 	align-items: center;
 }
+
 .createAccount-wrapper > .form-wrapper a {
 	position: absolute;
 	left: 5px;
@@ -26,8 +27,13 @@ input {
 	width: 500px;
 }
 
-
 .createAccount-wrapper > .btns {
 	margin-top: 70px;	
 }
 button { height: 60px; padding: 5px; width: 500px; margin: 5px 0; border: none; }
+
+
+.createAccount-wrapper > .logo {
+	
+}
+

@@ -1,7 +1,5 @@
 package com.lgy.smile.dto;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +15,10 @@ public class NoticeDto {
 	private int view;
 	private String author;
 	private int user;
+	
+	private String nickname;
+	private int board;
+	
+	
+	private int comments;
 }

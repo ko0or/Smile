@@ -24,4 +24,6 @@ public interface NoticeCommentMapperinterface {
 	public void deletecomment(HashMap<String, String> param);
 	public void deletecomment(HashMap<String, String> param, HttpSession session);
 
+
+
 }

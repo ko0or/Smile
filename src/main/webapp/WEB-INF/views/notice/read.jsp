@@ -18,8 +18,8 @@
 			<p><font color="grey">
 			${board.created}</font></p>
 			
-			<!-- 운영자일때만 표시 -->
 			<c:if test="${role == 'admin'}">
+			<!-- 운영자일때만 표시 -->
 			<div class="btn-group" style="position: absolute; bottom: 20px; right: 10px; height: 40px; background-color: white;">
 			  <button type="button" style="border: none; background-color: white;" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
 			  <ul class="dropdown-menu" style="padding: 10px;">

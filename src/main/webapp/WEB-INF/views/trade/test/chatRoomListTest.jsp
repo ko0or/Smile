@@ -23,7 +23,8 @@
 			
 			<c:forEach items="${list}" var = "dto">
 				<tr>
-					<td>${dto.identity}</td>
+<%-- 					<td>${dto.identity}</td> --%>
+					<td><a href="../chat/chatContentTest?board=${dto.board}&buyer=${dto.buyer}" style="background-color: aqua;">${dto.identity}</a></td>
 					<td>${dto.board}</td>
 					<td>${dto.seller}</td>
 					<td>${dto.buyer}</td>
@@ -32,14 +33,10 @@
 					<td><input type="button" onclick="fn_submit()" value="삭제"></td>
 				</tr>
 			</c:forEach>
-			<tr>
-				<td colspan="5">
-					<a href="chatRoomCreateTest">채팅방 생성 테스트</a>
-					&nbsp;<a href="../chat/chatCreateTest">채팅 생성 테스트</a>
-				</td>
-			</tr>
 		</form>
 	</table>
+	<a href="chatRoomCreateTest">채팅방 생성 테스트</a>
+	&nbsp;<a href="../chat/chatCreateTest">채팅 생성 테스트</a>
 <!-- -------------------------------------------------------------------------- -->
 </section>
 <%@ include file="../../common/footer.jsp" %>

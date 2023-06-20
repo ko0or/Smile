@@ -4,9 +4,12 @@
 
 <mapper namespace="com.lgy.smile.dao.NoticeCommentMapperinterface">
 
-    <select id="getCount" resultType="int">
-        SELECT count(*) FROM comment_notice
-    </select>
+<!--     <select id="getCount" resultType="int"> -->
+ <!--         SELECT count(*) FROM comment_notice -->
+<!--           SELECT COUNT(comment.content)  -->
+<!-- FROM smile.board_notice board, smile.comment_notice comment -->
+<!-- WHERE board.identity = #{identity} -->
+<!--     </select> -->
     <insert id="writecomment" parameterType="hashmap">
     insert into comment_notice(identity, content, created, user,board) values(
 			null , #{content} , #{created} , #{user} , #{board}

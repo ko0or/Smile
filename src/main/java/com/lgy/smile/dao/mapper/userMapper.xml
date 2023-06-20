@@ -12,6 +12,18 @@
 		UPDATE user SET pwd=#{password}, nickname=#{nickname} where id = #{id}
 	</update>  	
   	
+  	<select id="isDuplicated" resultType="com.lgy.smile.dto.UserDto" parameterType="hashmap">
+	    SELECT * FROM user WHERE id = #{id}
+  	</select>
+
+  	<insert id="register" parameterType="hashmap">
+  		INSERT INTO user (identity, id, pwd, nickname, point, role) VALUES(null, #{id}, #{password}, #{nickname}, 0, 'user')
+  	</insert>
+  	
+  	<delete id="delete" parameterType="hashmap">
+  		DELETE FROM user WHERE id=#{id}
+  	</delete>
+  	
 </mapper>
 
 

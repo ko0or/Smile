@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dao.NoticeCommentMapperinterface;
 import com.lgy.smile.dto.NoticeCommentDto;
-import com.lgy.smile.dto.UserDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,13 +22,13 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	@Autowired SqlSession sqlSession;
 	@Autowired DevUtils devUtils;
 	
-	@Override
-	public int getCount() {
-		
-		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
-		return dao.getCount();
-		
-	}
+//	@Override
+//	public int getCount(int comment) {
+//		
+//		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
+//		return dao.getCount("com.lgy.smile.dao.mapperNoticeCommentDao.getCount",comment);
+//		
+//	}
 
 	@Override
 	public void writecomment(HashMap<String, String> param, HttpSession session) {
@@ -92,6 +91,14 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
 
 
 }

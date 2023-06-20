@@ -11,9 +11,11 @@
 <section>
 <h1>공지사항 수정</h1>
 
-<form action="list" method="POST">
-	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 "><br>
-	<textarea name="content" id="summernote"></textarea><br>
+<form action="modify" method="POST">
+	<input name="identity" type="hidden" value="${identity}">
+
+	<input type="text" name="title"  class="form-control" placeholder="제목을 입력해주세요 " value="${board.title}"><br>
+	<textarea name="content" id="summernote">${board.content}</textarea><br>
 	
 	<button id="writeOk" class="btn btn-primary" type="button">
 	작성 완료</button>

@@ -84,8 +84,7 @@ public class NoticeService implements NoticeMapperinterface {
 		
 		//null , #{title} , #{content} , #{created} , 0 , #{author} , #{user}
 		params.put("created", devUtils.getDate() );
-		params.put("author", "testUser" );//수정
-		params.put("user", "3" );//수정
+		params.put("user", "8" );//수정
 		
 		log.info("@# NoticeService.write() end");
 		dao.write(params);
@@ -126,6 +125,13 @@ public class NoticeService implements NoticeMapperinterface {
 		//}
 		
 	}
+	@Override
+	public int getCount() {
+		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+		return dao.getCount();
+	}
+
+
 
 
 	
