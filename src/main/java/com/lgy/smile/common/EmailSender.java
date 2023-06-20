@@ -146,18 +146,28 @@ public class EmailSender {
 
 		// SMTP 설정
 		properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", mailConfig.getHost());
-		properties.setProperty("mail.smtp.auth", mailConfig.getAuth());
-		properties.setProperty("mail.smtp.port", mailConfig.getPort());
-		properties.setProperty("mail.smtp.ssl.enable", mailConfig.getSsl());
+		
+      properties.setProperty("mail.smtp.host", "smtp.naver.com");
+      properties.setProperty("mail.smtp.auth", "true");
+      properties.setProperty("mail.smtp.port", "465");
+      properties.setProperty("mail.smtp.ssl.enable", "true");
+//		properties.setProperty("mail.smtp.host", mailConfig.getHost());
+//		properties.setProperty("mail.smtp.auth", mailConfig.getAuth());
+//		properties.setProperty("mail.smtp.port", mailConfig.getPort());
+//		properties.setProperty("mail.smtp.ssl.enable", mailConfig.getSsl());
 
 		// 메일 발송자 세팅 ( 아이디 + @ + smtp. 뒤에있는 값 )
-		from = mailConfig.getNaverId() + "@" + mailConfig.getHost().split("smtp.")[1];
+	      String from = "imbirimbir@naver.com"; //보내는 사람의 이메일 주소
+	      String host = "smtp.naver.com"; //SMTP 서버 호스트명
+	      String loginId = "imbirimbir"; //네이버 계정 아이디
+	      String loginPw = "teamProject2023"; //네이버 계정 비밀번호
+	      
+	      
 
 		// 메일 발송자 계정 로그인
 		auth = new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(mailConfig.getNaverId(), mailConfig.getNaverPw());
+				return new PasswordAuthentication(loginId, loginPw);
 			}
 		};
 

@@ -22,6 +22,19 @@ public class HomeController {
     
     [5] login.jsp 파일에도 내용 변경 필요 
     location.href = "/smile/main/list";
+    
+    
+    [@] 경로들
+    webapp/resources/js/api/kakaoLogin.js
+
+	WEB-INF/views/common/navbar.jsp
+
+	WEB-INF/views/trade/write.jsp
+	WEB-INF/views/trade/edit.jsp
+	WEB-INF/views/trade/list.jsp
+
+	WEB-INF/views/user/login.jsp
+
 << ============================================================================================================ */
 	
 	
