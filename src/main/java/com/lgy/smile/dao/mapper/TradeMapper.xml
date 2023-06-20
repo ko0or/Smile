@@ -11,18 +11,25 @@
 	    )
   	</insert>
 
+<!-- 	select이고 여러줄 보여줄거라서 ArrayList로 -->
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto">
 		SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
 		FROM board_trade ORDER BY identity DESC
   	</select>
 
+<!-- 	select이고 한줄 보여줄거라서 ArrayList로 안하고 TradeDto로-->
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
         SELECT identity, title, content, created, contacted, imgPath, status, price, address, user 
         	from board_trade where identity=#{identity}
     </select>
   	
   	<update id="modify" parameterType="hashmap">
-		UPDATE board_trade SET title = #{title}, content = #{content} 
+		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}
+			where identity=#{identity}
+    </update>
+
+  	<update id="modifyWithImgPath" parameterType="hashmap">
+		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}, imgPath = #{imgPath}
 			where identity=#{identity}
     </update>
   	

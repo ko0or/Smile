@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lgy.smile.dto.MainBoardDto;
 import com.lgy.smile.dto.TradeDto;
 import com.lgy.smile.service.TradeService;
 
@@ -32,15 +33,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/trade")
 public class TradeController {
 
-	@Autowired private TradeService service;
+	@Autowired private TradeService tradeService;
 
 	// ★ trade(중고 거래) 글 목록
 	@GetMapping("/list")
 	public String tradeList(Model model) {
 		log.info("@# list");
 
-		ArrayList<TradeDto> list = service.list();
+		ArrayList<TradeDto> list = tradeService.list();
 		model.addAttribute("list", list);
+		model.addAttribute("show", true);
+		
 
 		return "trade/list";
 	}
@@ -48,7 +51,7 @@ public class TradeController {
 	// ★ trade(중고 거래) TradeDto에서 받아온 값들
 	@GetMapping("/getPosts")
 	public ResponseEntity< ArrayList<TradeDto> > getPosts() {
-		return ResponseEntity.status(HttpStatus.OK).body( service.list() );
+		return ResponseEntity.status(HttpStatus.OK).body( tradeService.list() );
 	}
 	
 	
@@ -66,7 +69,7 @@ public class TradeController {
 	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		log.info("@# write");
 
-		service.write(params, imgPath, session);
+		tradeService.write(params, imgPath, session);
 		
 		
 		return "redirect:list";
@@ -80,23 +83,34 @@ public class TradeController {
 		return "trade/write_view";
 	}
 
-	// ★ trade(중고 거래) 글 수정
+	// ★ trade(중고 거래) 글 수정 (★ 화면) 
 	@GetMapping("/modify")
-	public String tradeModify(@RequestParam HashMap<String, String> params) {
+	public String tradeModify(@RequestParam HashMap<String, String> params, Model model) {
+		
+		log.info("@# modify");		 
+		model.addAttribute("board", tradeService.contentView(params));
+		
+		return "trade/edit";
+	}
+	
+	// ★ trade(중고 거래) 글 수정 (★ 처리)
+	@PostMapping("/modify")
+	public String tradeModify(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
+		
 		log.info("@# modify");
-
-		service.modify(params);
-
-		return "trade/modify";
+		tradeService.modify(params, imgPath, session);	
+		
+		return "redirect:list";
 	}
 
 	// ★ trade(중고 거래) 글 삭제
-	public String tradeDelete(@RequestParam HashMap<String, String> params) {
+	@GetMapping("/delete")
+	public String tradeDelete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# delete");
 
-		service.delete(params);
+		tradeService.delete(params, session);
 
-		return "trade/delete";
+		return "redirect:list";
 	}
 	
 	// ======= ★<img src="요기들어갈꺼 리턴해주는 메소드"> ============================= >

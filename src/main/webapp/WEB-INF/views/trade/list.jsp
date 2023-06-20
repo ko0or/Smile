@@ -38,6 +38,9 @@
 
 << ============================================================================================= 
 -->
+<script>
+var show = ${show};
+</script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=149a80c17154419aa57d2cfae9d6a80d&libraries=services"></script>
 <script src="../resources/js/api/kakaoMap.js"></script>
 <script src="../resources/js/trade/list.js"></script>
