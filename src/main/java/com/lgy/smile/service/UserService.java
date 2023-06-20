@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,6 +32,8 @@ public class UserService implements UserMapperInterface {
 		return dto;
 	}
 
+	
+	
 	@Override
 	public void modify(HashMap<String, String> params, HttpSession session) {
 		log.info("UserService ===> modify start");
@@ -55,6 +58,7 @@ public class UserService implements UserMapperInterface {
 		
 	}
 
+
 	
 	
 	
@@ -74,13 +78,47 @@ public class UserService implements UserMapperInterface {
 	
 	// ☆ "중복여부체크" 눌렀을때,  해당 이메일ID 와 닉네임이 사용중인지 확인후 리턴하는 메소드 필요
 	// public boolean isDuplicated(Model model) {  ... 조건문 if-else로 return 분기처리 true/false }
-	
-	
+	@Override
+	public UserDto isDuplicated(HashMap<String, String> params) {
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		UserDto dto = userDao.isDuplicated(params);
+		
+		return dto;
+	}
+
+
 	
 	// ☆ user(유저) 회원가입을 처리하는 메소드 필요	
 	// 위에서 만든 isDuplicated 메소드가 false 일때 진행 ex->  if ( isDuplicated(model) == true ) { ... }
 	// dao 객체 호출해서 insert 쿼리진행
+	@Override
+	public void register(HashMap<String, String> params) {
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.register(params);
+	}
+
+	@Override
+	public void delete(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
 		
+	}	
+
+	@Override
+	public void delete(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> delete ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+//		UserDto user = (UserDto) session.getAttribute("userInfo");
+//		log.info("user ===> "+user);
+		
+//		String id = params.get("id");
+//		String pwd = params.get("password");
+//		log.info("id ===> "+id);
+//		log.info("pwd ===> "+pwd);
+		
+		userDao.delete(params);
+		log.info("UserService ===> delete ===> end");
+	}
 
 	
 /*

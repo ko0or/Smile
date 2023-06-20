@@ -27,7 +27,7 @@ public class UserController {
 	@Autowired private UserService userService;
 	@Autowired private DevUtils devUtils;
 
-//================================================================================ >
+//=========================== 회원 로그인 ===================================================== >
 	
 	// ★ user(유저) 로그인 화면
 	@GetMapping("/login")
@@ -85,7 +85,7 @@ public class UserController {
 		}
 	}	
 	
-//================================================================================ >
+//=================== 회원정보 조회 및 수정 ============================================================= >
 	
 	// ★ user(유저) 회원정보 조회화면
 	@GetMapping("/info")
@@ -122,9 +122,17 @@ public class UserController {
 		String password = params.get("password");
 		String password2 = params.get("password2");
 		
-		if(password.equals(password2) && (password!=null)) {
+		if(password.equals(password2) && (password.isEmpty() == false )) {	// 비밀번호가 공백이 아닌 경우
+			
+			log.info( params.toString() );
 			
 			userService.modify(params, session);
+			
+			UserDto user = (UserDto) session.getAttribute("userInfo");
+			user.setNickname(params.get("nickname"));		// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
+			user.setPwd(params.get("password"));
+			session.setAttribute("userInfo", user);
+			
 			
 			log.info("UserController ===> modify method ====> end");
 			
@@ -146,32 +154,96 @@ public class UserController {
 		return "redirect:/main/list";
 	}
 	
-	//================================================================================ >
+	//============== 회원가입 처리 ================================================================== >
 	
-//	UserDto user = (UserDto) session.getAttribute("userInfo");
-//	model.addAttribute("user", user);
+	// 이메일 중복확인
+	@PostMapping("/isDuplicated")
+	public ResponseEntity<String> isDuplicated(@RequestParam HashMap<String, String> params) {
+		log.info("UserController ===> isDuplicated method ====> start");
+		
+		if(userService.isDuplicated(params)!=null) {	// 해당 이메일이 존재하는 경우 경고창
+			log.info("UserController ===> isDuplicated method ====> end");
+			
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+			
+		}else {		// 이메일이 존재하지 않는 경우 회원가입 진행
+			log.info("UserController ===> isDuplicated method ====> else");
+			
+			return new ResponseEntity(HttpStatus.OK);
+		}
+	}
+	
+	int AutoCreatedCode;
+	
+	// 인증번호 발송 동의함과 동시에 인증번호 이메일로 발송
+	@PostMapping("/sendCode")
+	public ResponseEntity<String> sendCode(@RequestParam HashMap<String, String> params) {
+//		AutoCreatedCode = devUtils.emailSenderByCreate("zihye.choi@gmail.com");
+		AutoCreatedCode = devUtils.emailSenderByCreate(params.get("id"));
+		log.info("발송한 인증번호 받아보기 => " + AutoCreatedCode );
+		
+		return new ResponseEntity(HttpStatus.OK); 
+	}
 
+	// 사용자가 입력한 인증번호를 검증
+	@PostMapping("/checkCode")
+	public ResponseEntity<String> checkCode(@RequestParam HashMap<String, String> params) {
+		log.info("UserController ===> checkCode ===> start");
+		
+		int inputCode = Integer.parseInt(params.get("code"));
+		
+		if(inputCode == AutoCreatedCode) {
+			log.info("UserController ===> checkCode ===> if true");
+			
+			return new ResponseEntity(HttpStatus.OK);
+		}else {
+			log.info("UserController ===> checkCode ===> if false");
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+	}
 	
-	
-	
-
 	// ★ user(유저) 회원가입 화면
 	@GetMapping("/createAccount")
 	public String userCreateAccount() {
-		
-		
-		
-		
-		
 		return "user/createAccount";
 	}
 	
-//================================================================================ >
+	// ★ user(유저) 회원가입 처리
+	@PostMapping("/createAccount")
+	public String userCreateAccount(@RequestParam HashMap<String, String> params) {
+		log.info("UserController ===> createAccount ===> start");
+		
+		userService.register(params);
+		
+		return "user/login";
+	}
 	
+//========================= 회원 탈퇴처리 ======================================================= >
+	
+	// ★ user(유저) 회원탈퇴 처리
+	@PostMapping("/unregister")
+	public String delete(@RequestParam HashMap<String, String> params, HttpSession session) {
+		log.info("UserController ===> delete ===> start");
+
+//		UserDto user = (UserDto) session.getAttribute("userInfo");
+//		log.info("UserDto user ===> "+ user);
+		
+//		String nickname = params.get("nickname");
+//		log.info("UserController ===> delete ===> nickname===> " +nickname);
+		
+		userService.delete(params, session);
+		
+		log.info("UserController ===> delete ===> end");
+		
+		return "redirect:/user/logOut";
+	}
 
 }
 
-
-
+//
+//UserDto user = (UserDto) session.getAttribute("userInfo");
+//user.setNickname(params.get("nickname"));		// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
+//user.setPwd(params.get("password"));
+//session.setAttribute("userInfo", user);
 
 
