@@ -133,33 +133,47 @@ $(document).ready(function() {
 
 
 				//=> 댓글 수정버튼 이벤트 등록
-				$(".comment-edit").click(function() {
-					if ( $(this).hasClass("form-control") == true ) {
-					
-						$(this).prev().removeClass(" form-control");
-						$(this).prev().attr("readonly", "true");
-						$(this).prev().css({"border" : "none" , "outline" : "none"})
+				$(".comment-edit").click(function() {					
+	
+                    if ( $(this).text().indexOf("수정") > -1 ) {
 						
-					} else {
-					
-						$(this).prev().addClass(" form-control");
-						$(this).prev().attr("readonly", "false");
-						$(this).prev().css({"border" : "none" , "outline" : "none"})
-					}
-				})
+                        //=> 상태: 댓글 수정
+                        $(".feed-comments" + $(this).attr("id") + " textarea").addClass("form-control");
+                        $(".feed-comments" + $(this).attr("id") + " textarea").prop("readonly", false);
+                        $(".feed-comments" + $(this).attr("id") + " textarea").css({"border" : "1px solid #ccc" , "outline" : "initial", "cursor" : "text"})
+                        $(this).text("저장");
+                        $(this).next().text("취소");
 
+                    } else if ( $(this).text().indexOf("저장") > -1 ) {
+
+                        alert("수정내용 저장하는것도 처리해야징");
+
+                    }
+
+					 // ~~ 댓글 수정버튼의 글자가 '수정' or '저장' 에 따른 이벤트 처리 끝 -!
+				}) // ~ 수정버튼 이벤트 종료 -!
 
 
 
 				//=> 댓글 삭제버튼 이벤트 등록
 				$(".comment-delete").click(function() {
 
-					$.ajax({
-						url : "comment/delete" ,
-						method : "GET" ,
-						data : { "identity" : $(this).attr("id")  } ,
-						success : function() { callComments(boardIdentity); }
-					})
+                    if ( $(this).text().indexOf("취소") > -1 ) {
+						
+						callComments(boardIdentity);
+
+
+                    } else {
+
+                        $.ajax({
+                            url : "comment/delete" ,
+                            method : "GET" ,
+                            data : { "identity" : $(this).attr("id")  } ,
+                            success : function() { callComments(boardIdentity); }
+                        })
+
+                    }
+
 
 				})
 
@@ -246,11 +260,11 @@ $(document).ready(function() {
 				
 
 				<div class="btn-group" style="display : ${show}" >
-				<button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
-				<ul class="dropdown-menu">
+					<button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
+					<ul class="dropdown-menu">
 						<li><a class="dropdown-item" href="modify?identity=${identity}">수정</a></li>
 						<li><a class="dropdown-item" href="delete?identity=${identity}">삭제</a></li>
-				</ul>
+					</ul>
 				</div>
 			</div>
 			
@@ -280,12 +294,12 @@ $(document).ready(function() {
 	return `
 
 						<!-- feed-comment-wrapper 클래스 안에 랜더링해주기 -->			  
-						<div class="feed-comments" style="margin-bottom: 70px; text-align:left;">
+						<div class="feed-comments${identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
 									
 									<div class="profileImageIcon"></div>
 									<h4 style="display: inline">${nickname}</h4>
 									<sub style="color:grey">${date}</sub>	
-									<textarea style="margin: 20px 0; display: block; cursor: default;" class="form form-control">${content}</textarea>
+									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default;" class="" readOnly>${content}</textarea>
 									
 									<button id="${identity}" class="comment-edit" style="border:none;background:white;color:grey;">
 									수정</button>
