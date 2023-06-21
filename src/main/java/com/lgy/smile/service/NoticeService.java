@@ -1,9 +1,11 @@
 package com.lgy.smile.service;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.lgy.smile.service.CommentService;
 
@@ -50,6 +54,7 @@ public class NoticeService implements NoticeMapperinterface {
 		log.info("@# NoticeService.list() start");
 		
 		
+		
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 
 		if ( params.get("pageNum") == null ) {
@@ -62,14 +67,19 @@ public class NoticeService implements NoticeMapperinterface {
 		
 		int page = Integer.parseInt( params.get("pageNum") );
 		int s = page * 10 - 10;
-		int e = page * 10;
+//		int e = page * 10;
 		
 		String start = String.valueOf(s);
-		String end = String.valueOf(e);
+//		String end = String.valueOf(e);
 
+		log.info("************ start => " + start);
+//		log.info("************ end => " + end);
+		
+		
 		
 		params.put("start", start );
-		params.put("end", end );
+//		params.put("end", end );
+
 		
 		log.info("@# NoticeService.list() end");
 		return dao.list(params);
@@ -96,9 +106,8 @@ public class NoticeService implements NoticeMapperinterface {
 	public NoticeDto contentView(@RequestParam HashMap<String, String> params) {
 		log.info("@# NoticeService.contentView() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
-		NoticeDto dto = dao.contentView(params);
 		log.info("@# NoticeService.contentView() end");
-		return dto;
+		return dao.contentView(params);
 	}
 
 
@@ -129,6 +138,25 @@ public class NoticeService implements NoticeMapperinterface {
 	public int getCount() {
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		return dao.getCount();
+	}
+
+
+	@Override
+	public void viewUp(HashMap<String, String> param) {
+
+		log.info("@@@@@ => viewUp start @");
+		HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) { ip = req.getRemoteAddr(); }
+		
+		param.put("ipaddr", ip);
+		log.info("@ param 매개변수들 => " + param.toString() );
+		
+		log.info("@@@@@ => viewUp end @");
+		
+		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+		dao.viewUp(param);
+		
 	}
 
 

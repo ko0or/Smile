@@ -12,7 +12,7 @@ public class NoticeDto {
 	private String title;
 	private String content;
 	private String created;
-	private int view;
+	private String view;
 	private String author;
 	private int user;
 	
