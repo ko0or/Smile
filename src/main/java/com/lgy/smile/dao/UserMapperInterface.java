@@ -9,6 +9,7 @@ public interface UserMapperInterface {
 	public UserDto login(HashMap<String, String> params);
 	public void modify(HashMap<String, String> params);
 	public void modify(HashMap<String, String> params, HttpSession session);
+	public void tempPwd(HashMap<String, String> params);
 	
 	public UserDto isDuplicated(HashMap<String, String> params);
 	

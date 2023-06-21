@@ -39,15 +39,21 @@
 			</div>
 			
 			<div class="form-floating mb-3">
-				<input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
+				<input name="password" type="password" class="form-control" id="floatingPassword_origin" placeholder="Password"> 
 				<label for="floatingPassword"><i>*</i>
-				비밀번호</label>				
+				현재 비밀번호</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
-				<input name="password2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
+				<input name="newPassword" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
+				<label for="floatingPassword"><i>*</i>
+				새 비밀번호</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<input name="newPassword2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
 				<label for="floatingPassword2"><i>*</i>
-				비밀번호 재확인</label>				
+				새 비밀번호 확인</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
@@ -99,8 +105,21 @@ $(document).ready(function() {
 		   ,data: formData
 		   ,url: "modify"
 		   ,success: function(data, status){
-			   alert("회원정보 수정을 완료했습니다!");
-			   location.href = "/smile/user/info";		// 컨트롤러의 URL 로 이동
+// 			   alert("회원정보 수정을 완료했습니다!");
+
+			   Swal.fire({
+				    icon: 'success',
+				    title: '수정 성공',
+				    text: "회원정보 수정을 완료했습니다!",
+				    showCancelButton: false,
+				    confirmButtonText: '확인'
+
+				})
+			   .then(function(){
+			   		location.href = "/smile/user/info";
+			   })
+
+// 			   location.href = "/smile/user/info";
 // 			   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
 // 			   ★ aws 배포시 => location.href = "/main/list";		
 		   }
