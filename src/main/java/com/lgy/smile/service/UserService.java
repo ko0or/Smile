@@ -37,19 +37,20 @@ public class UserService implements UserMapperInterface {
 	@Override
 	public void modify(HashMap<String, String> params, HttpSession session) {
 		log.info("UserService ===> modify start");
-		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
 		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
 		
 		log.info("UserService ===> modify ===> userDao ===> " + userDao);
 		
 		UserDto user = new DevUtils().getUserInfo(session);
+		log.info("UserService ===> modify ===> user ===> " + user);
+		
 		params.put("id", user.getId() );
 		log.info( params.toString() );
 		
 		userDao.modify(params);
 		
 		log.info("UserService ===> modify end");
-		
 	}
 
 	@Override
@@ -58,6 +59,15 @@ public class UserService implements UserMapperInterface {
 		
 	}
 
+	@Override
+	public void tempPwd(HashMap<String, String> params) {
+		log.info("UserService ===> tempPwd ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.tempPwd(params);
+		
+		log.info("UserService ===> tempPwd ===> end");
+	}
 
 	
 	
@@ -119,6 +129,8 @@ public class UserService implements UserMapperInterface {
 		userDao.delete(params);
 		log.info("UserService ===> delete ===> end");
 	}
+
+
 
 	
 /*

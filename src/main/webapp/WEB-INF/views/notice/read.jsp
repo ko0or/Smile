@@ -50,6 +50,7 @@
 </body>
 <script>
 var boardIdentity = ${board.identity};
+
 </script>
 <script src="../resources/js/notice/comment/list.js"></script>
 </html>

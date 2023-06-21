@@ -164,7 +164,7 @@ $(document).ready(function() {
 									})
 									
 									
-									// 비밀번호까지 모두 입력되면 회원가입 활성화
+									// 비밀번호까지 모두 입력되면 회원가입 버튼 활성화
 				    				function activeEvent() {
 				    					switch(!(formNickname.value && formEmail.value && formPassword.value && formPassword2.value)){
 					    					case true : registerButton.disabled = true; break;
@@ -188,6 +188,7 @@ $(document).ready(function() {
 				    				formPassword2.addEventListener('keyup', activeEvent);
 				    				registerButton.addEventListener('keyup', errorEvent);
 				    				
+				    				// 회원가입 처리
 				    				$("#register").click(function(){
 				    					$("#createAccount").submit();
 				    					

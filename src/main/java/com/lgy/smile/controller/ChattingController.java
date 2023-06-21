@@ -29,12 +29,14 @@ public class ChattingController {
 	@Autowired
 	ChattingRoomService chatttingRoomService;
 	
+//	채팅 전체 목록 불러오는 메소드
 	@GetMapping("/getChattings")
-	public ResponseEntity<List<ChattingDto>> getChattings(@RequestParam HashMap<String, String> params) {
+	public ResponseEntity<List<ChattingDto>> getChattings() {
 		ArrayList<ChattingDto> list = chattingService.list();
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
+//	board 아이디(게시글 번호)와 buyer 아이디(구매자 번호)로 채팅방 번호를 찾아서 해당 채팅창 번호의 채팅 모두 불러오는 메소드
 	@PostMapping("/getChatting")
 	public ResponseEntity<List<ChattingDto>> getChatting(@RequestParam HashMap<String, String> params) {
 		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
@@ -42,25 +44,29 @@ public class ChattingController {
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
+//	채팅 작성 메소드
 	@PostMapping("/write")
-	public String chattingRoomWrite(@RequestParam HashMap<String, String> params) {
+	public String chattingWrite(@RequestParam HashMap<String, String> params) {
 		chattingService.write(params);
 		return "/write";
 	}
 	
+//	채팅작성 테스트페이지
 	@RequestMapping("/chatCreateTest")
 	public String chatCreateTest() {
 		
 		return "/trade/test/chatCreateTest";
 	}
-	
+
+//	채팅리스트 테스트페이지
 	@GetMapping("/chatListTest")
-	public String list(@RequestParam HashMap<String, String> params, Model model) {
+	public String list(Model model) {
 		ArrayList<ChattingDto> list = chattingService.list();
 		model.addAttribute("list", list);
 		return "/trade/test/chatListTest";
 	}
 	
+//	채팅방 화면 테스트페이지
 	@GetMapping("/chatContentTest")
 	public String chatContentTest(@RequestParam HashMap<String, String> params, Model model) {
 		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
