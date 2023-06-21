@@ -41,13 +41,19 @@
 			<div class="form-floating mb-3">
 				<input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
 				<label for="floatingPassword"><i>*</i>
-				비밀번호</label>				
+				현재 비밀번호</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
-				<input name="password2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
+				<input name="newPassword" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
+				<label for="floatingPassword"><i>*</i>
+				새 비밀번호</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<input name="newPassword2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
 				<label for="floatingPassword2"><i>*</i>
-				비밀번호 재확인</label>				
+				새 비밀번호 확인</label>				
 			</div>
 			
 			<div class="form-floating mb-3">
