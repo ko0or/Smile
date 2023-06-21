@@ -93,15 +93,19 @@
 				<c:choose>
 					<c:when test="${dto.sender == list[0].sender}">
 						<div class="chat ch1">
+						<div>
+							<div class="icon"><i class="fa-solid fa-user"></i></div>
 							<div>${dto.sender}</div>
-				            <div class="icon"><i class="fa-solid fa-user"></i></div>
+						</div>				     
 				            <div class="textbox">${dto.msg}</div>
 			   		  	</div>
 					</c:when>
 					<c:otherwise>
-						<div class="chat ch2">
+						<div class="chat ch2">							
+			            <div>
+							<div class="icon"><i class="fa-solid fa-user"></i></div>
 							<div>${dto.sender}</div>
-				            <div class="icon"><i class="fa-solid fa-user">${dto.sender}</i></div>
+						</div>	
 				            <div class="textbox">${dto.msg}</div>
 			       		</div>
 					</c:otherwise>
