@@ -18,7 +18,9 @@
 <!-- -------------------------------------------------------------------------- -->
 
 <!-- 글 쓰기 버튼 ( ★ 운영자 권한 가진 사람만 볼 수 있게 해야함 ) -->
+<!-- role이 컨트롤러 단에서 조건문안에 model에 담았던 아이가 admin(관리자)이면 -->
 <c:if test="${role == 'admin'}">
+<!--  +모양을 보여주고 그걸 클릭하면 write로 가라 -->
 	<div class="write" onclick="location.href='write'">+ </div>
 </c:if>
 
@@ -32,8 +34,10 @@
 		</tr>
 	</thead>
 	<tbody>
+<!-- 	컨트롤러단에서 ArrayList로 받았던 아이 그래서 그만큼 반복하기 위해 forEach문에 담고 var="dto"=>dto를 사용해서 담겟다 -->
 	<c:forEach items="${list}" var="dto">
 		<tr> 
+<!-- 	${dto.title}을 누르면	${dto.identity} => identity의 값을 가지고 read를 이동 -->
 			<td><a class="move_link" href="read?identity=${dto.identity}">${dto.title}</a></td>
 			<td>${dto.created}</td>
 			<td>${dto.view}</td>

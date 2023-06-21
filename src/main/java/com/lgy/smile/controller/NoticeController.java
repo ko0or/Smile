@@ -37,7 +37,7 @@ public class NoticeController {
 
 	// ★ notice(공지) 목록
 	@GetMapping("/list")
-	public String noticeList(Model model, @RequestParam HashMap<String, String> params, NoticeCriteria cri,HttpSession session) {
+	public String noticeList(Model model,@RequestParam HashMap<String,String> params, NoticeCriteria cri,HttpSession session) {
 		
 		log.info("@# list");
 //		list로 service단에 list메소드를 params값으로 담는다
@@ -47,8 +47,10 @@ public class NoticeController {
 		model.addAttribute("list", list);
 		log.info( "list 갯수 => " + list.size() );
 		
-//		model에 담아서  service단에 getCount메소드와 NoticeCriteria에 있는 값을 pageMaker이름으로 가져간다
+//		model에 담아서  service단에 getCount메소드와 NoticeCriteria에 있는 값을 pageMaker이름으로 가져간다(페이징 처리를 위해)
 		model.addAttribute("pageMaker", new NoticePageDTO( service.getCount() , cri));
+		
+//		(댓글 갯수 확인)
 		model.addAttribute("commnetCount", commentService.getCount() );
 		
 		if ( devUtils.getUserRoleIsAdmin(session) == true ) {
@@ -61,7 +63,7 @@ public class NoticeController {
 	// ★ notice(공지) 글 쓰기 (화면)
 	@GetMapping("/write")
 	public String noticeWrte(HttpSession session) {
-//		devUtils 에 있는 getUserRoleIsAdmin(관리자인지 확인하는 메소드) 가 사실이면
+//		devUtils 에 있는 getUserRoleIsAdmin(관리자인지 확인하는 메소드) 가 사실이면(관리자로 로그인 햇을때만 글을 작성할수 있게 하기 위해)
 		if ( devUtils.getUserRoleIsAdmin(session) == true ) { 
 //			write로 가겟다
 			return "notice/write"; 
@@ -75,7 +77,7 @@ public class NoticeController {
 	
 	// ★ notice(공지) 글 쓰기(실행)
 	@PostMapping("/write")
-	public String noticeWrite(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
+	public String noticeWrite(Model model, @RequestParam HashMap<String,String> params, HttpSession session) {
 		log.info("@# write");
 		service.write(params);	
 		return "redirect:list";
@@ -94,12 +96,13 @@ public class NoticeController {
 		// 조회수 증가시키는 쿼리 실행하기 => service.viewUp(params);
 		service.viewUp(params);
 		
+//		service단에 있는 contentView 메소드를 가지고 와서 board라는 이름으로 model에 넣어 준다.
 		model.addAttribute("board",service.contentView(params));
 		
-//		devUtils 에 있는 getUserInfo(로그인이 되어있는)값이 참이면
+//		devUtils 에 있는 getUserRoleIsAdmin(관리자)값이 참이면
 		if ( devUtils.getUserRoleIsAdmin(session) == true )  {
 			
-//			model에 role의 값으로 관리자의 정보를 넣어줌
+//			model에 role의 값으로 관리자의 정보를 넣어줌(수정,삭제는 관리자만 볼수 있게 하기 위함)
 			model.addAttribute("role", devUtils.getUserInfo(session).getRole() );
 		}
 		return "notice/read";
@@ -112,8 +115,12 @@ public class NoticeController {
 	public String noticeEdit(Model model,@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# edit");
 		
-//		
+		
+//		service단에 있는 contentView 메소드를 가지고 와서 board라는 이름으로 model에 넣어 준다.
 		model.addAttribute("board", service.contentView(params));
+		
+//		params.get=>쿼리스트링을 쓰기 위한것
+//		그래서 params.get("identity")=>identity컬럼(??)을 가져와서 identity에 넣는다(게시글의 PK값을 가져가서 수정하기 위함)
 		model.addAttribute("identity", params.get("identity"));
 		return "notice/edit";
 	}
@@ -123,21 +130,15 @@ public class NoticeController {
 	@PostMapping("/modify")
 	public String noticeModify(Model model,@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# edit");
+//		진짜 관리자라면
 		if ( devUtils.getUserRoleIsAdmin(session) == true ) { 
+//			service단에 있는 modify메소드를 불러와서 수정 후
 			service.modify(params);
-			
-			params.get("pageNum");
-			// (케이스 1번) redirect:read?identity= + params.get("identity")
-			// (케이스 2번) or 목록으로 갈꺼면  페이지 번호로 돌아가게끔  ( ex-> 3페이지에있는 공지에 있는 글 수정후, 목록갈땐 1페이지가 아닌  원래 보고있던 3페이지로 가게끔 )
-			//               redirect:list   =>   pageNum 이 null 이라서   if 조건문에 따라  초기값 그거 설정해둕걸로 들어감 ,  결론은  list로 보내면 1 페이지 감 
-			return "notice/edit";
+//			PK값을가지고 다시 read로 가라
+			return "redirect:read?identity=" + params.get("identity");
 			
 		}
-//		model.addAttribute("role", devUtils.getUserInfo(session).getRole() );
-		
-		
-		// 현재 주소창에 적힌 주소중 가장 마지막에 있는 / 기준으로 바궈치기
-		// http://아피주소:톰캣포트번호/패키지명/notice/modify => modify 가  list 로 바꿔치기 되는 이유
+//		관리자가 아니라면 그냥 리스트에 있어라
 		return "redirect:list";
 	}
 	
@@ -147,22 +148,15 @@ public class NoticeController {
 	@GetMapping("/delete")
 	public String noticeDelete(Model model,@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# delete");
+//		진짜 관리자라면
 		if ( devUtils.getUserRoleIsAdmin(session) == true ) { 
+//			삭제하고
 			service.delete(params);
 		}
-//		model.addAttribute("role", devUtils.getUserInfo(session).getRole() );
+//		리스트로 다시 가라
 		return "redirect:list";
 		
 	}
-//	@GetMapping("/list")
-//	public String getCount(int comment) {
-//		log.info("@# getCount");
-//		
-//		service.getCount(comment);
-//		return "redirect:list";
-//	// ★ notice(공지) 글 수정
-//	// ... 작성 ...
-//	}
 	
 	
 }
