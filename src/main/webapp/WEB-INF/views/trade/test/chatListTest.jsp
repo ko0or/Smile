@@ -12,16 +12,17 @@
 <section>
 <h1>Chatting LIST TEST</h1>
 
-<table width = "1000" border = "1" class="table-primary">
+<div style="overflow-y: scroll; height: 600px; width: 1400px; margin: 0 auto;">
+	<table border = "1" class="table-primary">
 		<tr>
-			<td>채팅번호</td>
-			<td>채팅방번호</td>
-			<td>게시글번호</td>
-			<td>판매자번호</td>
-			<td>보낸사람 닉</td>
-			<td>보낸날짜</td>
-			<td>메세지</td>
-			<td>받는사람 닉</td>
+			<th>채팅번호</th>
+			<th>채팅방번호</th>
+			<th>게시글번호</th>
+			<th>판매자번호</th>
+			<th>보낸사람 닉</th>
+			<th>보낸날짜</th>
+			<th width="200">메세지</th>
+			<th>받는사람 닉</th>
 		</tr>
 		
 		<c:forEach items="${list}" var = "dto">
@@ -37,6 +38,7 @@
 			</tr>
 		</c:forEach>
 	</table>
+</div>
 	
 	<a href="chatCreateTest">채팅 생성 테스트</a>
 	&nbsp;<a href="../chatroom/chatRoomCreateTest">채팅방 생성 테스트</a>
