@@ -59,6 +59,15 @@ public class UserService implements UserMapperInterface {
 		
 	}
 
+	@Override
+	public void tempPwd(HashMap<String, String> params) {
+		log.info("UserService ===> tempPwd ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.tempPwd(params);
+		
+		log.info("UserService ===> tempPwd ===> end");
+	}
 
 	
 	
@@ -120,6 +129,8 @@ public class UserService implements UserMapperInterface {
 		userDao.delete(params);
 		log.info("UserService ===> delete ===> end");
 	}
+
+
 
 	
 /*

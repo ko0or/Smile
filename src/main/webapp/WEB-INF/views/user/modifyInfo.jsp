@@ -106,7 +106,22 @@ $(document).ready(function() {
 		   ,url: "modify"
 		   ,success: function(data, status){
 			   alert("회원정보 수정을 완료했습니다!");
-			   location.href = "/smile/user/info";		// 컨트롤러의 URL 로 이동
+
+// 			   Swal.fire({
+// 				    icon: 'success',
+// 				    title: '수정 성공',
+// 				    text: "회원정보 수정을 완료했습니다!",
+// 				    showCancelButton: false,
+// 				    confirmButtonText: '확인'
+
+// 				}).then(
+// 			   		location.href = "/smile/user/info";		// 컨트롤러의 URL 로 이동			   
+// 			   )
+			   
+			   location.href = "/smile/user/info";
+
+
+
 // 			   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
 // 			   ★ aws 배포시 => location.href = "/main/list";		
 		   }

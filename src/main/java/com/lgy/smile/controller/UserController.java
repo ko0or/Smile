@@ -85,6 +85,27 @@ public class UserController {
 		}
 	}	
 	
+//=================== 임시 비밀번호 발급 ============================================================= >
+	
+	@PostMapping("/sendTempPwd")
+	public ResponseEntity<String> sendTempPwd(@RequestParam HashMap<String, String> params) {
+		
+		int tempPassword = devUtils.emailSenderByForget(params.get("id"));
+		log.info("임시 비밀번호를 발송할 이메일 주소 ===> " +params.get("id"));
+		log.info("발송한 임시 비밀번호 받아보기 ===> "+ tempPassword);
+		
+		//====================== 여기서 DB의 비밀번호를 임시 비밀번호로 변경해야 함 ===============
+		
+		// 임시 비밀번호를 암호화
+		String password = devUtils.StringToPassword(Integer.toString(tempPassword));
+		params.put("password", password);
+		
+		userService.tempPwd(params);
+		
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
+	
 //=================== 회원정보 조회 및 수정 ============================================================= >
 	
 	// ★ user(유저) 회원정보 조회화면

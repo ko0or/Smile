@@ -86,7 +86,7 @@ public class EmailSender {
 
 	// 이메일 발송내용 == >> 임시비밀번호 발급요청시
 	private String setContentForgetPassword(int certificationNumber) {
-		return "<div style=\"display: flex; justify-content: center; align-items: center; height: 500px; background-color:antiquewhite;\"> <div style=\"width:100%; height: 300px; text-align: center; background-color: white; padding: 20px;\"> <h2>임시 비밀번호 발급을 위한 이메일 인증</h2><br /> <p>임시 비밀번호가  ["
+		return "<div style=\"display: flex; justify-content: center; align-items: center; height: 500px; background-color:antiquewhite;\"> <div style=\"width:100%; height: 300px; text-align: center; background-color: white; padding: 20px;\"> <h2>임시 비밀번호 발급</h2><br /> <p>임시 비밀번호가  ["
 				+ certificationNumber + "] 으로 발급되었습니다.</p><sub><i>*</i> 로그인 후 꼭 비밀번호를 변경해주세요 !</sub> </div> </div>";
 	}
 
@@ -96,16 +96,18 @@ public class EmailSender {
 		
 		try {
 
-			emailTitle = "[싱글벙글] 본인 확인 인증번호 발송";
+//			emailTitle = "[싱글벙글] 본인 확인 인증번호 발송";
 
 			ready(to); // ==> 이메일 발송을 위해 필요한 정보를 세팅해주는 ready() 메소드 호출
 			certificationNumber = (int) (Math.random() * 99999) + 10000; // ==> 인증번호 준비
 
 			/* ===== 매개변수로 받은 Enum 타입에 따라 발송될 내용을 분기처리 ( 본인인증용 or 임시비밀번호 발급용 ) ===== */
 			if (type.equals(sendType.create) == true) {
+				emailTitle = "[싱글벙글] 신규 회원가입 인증번호 발송";
 				emailContent.append(setContentCheckForUser(certificationNumber)); // ==> 메일 발송시 본인인증용으로 발송
 
 			} else if (type.equals(sendType.forget) == true) {
+				emailTitle = "[싱글벙글] 임시 비밀번호 발송";
 				emailContent.append(setContentForgetPassword(certificationNumber)); // ==> 메일 발송시 임시비밀번호 발급용으로 발송
 			}
 
