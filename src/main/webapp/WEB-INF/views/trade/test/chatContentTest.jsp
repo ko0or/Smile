@@ -85,25 +85,7 @@
 <!-- <style>@import 'resources/css/main.css'</style>  -->
 <section>
 <h1>Chatting Content Test</h1>
-<div style="display: flex; justify-content: space-around;">
-	<form id="frm" method="post" action="chatting">
-		<input type="hidden" name="board" value="${list[0].board}">
-		<input type="hidden" name="seller" value="${list[0].seller}">
-		<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
-		<input type="hidden" name="sender" value="${list[0].sender}">
-		<input type="hidden" name="receiver" value="${list[0].receiver}">
-		<p>메세지&nbsp;<input type="text" name="msg"> <input type="reset" onclick="fn_submit()" value="입력"></p>
-	</form>
-	
-	<form id="frm2" method="post" action="chatting">
-		<input type="hidden" name="board" value="${list[0].board}">
-		<input type="hidden" name="seller" value="${list[0].seller}">
-		<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
-		<input type="hidden" name="sender" value="${list[0].receiver}">
-		<input type="hidden" name="receiver" value="${list[0].sender}">
-		<p>메세지&nbsp;<input type="text" name="msg"> <input type="reset" onclick="fn_submit2()" value="입력"></p>
-	</form>
-</div>
+
 <h2>Chatting Room : ${list[0].chattingroom}</h2>
 	<div class="wrap">
 		<div id="chattest">
@@ -111,12 +93,14 @@
 				<c:choose>
 					<c:when test="${dto.sender == list[0].sender}">
 						<div class="chat ch1">
-				            <div class="icon"><i class="fa-solid fa-user">${dto.sender}</i></div>
+							<div>${dto.sender}</div>
+				            <div class="icon"><i class="fa-solid fa-user"></i></div>
 				            <div class="textbox">${dto.msg}</div>
 			   		  	</div>
 					</c:when>
 					<c:otherwise>
 						<div class="chat ch2">
+							<div>${dto.sender}</div>
 				            <div class="icon"><i class="fa-solid fa-user">${dto.sender}</i></div>
 				            <div class="textbox">${dto.msg}</div>
 			       		</div>
@@ -125,9 +109,29 @@
 			</c:forEach>
 		</div>
 	</div>
+	
+	<div style="display: flex; justify-content: space-around; margin: 10px">
+		<form id="frm" method="post" action="#" onsubmit="return false;">
+			<input type="hidden" name="board" value="${list[0].board}">
+			<input type="hidden" name="seller" value="${list[0].seller}">
+			<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
+			<input type="hidden" name="sender" value="${list[0].sender}">
+			<input type="hidden" name="receiver" value="${list[0].receiver}">
+			<p>메세지&nbsp;<input id="text1" type="text" name="msg"> <input type="reset" onclick="fn_submit()" value="입력"></p>
+		</form>
+		
+		<form id="frm2" method="post" action="#" onsubmit="return false;">
+			<input type="hidden" name="board" value="${list[0].board}">
+			<input type="hidden" name="seller" value="${list[0].seller}">
+			<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
+			<input type="hidden" name="sender" value="${list[0].receiver}">
+			<input type="hidden" name="receiver" value="${list[0].sender}">
+			<p>메세지&nbsp;<input id="text2" type="text" name="msg"> <input type="reset" onclick="fn_submit2()" value="입력"></p>
+		</form>
+	</div>
     
-<a href="chatCreateTest">채팅 생성 테스트</a>
-&nbsp;<a href="../chatroom/chatRoomCreateTest">채팅방 생성 테스트</a>
+<a href="chatCreateTest">　</a>
+&nbsp;<a href="../chatroom/chatRoomCreateTest">　</a>
 
 <!-- -------------------------------------------------------------------------- -->
 </section>
@@ -140,6 +144,7 @@ $(document).ready(function() {
 </script>
 
 <script type="text/javascript">
+
 		function fn_submit() {
 			var formData = $("#frm").serialize();
 			
@@ -159,26 +164,40 @@ $(document).ready(function() {
 			});
 		}
 		
-		const $el = document.querySelector(".wrap");
-		const start = () => { 
-		  setInterval(() => {
-		    const eh = $el.clientHeight + $el.scrollTop;
-		    const isScroll = $el.scrollHeight <= eh;
-		    if (isScroll) {
-		      $el.scrollTop = $el.scrollHeight;
-		    }
-		  }, 1000);
-		}
+		$("#text1").keyup(function(event) {
+	        if (event.which === 13) {
+	        	fn_submit();
+	        	$("#text1").val("");
+	        	$("#frm").reset();
+	        }
+	    });
+		
+		$("#text2").keyup(function(event) {
+	        if (event.which === 13) {
+	        	fn_submit2();
+	        	$("#text2").val("");
+	        	$("#frm2").reset();
+	        }
+	    });
+		
+		$('.wrap').scrollTop($('.wrap')[0].scrollHeight);
 		
 		$(document).ready(function(){
-			start();
-			let mySpace = document.getElementById("space"); 
-		    mySpace.scrollTop = mySpace.scrollHeight;
+			setInterval(function() {
+				const $el = document.querySelector(".wrap");
+				const eh = $el.clientHeight + $el.scrollTop;
+			    const isScroll = $el.scrollHeight <= eh+150;
+			    $("#chattest").load(window.location + ' #chattest');
+			    if (isScroll) {
+			      $el.scrollTop = $el.scrollHeight;				
+				}
+			}, 300);
+			$("#text1").keyup(function(event) {
+		        if (event.which === 13) {
+		        	fn_submit();
+		        }
+		    });
 		})
-		
-		setInterval(function() {
-			$("#chattest").load(window.location + ' #chattest');
-		}, 1000);
 		
 </script>
 
