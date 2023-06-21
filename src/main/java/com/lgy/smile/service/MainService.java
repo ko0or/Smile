@@ -75,10 +75,11 @@ public class MainService implements MainBoardMapperInterface {
 	
 
 	@Override
-	public ArrayList<MainBoardDto> list() {
+	public ArrayList<MainBoardDto> list(HashMap<String, String> params) {
 		
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
-		return dao.list();
+		
+		return dao.list(params);
 		
 	}
 
@@ -125,7 +126,15 @@ public class MainService implements MainBoardMapperInterface {
 	}
 
 
-
+	@Override
+	public void like_toggle(HashMap<String, String> params, HttpSession session) {
+		
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
+		params.put("user", devUtils.getUserIdentityToString(session));
+		log.info("@@@좋아요 토글 테스트 시작 ==> " + params.toString());
+		dao.like_toggle(params);
+		
+	}
 
 
 
@@ -164,6 +173,23 @@ public class MainService implements MainBoardMapperInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public void like_toggle(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public ArrayList<MainBoardDto> list() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 
 	
 	

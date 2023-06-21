@@ -12,6 +12,7 @@ import com.lgy.smile.dto.UserDto;
 public interface MainBoardMapperInterface {
 	
 	public ArrayList<MainBoardDto> list();
+	public ArrayList<MainBoardDto> list(HashMap<String, String> params);
 	
 	public boolean write(HashMap<String, String> params);
 	public boolean write(HashMap<String, String> params, HttpSession session);
@@ -24,4 +25,7 @@ public interface MainBoardMapperInterface {
 	
 	public MainBoardDto  content_view(HashMap<String, String> params);
 	public MainBoardDto  content_view(HashMap<String, String> params, HttpSession session);
+	
+	public void like_toggle(HashMap<String, String> params);
+	public void like_toggle(HashMap<String, String> params, HttpSession session);
 }
