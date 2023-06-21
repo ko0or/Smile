@@ -7,8 +7,10 @@
     <select id="list" resultType="com.lgy.smile.dto.NoticeDto" parameterType="int">
         <![CDATA[
 		SELECT
-			board.identity, board.title, board.content, board.created, board.view, board.user 
-		    , IFNULL(COUNT(comment.identity), 0) AS "comments"
+			board.identity, board.title, board.content, board.created, 
+			board.user,
+			(LENGTH(view) - LENGTH(REPLACE(view, ',', ''))) AS "view" ,
+     		IFNULL(COUNT(comment.identity), 0) AS "comments"
 		FROM
 			smile.board_notice board
 		LEFT JOIN 
@@ -17,7 +19,7 @@
 		    smile.board.identity
 		ORDER BY 
 			smile.board.identity DESC
-		LIMIT ${start}, ${end}
+		LIMIT ${start}, 10
         ]]>
     </select>
     
@@ -31,7 +33,8 @@
     </insert>
     
     <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
-        select identity, title, content, created, view, user from board_notice where identity=#{identity}
+         select identity, title, content, created, view, user from board_notice where identity=#{identity}
+
     </select>
     
     <update id="modify" parameterType="hashmap">
@@ -46,5 +49,17 @@
       <select id="getCount" resultType="int">
       	SELECT COUNT(identity) FROM smile.board_notice
     </select>
+    
+    <update id="viewUp" parameterType="hashmap">
+    	<![CDATA[
+		UPDATE 
+			board_notice
+		SET 
+			view = CONCAT(view, ', ', '${ipaddr}')
+		WHERE 
+			identity = ${identity}
+		    AND view NOT LIKE '%, ${ipaddr}%'
+	]]>
+    </update>
 
 </mapper>

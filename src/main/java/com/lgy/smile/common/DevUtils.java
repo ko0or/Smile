@@ -52,11 +52,11 @@ public class DevUtils  {
 	
 	// [★] 입력받은 문자열을 암호화
 	public String StringToPassword(String strFromInput) {		
-		return new BCryptPasswordEncoder().encode(strFromInput); 
+		return new BCryptPasswordEncoder().encode(strFromInput);
 	}
 	
 	// [★] 입력받은 문자열과, 암호화되어있는 문자열이 서로 일치하는지 비교 (일치시 true ,  아니면 false)
-	public boolean psswordMatches(String strFromInput, String strFromDatabase) {
+	public boolean passwordMatches(String strFromInput, String strFromDatabase) {
 		return new BCryptPasswordEncoder().matches(strFromInput, strFromDatabase);
 	}
 	

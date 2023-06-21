@@ -1,9 +1,11 @@
 package com.lgy.smile.service;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.lgy.smile.service.CommentService;
 
@@ -50,9 +54,12 @@ public class NoticeService implements NoticeMapperinterface {
 		log.info("@# NoticeService.list() start");
 		
 		
+//		매퍼인터 페이스와 매퍼인터페이스를 구현한 객체를 가져온다
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 
+//		pageNum(페이지 번호)의 값의 없으면
 		if ( params.get("pageNum") == null ) {
+//			1을 줘라
 			params.put("pageNum", "1");
 		}
 		
@@ -62,14 +69,13 @@ public class NoticeService implements NoticeMapperinterface {
 		
 		int page = Integer.parseInt( params.get("pageNum") );
 		int s = page * 10 - 10;
-		int e = page * 10;
 		
 		String start = String.valueOf(s);
-		String end = String.valueOf(e);
 
+		log.info("************ start => " + start);
 		
 		params.put("start", start );
-		params.put("end", end );
+
 		
 		log.info("@# NoticeService.list() end");
 		return dao.list(params);
@@ -81,10 +87,10 @@ public class NoticeService implements NoticeMapperinterface {
 		log.info("@# NoticeService.write() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		
-		
-		//null , #{title} , #{content} , #{created} , 0 , #{author} , #{user}
+//		created애는 devUtils에 있는 getDate메소드를 사용할 것 이다.
 		params.put("created", devUtils.getDate() );
-		params.put("user", "8" );//수정
+//		user에는 8번을 사용할것이다(관리자 인덱스)
+//		params.put("user",  );
 		
 		log.info("@# NoticeService.write() end");
 		dao.write(params);
@@ -96,9 +102,8 @@ public class NoticeService implements NoticeMapperinterface {
 	public NoticeDto contentView(@RequestParam HashMap<String, String> params) {
 		log.info("@# NoticeService.contentView() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
-		NoticeDto dto = dao.contentView(params);
 		log.info("@# NoticeService.contentView() end");
-		return dto;
+		return dao.contentView(params);
 	}
 
 
@@ -117,18 +122,35 @@ public class NoticeService implements NoticeMapperinterface {
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		log.info("@# NoticeService.delete() start");
 		
-		//if ( userDto.getRole().equals("admin") == true ) {
 			
 			dao.delete(params);
 			log.info("@# NoticeService.delete() end");
 		
-		//}
 		
 	}
 	@Override
 	public int getCount() {
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		return dao.getCount();
+	}
+
+
+	@Override
+	public void viewUp(HashMap<String, String> param) {
+
+		log.info("@@@@@ => viewUp start @");
+		HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String ip = req.getHeader("X-FORWARDED-FOR");
+		if (ip == null) { ip = req.getRemoteAddr(); }
+		
+		param.put("ipaddr", ip);
+		log.info("@ param 매개변수들 => " + param.toString() );
+		
+		log.info("@@@@@ => viewUp end @");
+		
+		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+		dao.viewUp(param);
+		
 	}
 
 

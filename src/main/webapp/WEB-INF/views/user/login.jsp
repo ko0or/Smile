@@ -30,7 +30,7 @@
 			<div class="form-floating">
 				<input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
 				<label for="floatingPassword">비밀번호</label>
-				<a href="#">비밀번호가 뭐..였더라 ..? (기억안날시)</a>
+				<a href="#" id="forgotPassword">비밀번호가 뭐..였더라 ..? (기억안날시)</a>
 			</div>
 			
 		</form>
@@ -121,10 +121,103 @@ $(document).ready(function() {
 // 			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
 		});
-	})
+	}) // 로그인 버튼 처리 ~~end
+	
+	// 비밀번호 기억안날시 링크 클릭했을 때 처리
+	$("#forgotPassword").click(function(){
+		
+		// 작동함
+// 		var inputEmail = prompt("이메일 주소 입력 ");
+// 		console.log(inputEmail);
+
+		Swal.fire({
+			  title: '이메일 주소를 입력해주세요',
+			  input: 'text',
+			  inputAttributes: {
+			    autocapitalize: 'off'
+			  },
+			  showCancelButton: true,
+			  confirmButtonText: '전송',
+			  
+// ====================== 작업 완료. 작동되는 듯? (비밀번호 찾기 => 가입여부 확인 추가) ================================
+			  showLoaderOnConfirm: true,
+			  preConfirm: (login) => {
+			    return $.ajax({
+			    	type: "POST"
+			       ,data: { id: login}
+			       ,url: "checkEmailExists"
+			       ,dataType: "json"
+		    	}).then(response => {
+			        if (response.exists) {
+			          return login;
+			        } else {
+			        	throw new Error("가입되지 않은 이메일 주소입니다.");
+			        }
+			      })
+			      .catch(error => {
+			        Swal.showValidationMessage(error.message);
+			      });
+			  },
+			  allowOutsideClick: () => !Swal.isLoading()
+			  
+// 			  showLoaderOnConfirm: true,
+// 			  preConfirm: (login) => {
+// 			    return fetch(`//api.github.com/users/${login}`)
+// 			      .then(response => {
+// 			        if (!response.ok) {
+// 			          throw new Error(response.statusText)
+// 			        }
+// 			        return response.json()
+// 			      })
+// 			      .catch(error => {
+// 			        Swal.showValidationMessage(
+// 			          `Request failed: ${error}`
+// 			        )
+// 			      })
+// 			  },
+// 			  allowOutsideClick: () => !Swal.isLoading()
+// ====================== 작업 완료. 작동되는 듯? (비밀번호 찾기 => 가입여부 확인 추가) ================================
+	
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    Swal.fire({
+			      title: "임시 비밀번호 이메일 발송 완료!"
+// 			      title: `${result.value.login}'s avatar`,
+// 			      imageUrl: result.value.avatar_url
+			    })
+			    
+			    var email = result.value;
+			    var formData = {"id":email}
+			    
+			    console.log(email);
+			    console.log(formData);
+			    
+			    $.ajax({
+			    	type: "POST"
+			       ,data: formData
+			       ,url: "sendTempPwd"
+			       ,success: function(data){
+			    	   console.log("success" +data);
+			       }
+			       ,error: function(){
+			    	   console.log("error" +data);
+			       }
+			    });
+			  }
+			})
+		
+	});
+	
 	
 })// ~~ end
 </script>
 </html>
+
+
+
+
+
+
+
 
 

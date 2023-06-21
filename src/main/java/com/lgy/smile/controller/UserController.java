@@ -44,30 +44,34 @@ public class UserController {
 //	public ResponseEntity<Void> login(@RequestParam HashMap<String, String> params, HttpSession session) {
 	public ResponseEntity<Integer> login(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
+		// 사용자가 입력한 비밀번호
+		String strFromInput = params.get("password");
+		log.info("strFromInput ===> " + strFromInput);
+		
+		// 데이터베이스에서 조회한 비밀번호
 		UserDto dto = userService.login( params );
+		String strFromDatabase = dto.getPwd();
+		log.info("strFromDatabase ===> " + strFromDatabase);
+		
+		// 비교하여 리턴값이 true 인 경우 사용자 입력 비밀번호가 데이터베이스에 암호화되어 저장된 비밀번호와 일치
+		boolean passwordMatches = devUtils.passwordMatches(strFromInput, strFromDatabase);
+		log.info("passwordMatches ===> " + passwordMatches);
 		
 		if ( dto != null ) {
 			
-			if( dto.getPwd().equals(params.get("password"))) {
+//			if( dto.getPwd().equals(params.get("password"))) {
+			if( passwordMatches ) {
 				log.info("@ => 로그인 성공 ( 닉네임 : " + dto.getNickname() + ") " );
 				
 				session.setAttribute("userInfo", dto);
-				session.setMaxInactiveInterval(1800);	// 세션 30분 설정 
+				session.setMaxInactiveInterval(1800);
 				log.info("@ => session " + session.getAttribute("userInfo"));
-				
-//				log.info("@# HttpStatus.OK ===>"+ ResponseEntity.status(HttpStatus.OK).build());
-//				return ResponseEntity.status(HttpStatus.OK).build();
-//				return new ResponseEntity<Void>(HttpStatus.OK);
 				
 				log.info("@# === body(200)=== >" + ResponseEntity.status(HttpStatus.OK).body(200));
 				return ResponseEntity.status(HttpStatus.OK).body(200);
 				
 			} else {
 				log.info("@ => 로그인 실패 => 비밀번호 불일치");
-				
-//				log.info("@# HttpStatus.NOT_FOUND ===>"+ ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-//				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//				return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 				
 				log.info("@# === body(404)=== >" + ResponseEntity.status(HttpStatus.BAD_REQUEST).body(404));
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(404);
@@ -76,14 +80,43 @@ public class UserController {
 		}else {
 			log.info("@ => 로그인 실패 => 회원 아이디 조회 불가");
 			
-//			log.info("@# HttpStatus.BAD_REQUEST ===>"+ ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-					
 			log.info("@# === body(400)=== >" + ResponseEntity.status(HttpStatus.BAD_REQUEST).body(400));
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(400);
 		}
 	}	
+	
+//=================== 임시 비밀번호 발급 ============================================================= >
+	
+	@PostMapping("/checkEmailExists")
+	public ResponseEntity<String> checkEmailExists(@RequestParam HashMap<String, String> params){
+		UserDto user = userService.login(params);
+		log.info("user ===> " + user);
+		
+		if(user != null) {
+			return ResponseEntity.ok().body("{\"exists\": true}");
+		}else {
+			return ResponseEntity.ok().body("{\"exists\": false}");
+		}
+	}
+	
+	@PostMapping("/sendTempPwd")
+	public ResponseEntity<String> sendTempPwd(@RequestParam HashMap<String, String> params) {
+		
+		int tempPassword = devUtils.emailSenderByForget(params.get("id"));
+		log.info("임시 비밀번호를 발송할 이메일 주소 ===> " +params.get("id"));
+		log.info("발송한 임시 비밀번호 받아보기 ===> "+ tempPassword);
+		
+		//====================== 여기서 DB의 비밀번호를 임시 비밀번호로 변경해야 함 ===============
+		
+		// 임시 비밀번호를 암호화
+		String password = devUtils.StringToPassword(Integer.toString(tempPassword));
+		params.put("password", password);
+		
+		userService.tempPwd(params);
+		
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
 	
 //=================== 회원정보 조회 및 수정 ============================================================= >
 	
@@ -119,27 +152,80 @@ public class UserController {
 	public ResponseEntity<String> modify(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("UserController ===> modify method ====> start");
 		
-		String password = params.get("password");
-		String password2 = params.get("password2");
+		// 사용자가 입력한 "현재" 비밀번호
+		String strFromInput = params.get("password");
+		log.info("UserController ===> modify ===> 현재 비밀번호(strFromInput) ===> " + strFromInput);
 		
-		if(password.equals(password2) && (password.isEmpty() == false )) {	// 비밀번호가 공백이 아닌 경우
+		// 세션 값으로 파라미터에 id 추가
+		UserDto user = new DevUtils().getUserInfo(session);
+		log.info("user 세션을 통해 받아온 사용자 DTO ===> " + user);
+		params.put("id", user.getId() );
+		log.info("user 세션을 통해 받아온 사용자 DTO 의 getId 를 통해 받은 ID값 ===> " + user.getId());
+		log.info("=========================================================");
+		
+		// 데이터베이스에서 조회한 비밀번호
+		UserDto dto = userService.login( params );
+		log.info("modify ===> dto ===> " + dto);
+		
+		String strFromDatabase = dto.getPwd();
+		log.info("UserController ===> modify ===> 데이터베이스에 저장된 비밀번호(strFromDatabase) ===> " + strFromDatabase);
+		
+		// 비교하여 리턴값이 true 인 경우 사용자 입력 비밀번호가 데이터베이스에 암호화되어 저장된 비밀번호와 일치
+		boolean passwordMatches = devUtils.passwordMatches(strFromInput, strFromDatabase);
+		log.info("UserController ===> modify ===> passwordMatches ===> " + passwordMatches);
+
+		// 새 비밀번호와 새 비밀번호 확인
+		String password = params.get("newPassword");
+		String password2 = params.get("newPassword2");
+		log.info("새 비밀번호(password) ===> " + password);
+		log.info("새 비밀번호 확인(password2) ===> " + password2);
+
+		log.info("============ if 문 시작 =============================================");
+		// 현재 비밀번호와 데이터베이스 조회 비밀번호가 일치하면
+		if (passwordMatches) {
 			
-			log.info( params.toString() );
-			
-			userService.modify(params, session);
-			
-			UserDto user = (UserDto) session.getAttribute("userInfo");
-			user.setNickname(params.get("nickname"));		// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
-			user.setPwd(params.get("password"));
-			session.setAttribute("userInfo", user);
-			
-			
-			log.info("UserController ===> modify method ====> end");
-			
-			return ResponseEntity.status(HttpStatus.OK).body("success");
-		}else {
-			log.info("@# UserController ===> modify ===> else ");
-			
+			// 새 비밀번호와 새 비밀번호 확인 란에 공백이 아닌 경우
+			if(password.equals(password2) && (password.isEmpty() == false )) {
+				
+				log.info( params.toString() );
+				
+				log.info("============ UserService 이전 =============================================");
+				
+				userService.modify(params, session);
+				
+				log.info("============ UserService 다음 =============================================");
+				
+//				UserDto user = (UserDto) session.getAttribute("userInfo");
+				// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
+				user.setNickname(params.get("nickname"));
+				
+				// 입력받은 비밀번호를 암호화하는 메소드(StringToPassword) 호출
+				password = devUtils.StringToPassword(params.get("newPassword"));
+				
+				log.info("새 비밀번호 ===> " + params.get("newPassword"));
+				log.info("새 비밀번호 암호화 ===> " + password);
+				
+				// params 값을 replace 로 바꿔치기
+				params.replace("password", password);
+				
+				log.info("새 비밀번호 암호화를 파라미터(password)로 교체한 후 ===> " + params.get("password"));
+
+				// 암호화된 비밀번호를 setter 로 세션값에 셋팅
+//				user.setPwd(password);
+				
+				userService.modify(params, session);
+				
+//				session.setAttribute("userInfo", user);
+				
+				log.info("UserController ===> modify method ====> end");
+				
+				return ResponseEntity.status(HttpStatus.OK).body("success");
+			}else {
+				log.info("@# UserController ===> modify ===> else ");
+				
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+			}
+		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
 		}
 	}
@@ -213,6 +299,11 @@ public class UserController {
 	public String userCreateAccount(@RequestParam HashMap<String, String> params) {
 		log.info("UserController ===> createAccount ===> start");
 		
+		// 입력받은 비밀번호를 암호화하는 메소드(StringToPassword) 호출
+		String password = devUtils.StringToPassword(params.get("password"));
+		
+		// params 값을 replace 로 바꿔치기 한 후 회원가입 진행
+		params.replace("password", password);
 		userService.register(params);
 		
 		return "user/login";
@@ -239,11 +330,4 @@ public class UserController {
 	}
 
 }
-
-//
-//UserDto user = (UserDto) session.getAttribute("userInfo");
-//user.setNickname(params.get("nickname"));		// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
-//user.setPwd(params.get("password"));
-//session.setAttribute("userInfo", user);
-
 

@@ -14,12 +14,12 @@
 	<div class="content-wrapper">	
 		<div class="content-header">
 			<div class="user-icon"></div>
-			<p><b>${board.title}</b></p>
+			<p style="margin-right: 20px;"><b>${board.title}</b></p>
 			<p><font color="grey">
 			${board.created}</font></p>
 			
+			<!-- 운영자일때만 표시하기위해 role사용 -->
 			<c:if test="${role == 'admin'}">
-			<!-- 운영자일때만 표시 -->
 			<div class="btn-group" style="position: absolute; bottom: 20px; right: 10px; height: 40px; background-color: white;">
 			  <button type="button" style="border: none; background-color: white;" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
 			  <ul class="dropdown-menu" style="padding: 10px;">
@@ -49,7 +49,10 @@
 <%@ include file="../common/footer.jsp"%>
 </body>
 <script>
-var boardIdentity = ${board.identity};
+// js파일에서는 이엘 표기법을 사용 할 수 없기 때문에 jsp파일에서 변수로 만들어 준 후 
+	var boardIdentity = ${board.identity};
+	
 </script>
+<!-- 경로를 만들어줌 -->
 <script src="../resources/js/notice/comment/list.js"></script>
 </html>

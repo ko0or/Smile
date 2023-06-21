@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,8 +18,11 @@ import com.lgy.smile.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 
 import com.lgy.smile.common.DevUtils;
+import com.lgy.smile.dao.MainBoardMapperInterface;
 import com.lgy.smile.dao.TradeMapperInterface;
+import com.lgy.smile.dto.MainBoardDto;
 import com.lgy.smile.dto.TradeDto;
+import com.lgy.smile.dto.UserDto;
 
 @Slf4j
 @Service
@@ -46,14 +50,24 @@ public class TradeService implements TradeMapperInterface {
 
 	//* ☆ trade(중고 거래) 글 쓰기
 	@Override
-	public void write(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
+	public boolean write(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		
 		//=> ☆ 넘어온 값 보기
 		log.info("@# TradeService.write() start");
-		
-		
+			
 		//=> ☆ 저장할 값 세팅하기
-		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);		
+		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+		UserDto user = devUtils.getUserInfo(session);
+		
+		String fileIdentity = UUID.randomUUID().toString() + "_" ;
+		
+		if ( user == null ) {
+			log.info("☆ 글 작성 실패 => 비로그인상태");
+			return false;
+		}
+
+		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆
+//		params.put("userPK", String.valueOf( user.getIdentity() ) );
 		params.put( "created", devUtils.getDate() );		
 		if ( params.get("contacted") != null ) {
 			// 비대면 결제에 체크했다면,   contacted 값을 uncontacted(비대면) 으로 저장하고
@@ -77,12 +91,12 @@ public class TradeService implements TradeMapperInterface {
 				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
 				
-				File saveFile = new File( devUtils.getSavePath() , multipartFile.getOriginalFilename());
+				File saveFile = new File( devUtils.getSavePath() , fileIdentity + multipartFile.getOriginalFilename());
 				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
 				
 				
 				// params.put("imgPath", saveFile.getPath() );
-				params.put("imgPath", devUtils.getSavePath() + multipartFile.getOriginalFilename() );
+				params.put("imgPath", devUtils.getSavePath() + fileIdentity +multipartFile.getOriginalFilename() );
 				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
 				log.info( params.toString() );
 				
@@ -97,8 +111,10 @@ public class TradeService implements TradeMapperInterface {
 			
 		//=> ☆ 쿼리 실행
 		dao.write(params);
-		
 		log.info("@# TradeService.write() end");
+		
+		return true;
+		
 	}
 
 	//=> ☆ trade(중고 거래) 글 내용 보기
@@ -115,11 +131,18 @@ public class TradeService implements TradeMapperInterface {
 
 	//=> ☆ trade(중고 거래) 글 수정
 	@Override
-	public void modify(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
+	public boolean modify(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		log.info("@# TradeService.modify() start");
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+		UserDto user = devUtils.getUserInfo(session);
 		
+		String fileIdentity = UUID.randomUUID().toString() + "_" ;
+		
+		if ( user == null ) {
+			log.info("☆ 글 수정 실패 => 비로그인상태");
+			return false;
+		}
 		
 		//=> ☆ 파일 업로드
 		for (MultipartFile multipartFile : uploadFile) {
@@ -134,22 +157,24 @@ public class TradeService implements TradeMapperInterface {
 				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
 				
-				File saveFile = new File( devUtils.getSavePath() , multipartFile.getOriginalFilename());
+				File saveFile = new File( devUtils.getSavePath() , fileIdentity + multipartFile.getOriginalFilename());
 				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
 				
 				
 				// params.put("imgPath", saveFile.getPath() );
-				params.put("imgPath", devUtils.getSavePath() + multipartFile.getOriginalFilename() );
+				params.put("imgPath", devUtils.getSavePath() + fileIdentity + multipartFile.getOriginalFilename() );
 				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
-				log.info( params.toString() );
+				log.info( params.toString() );				
+				
+				
+				if ( multipartFile.getSize() > 0 ) {
+					dao.modifyWithImgPath(params);
+				}
 				
 				
 				multipartFile.transferTo( saveFile );
 				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
 				// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
-				
-				
-				dao.modifyWithImgPath(params);
 				log.info("파일 존재");
 				
 			} catch (IOException e) { 
@@ -164,18 +189,39 @@ public class TradeService implements TradeMapperInterface {
 		} // ~ for 반복문 종료
 		
 		log.info("@# TradeService.modify() end");
+		return true;
 		
 	}
 
 	// ★ trade(중고 거래) 글 삭제
 	@Override
-	public void delete(@RequestParam HashMap<String, String> params, HttpSession session) {
+	public boolean delete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# TradeService.delete() start");
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
-		dao.delete(params);
+		UserDto user = devUtils.getUserInfo(session);
+
+		if ( user == null ) {
+			return false;
+		}
 		
-		log.info("@# TradeService.delete() end");
+		// 1. 게시글 번호로 SELECT 조회
+		TradeDto dto = dao.contentView(params);
+		// 2. 조회된 결과의 user 값을 확인
+		int userPK = dto.getUser();
+		
+		// 3. 현재 로그인중인 회원의 식별번호 (유저테이블의 pk번호) 확인
+		user.getIdentity();
+		
+		// 4. 현재 로그인중인 회원 식별번호가 게시글 조회시 나온 user 외래키와 서로 일치하는지 확인
+		if ( user.getIdentity() == userPK) { 		
+			// 현재 로그인중인 회원번호가,  삭제하고자하는 게시글 테이블의 pk 번호와 일치하다면 삭제
+			dao.delete(params);
+			log.info("@# TradeService.delete() end");
+			return true;
+		}
+		
+		return false;
 		
 	}
 
@@ -183,45 +229,32 @@ public class TradeService implements TradeMapperInterface {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
-	public void write(HashMap<String, String> param) {
-		
+	public boolean write(HashMap<String, String> param) {
+		// TODO Auto-generated method stub	
+		return false;
 	}
 
 	@Override
-	public void delete(HashMap<String, String> param) {
-		
+	public boolean delete(HashMap<String, String> param) {
+		// TODO Auto-generated method stub	
+		return false;
 	}
 
 	@Override
-	public void modify(HashMap<String, String> param) {
-		// TODO Auto-generated method stub
-		
+	public boolean modify(HashMap<String, String> param) {
+		// TODO Auto-generated method stub	
+		return false;
 	}
 
 	@Override
 	public void modifyWithImgPath(HashMap<String, String> param) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void modifyWithImgPath(HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

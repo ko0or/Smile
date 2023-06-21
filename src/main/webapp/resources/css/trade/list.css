@@ -94,15 +94,28 @@
 	/* white-space: pre; */
 	min-height: 500px;
 }
+
 .swal2-container .contact-btn {
-	width: 100%; 
+	width: 70%; 
 	border: 1px solid #eee; 
 	border-radius: 10px; 
 	padding: 20px; 
 	text-align: center;	
 	cursor: pointer;
 }
-
 .swal2-container .contact-btn:hover {
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+
+.swal2-container .insert-btn {
+	width: 25%;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	padding: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+.swal2-container .insert-btn:hover {
 	background-color: rgba(0, 0, 0, 0.15);
 }
