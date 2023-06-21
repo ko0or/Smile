@@ -3,6 +3,8 @@ package com.lgy.smile.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,4 +17,5 @@ public interface NoticeMapperinterface {
 	public void modify(@RequestParam HashMap<String, String> param);
 	public void delete(@RequestParam HashMap<String, String> param);
 	int getCount();
+	public void viewUp(@RequestParam HashMap<String, String> param);
 }
