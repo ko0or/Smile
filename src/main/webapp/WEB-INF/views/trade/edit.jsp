@@ -29,6 +29,7 @@
 
 <form id="tradeForm" action="modify" method="POST" class="was-validated" enctype="multipart/form-data">	
 	<input name="identity" value="${board.identity}" type="hidden">
+	<input name="user" value="${userIdentity}" type="hidden">
 	
   	<button id="${board.imgPath}" class="btn btn-primary showImg">기존 등록된 사진 보기</button>
   	<label for="imgPath" class="btn btn-primary">등록된 사진 변경하기</label>  	
