@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	
 	var count = 0;
-	alert("userPK => " + user);
 
 function getComponent( data ) {
       
@@ -66,8 +65,6 @@ function getComponent( data ) {
       method : "GET" ,
       
       success : function( data ) {   
-      
-         alert("조회갯수 => " + data.length);      
       
          for( var i=0; i<data.length; i++ ) {
             $(".main-content").append( getComponent(data[i]) );
@@ -144,7 +141,7 @@ function getComponent( data ) {
                       </div>
                       
 
-                    <h4 style="display: inline-block;"><i class="fa-solid fa-camera">미리보기</i></h4>
+                    <h4 style="display: inline-block;"><i class="fa-solid fa-camera"> 미리보기</i></h4>
                     <div class="picture" style="background-image: url('display?fileName=${data[boardDataArray].imgPath}'); width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: cover; background-position: center; ">                        
                     </div>
                     <hr><br>
@@ -165,7 +162,25 @@ function getComponent( data ) {
                       <!-- 랜더링 공간 종료 -->
               	</div>
                 `
-              })      
+              })
+              
+              $(".picture").click(function() {
+              
+				// 현재 URL 가져오기
+				var currentURL = window.location.href;
+				// 변경할 주소
+				var newAddress = $(this).attr("style").match(/url\(['"]?([^'"]+)['"]?\)/)[1];
+				// URL 분할
+				var urlParts = currentURL.split("/");
+				var lastSegment = urlParts[urlParts.length - 1];
+				// 변경된 주소로 조합
+				var newURL = currentURL.replace(lastSegment, newAddress);
+				// 새로운 URL로 이동
+				window.open( newURL );
+              
+              })
+              
+                    
             if ( tradeText == "만나요" ) { getMap(tradeLocation); 
             } else { 
               $(".trade-location").remove();

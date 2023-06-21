@@ -339,7 +339,7 @@ $(document).ready(function() {
 									<div class="profileImageIcon"></div>
 									<h4 style="display: inline">${nickname}</h4>
 									<sub style="color:grey">${date}</sub>	
-									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default;" class="" readOnly>${content}</textarea>
+									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${content}</textarea>
 									
 									<button id="${identity}" class="comment-edit" style="border:none;background:white;color:grey;">
 									수정</button>
