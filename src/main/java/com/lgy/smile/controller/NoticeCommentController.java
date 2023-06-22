@@ -52,11 +52,12 @@ public class NoticeCommentController {
 	
 	
 	// ★ notice(공지) 댓글 수정
-	@GetMapping("/edit")
+	@PostMapping("/edit")
 	@ResponseBody
 	public ResponseEntity<String> noticeEdit(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# edit");
 		commentService.modifycomment(params, session);
+		log.info("edit 들어오니?");
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 

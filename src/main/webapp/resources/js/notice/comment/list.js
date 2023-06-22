@@ -50,24 +50,46 @@ $(document).ready(function() {
 
 
 					
-					$(".comment-edit").click(function() {
-				
 						// 댓글 수정버튼 눌렀을때 작동할 내용
+					$(".comment-modify").click(function() {
+					//내 자신".comment-modify"text가 indexOf(인덱스)-1보다 큰것이 수정이냐
+					if($(this).text().indexOf("수정")>-1){
+					
+					//addClass("form-control"):아웃라인을 만들어라
+					//.comment =>댓글
+					$("#commentIdentity" + $(this).attr("id")).find("textarea").addClass("form-control");
+					
+					 //prop("readonly", false) :읽기 전용을 없에라
+					$("#commentIdentity" + $(this).attr("id")).find("textarea").prop("readonly", false);
+                    
+                    $("#commentIdentity" + $(this).attr("id")).find("textarea").css({"border" : "1px solid #ccc" , "outline" : "initial", "cursor" : "text"});
+
+					//내 자신의 text(타입)에 저장을 만들어라
+					$(this).text("저장");
+					
+					//그 다음의 text(타입)에 취소를 만들어라
+                     $(this).next().text("취소");
+                     
+                     //내 자신".comment-edit"text가 indexOf(인덱스)-1보다 큰것이 삭제이냐
+					} else if ( $(this).text().indexOf("저장") > -1 ) {
+				
 						var identity = $(this).attr("id");
-						alert("댓글수정 ajax URL 예시, comment/edit?identity=" + identity );
 						
 						
 						$.ajax({
 						
 							url : "comment/edit?identity="+identity ,
-							method : "GET" ,
-							success : function() {
-
-								// alert("수정성공, 그리고 callComments() 함수 호출 안했을때");
-								alert("수정성공, 그리고 callComments() 함수 사용하면?");
+							method : "POST" ,
+							data :{
+							"identity" : $(this).attr("id") ,
+							//commentIdentity 가지고 있는 자신.수정버튼이 가지고 있는 id(한마디로 pk값)+" 자식요소가textarea"인=>그래서 앞에 한칸을 띄움 값을 content에 넣어라.
+							"content"  : $("#commentIdentity" + $(this).attr("id")).find("textarea").val()
+							}
+							,success : function() {
 								callComments();
 							}
 						}) // ~ ajax 끝 !
+						}
 					}) // ~ 댓글 수정버튼 이벤트 끝 !
 					
 
@@ -78,9 +100,10 @@ $(document).ready(function() {
 
 						// 댓글 삭제버튼 눌렀을때 작동할 내용 attr("id") => id의 속성 값을 가지고 오는 거임
 						var identity = $(this).attr("id");
-						alert("댓글삭제 ajax URL 예시, comment/delete?identity=" + identity );
+						if($(this).text().indexOf("취소")>-1){
 						
-						$.ajax({
+								callComments();
+						}else{ $.ajax({
 
 						//url이 delete인이유는 컨트롤러에 있는 매칭되는 delete를 실행시키는거임 하지만 ajax이기때문에 눈에 보이진 않는 거임
 							url : "comment/delete?identity="+identity ,
@@ -88,13 +111,12 @@ $(document).ready(function() {
 							
 							success : function() {
 
-								// alert("삭제성공, 그리고 callComments() 함수 호출 안했을때");
-								alert("삭제성공, 그리고 callComments() 함수 사용하면?");
+								callComments();
 
 										// 댓글 삭제에 성공했으면, 변경된 내용을 다시 받아와서 화면에 표시함
-								callComments();
 							}
 						}) // ~ ajax 끝 !
+						}
 												
 					}) // ~ 댓글 삭제버튼 이벤트 끝 !
 
@@ -154,7 +176,7 @@ $(document).ready(function() {
 			
 			return `
 			
-			<div class="comment-wrapper mt-5">
+			<div id="commentIdentity${data.identity}" class="comment-wrapper mt-5">
 			
 			<div class="comment">
 				<div class="comment-header">
@@ -162,7 +184,11 @@ $(document).ready(function() {
 					<sub style="display: inline; color: grey;">${data.created}</sub>
 				</div>
 				
-				<p style="white-space: pre-line;">${data.content}</p>
+				<textarea
+					id = "${data.identity}" 
+					class = "modify-textarea"  
+					readonly 
+					style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" >${data.content}</textarea>
 
 					
 				<div class="comment-footer">					
