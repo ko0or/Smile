@@ -329,7 +329,7 @@ $(document).ready(function() {
 
 
 
-	function getComponentByComment( identity , nickname, date, content, user) {
+	function getComponentByComment( identity , nickname, date, content, authorIdentity) {
 
 	return `
 
@@ -337,7 +337,7 @@ $(document).ready(function() {
 						<div class="feed-comments${identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
 									
 									<div class="profileImageIcon"></div>
-									<h4 style="display: inline">${nickname}</h4>
+									<h4 style="display: inline" id="${authorIdentity}">${nickname}</h4>
 									<sub style="color:grey">${date}</sub>	
 									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${content}</textarea>
 									
@@ -362,10 +362,11 @@ $(document).ready(function() {
 	
 	$(window).scroll(function(){
 	        var scrollTop = $(this).scrollTop();
-	        var innerHeight = $(this).innerHeight();
+	        var outerHeight = $(this).outerHeight();
 	        var scrollHeight = $(document).height();
 	
-	        if ( boardUpdate == true && scrollTop + innerHeight > scrollHeight) {
+	        
+	        if ( boardUpdate == true && (scrollTop + outerHeight) >= scrollHeight) {
 	        	boardUpdate = false;
 	        	callBoards(); // ★ ==> 해당 메소드에서 ajax 로 데이터를 받아온뒤 다시 baordUpdate = true; 라고 해주기 !! 
 	        	

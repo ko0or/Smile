@@ -58,7 +58,15 @@ public class MainCommentService implements MainCommentMapperInterface {
 		
 	}
 
-
+	@Override
+	public int authorIdentityCheck(HashMap<String, String> params, HttpSession session) {
+		
+		//=> ★ 댓글 작성자 PK값 (identity컬럼) 반환하기
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		return dao.authorIdentityCheck(params);
+		
+	}
+	
 
 
 
@@ -83,7 +91,16 @@ public class MainCommentService implements MainCommentMapperInterface {
 
 		//=> ★ 댓글 내용 수정하기
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
-		dao.modify(params);
+		
+		int userIdentity = devUtils.getUserInfo(session).getIdentity();
+		int commentAuthorUserIdentity = dao.authorIdentityCheck(params);
+		if ( userIdentity == commentAuthorUserIdentity ) {
+			
+			dao.modify(params);
+			log.info("@ => 로그인된 유저와 댓글 작성자가 일치하여 댓글을 수정했습니다.");
+			return;
+		}
+		log.info("@ => 수정 실패! 댓글 작성자 본인이 아닙니다.");
 	}
 
 	
@@ -96,8 +113,28 @@ public class MainCommentService implements MainCommentMapperInterface {
 
 		//=> ★ 등록된 댓글 삭제하기
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
-		log.info("@# delete start()");
-		dao.delete(params);
-		log.info("@# delete end()");
+		
+		int userIdentity = devUtils.getUserInfo(session).getIdentity();
+		int commentAuthorUserIdentity = dao.authorIdentityCheck(params);
+		if ( userIdentity == commentAuthorUserIdentity ) {
+			
+			dao.delete(params);
+			log.info("@ => 로그인된 유저와 댓글 작성자가 일치하여 댓글을 삭제했습니다.");
+			return;
+		}
+		log.info("@ => 삭제 실패! 댓글 작성자 본인이 아닙니다.");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public int authorIdentityCheck(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
