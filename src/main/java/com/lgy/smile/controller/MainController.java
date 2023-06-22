@@ -51,9 +51,9 @@ public class MainController {
 
 	@GetMapping("/getPosts")
 	@ResponseBody
-	public ResponseEntity< List<MainBoardDto> > getPosts(HashMap<String, String> params) {		
+	public ResponseEntity< List<MainBoardDto> > getPosts(@RequestParam HashMap<String, String> params) {		
 		
-		ArrayList<MainBoardDto> dtos = mainService.list();		
+		ArrayList<MainBoardDto> dtos = mainService.list(params);		
 		return ResponseEntity.status(HttpStatus.OK).body( dtos );
 	}
 	
@@ -120,5 +120,20 @@ public class MainController {
 		mainService.delete(params, session);		
 		return "redirect:list";
 	}
+
+	
+	
+	
+//========================================================================================	
+	
+	
+	@GetMapping("/like_toggle")
+	public ResponseEntity<Void> likeToggle(@RequestParam HashMap<String, String> params, HttpSession session) {
+	
+		mainService.like_toggle(params, session);
+		return ResponseEntity.status(HttpStatus.OK).build();
+		
+	}
+	
 	
 }
