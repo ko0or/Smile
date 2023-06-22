@@ -59,7 +59,7 @@ public class MainCommentController {
 	
 	
 	//=> ★ 댓글 내용 수정하기
-	@GetMapping("/modfiy") @ResponseBody
+	@PostMapping("/modify") @ResponseBody
 	public ResponseEntity<Void> modfiy(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
 		commentService.modify(params, session);

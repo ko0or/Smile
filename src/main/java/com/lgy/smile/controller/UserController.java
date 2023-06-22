@@ -87,6 +87,18 @@ public class UserController {
 	
 //=================== 임시 비밀번호 발급 ============================================================= >
 	
+	@PostMapping("/checkEmailExists")
+	public ResponseEntity<String> checkEmailExists(@RequestParam HashMap<String, String> params){
+		UserDto user = userService.login(params);
+		log.info("user ===> " + user);
+		
+		if(user != null) {
+			return ResponseEntity.ok().body("{\"exists\": true}");
+		}else {
+			return ResponseEntity.ok().body("{\"exists\": false}");
+		}
+	}
+	
 	@PostMapping("/sendTempPwd")
 	public ResponseEntity<String> sendTempPwd(@RequestParam HashMap<String, String> params) {
 		

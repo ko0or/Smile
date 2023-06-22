@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
-	callBoards();
+
+	
 
 	/* 
 	
@@ -20,32 +21,35 @@ $(document).ready(function() {
 
 // ========================================================================================================== >>
 
-	function callBoards() {
+	function callBoards() {		
+		
 		$.ajax({
 
 			url : "getPosts" ,
 			method : "GET" ,
-			
+			data : { "start" : start } ,
 			success : function( data ) {	
 			
-				console.log("조회갯수 => " + data.length);
-			
-				for( var i =0; i<data.length; i++ ) {
-					$(".main-content").append( 
-						getComponentByBoard( data[i].identity , data[i].nickname, data[i].created, data[i].content, data[i].user) 
-					);			
-				}
-				
-				
-				// 테스트용으로 작성 (아이콘)
-				$(".profileImageIcon").css("background-image", "url('../resources/imgs/userDefaultIcon.png')");
-				
-				
-				// 랜더링된 컴포넌트에 이벤트 등록
-				setEvent();
+			start += 5;
+		
+			for( var i =0; i<data.length; i++ ) {
+				$(".main-content").append( 
+					getComponentByBoard( data[i].identity , data[i].nickname, data[i].created, data[i].content, data[i].user , data[i].likes) 
+				);			
 			}
-
-		})
+			
+			
+			// 테스트용으로 작성 (아이콘)
+			$(".profileImageIcon").css("background-image", "url('../resources/imgs/userDefaultIcon.png')");
+			
+			
+			// 랜더링된 컴포넌트에 이벤트 등록
+			setEvent();
+			boardUpdate = true;
+			}
+			
+			
+		}) // ~~ ajax 끝		
 	}
 
 
@@ -146,7 +150,16 @@ $(document).ready(function() {
 
                     } else if ( $(this).text().indexOf("저장") > -1 ) {
 
-                        alert("수정내용 저장하는것도 처리해야징");
+                        $.ajax({
+                        
+                        	url : "comment/modify" ,
+                        	method : "POST" , 
+                        	data : { 
+								"identity" : $(this).attr("id") ,
+								"content" : $(this).prev().val()
+							}
+                        , success : function() { callComments(boardIdentity); }
+                        })
 
                     }
 
@@ -201,9 +214,18 @@ $(document).ready(function() {
 		$(".like").click(function() {
 			if ( $(this).children('i').hasClass("fa-regular") ) {
 				$(this).children('i').removeClass("fa-regular").addClass("fa-solid")
+				alert("좋아요 클릭");
+				
 			} else {
 				$(this).children('i').removeClass("fa-solid").addClass("fa-regular")
+				alert("좋아요 해제");
 			}
+			
+			
+				$.ajax({ 
+					url : "like_toggle" , method : "GET" , data : { "identity" : $(this).attr("id") }
+				}) 
+				
 		})  // ~~ 버튼 이벤트 종료 [좋아요]
 		
 		
@@ -246,12 +268,14 @@ $(document).ready(function() {
 
 // ========================================================================================================== >>
 
-	function getComponentByBoard( identity , nickname, date, content, user) {
+	function getComponentByBoard( identity , nickname, date, content, user, liked) {
 		
 		var boardIdentity = identity;
 		var show = userIdentity == user ? "block" : "none";
+		// userIdentity 로그인된 유저 pk.    identity db에 저장된 유저 pk
 
-		return `
+
+		var row = `
 			<div class="content-wrapper">	
 			<div class="content-header">
 				<div class="profileImageIcon"></div>
@@ -266,21 +290,37 @@ $(document).ready(function() {
 						<li><a class="dropdown-item" href="delete?identity=${identity}">삭제</a></li>
 					</ul>
 				</div>
-			</div>
+			</div>`
 			
-
+	if ( liked.indexOf(userIdentity) > -1 ) {
+		row += `
 			<div class="content-body">${content}</div>
 			<div class="content-footer">
-				<button class="like"><i class="fa-regular fa-heart"></i>
+				<button id="${identity}" class="like"><i class="fa-solid fa-heart"></i>
 				좋아요</button>
 				<button id="${identity}" class="comment"><i class="fa-regular fa-comment"></i>
 				댓글달기</button>
 			</div>
 		</div>
 		`;	
-
-
+	} else {
+		row += `
+			<div class="content-body">${content}</div>
+			<div class="content-footer">
+				<button id="${identity}" class="like"><i class="fa-regular fa-heart"></i>
+				좋아요</button>
+				<button id="${identity}" class="comment"><i class="fa-regular fa-comment"></i>
+				댓글달기</button>
+			</div>
+		</div>
+		`;
 	}
+		
+		return row;
+	}
+	
+
+
 
 
 
@@ -299,7 +339,7 @@ $(document).ready(function() {
 									<div class="profileImageIcon"></div>
 									<h4 style="display: inline">${nickname}</h4>
 									<sub style="color:grey">${date}</sub>	
-									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default;" class="" readOnly>${content}</textarea>
+									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${content}</textarea>
 									
 									<button id="${identity}" class="comment-edit" style="border:none;background:white;color:grey;">
 									수정</button>
@@ -312,6 +352,25 @@ $(document).ready(function() {
 
 	}
 
+
+// ========================================================================================================== >>
+
+
+	var start = 0;
+	var boardUpdate = true;
+	callBoards();
+	
+	$(window).scroll(function(){
+	        var scrollTop = $(this).scrollTop();
+	        var innerHeight = $(this).innerHeight();
+	        var scrollHeight = $(document).height();
+	
+	        if ( boardUpdate == true && scrollTop + innerHeight > scrollHeight) {
+	        	boardUpdate = false;
+	        	callBoards(); // ★ ==> 해당 메소드에서 ajax 로 데이터를 받아온뒤 다시 baordUpdate = true; 라고 해주기 !! 
+	        	
+	        }
+	});
 
 
 }) // 자바스크립트 끝 -!

@@ -95,6 +95,33 @@
 	min-height: 500px;
 }
 
+
+
+.picture { 	position: relative; }
+
+.picture::before {
+  transition: 0.3s all;
+  cursor: pointer;
+  content: "새 창에서 열기"; /* 가상 요소에 표시될 텍스트 추가 */
+  opacity: 0; /* 초기에는 가상 요소를 숨김 */
+  position: absolute; /* 가상 요소의 위치를 조정하기 위해 절대 위치로 설정 */
+  top: 50%; /* 가상 요소를 수직 중앙으로 위치시킴 */
+  left: 50%; /* 가상 요소를 수평 중앙으로 위치시킴 */
+  transform: translate(-50%, -50%); /* 가상 요소를 정중앙으로 정렬 */
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;  
+  width: 100%;
+  height: 100%;
+  
+  display: flex; /* 가상 요소를 활성화할 때 보이도록 변경 */
+   justify-content: center;
+  align-items: center;
+}
+.picture:hover::before {  opacity: 1; }
+
+
 .swal2-container .contact-btn {
 	width: 70%; 
 	border: 1px solid #eee; 
