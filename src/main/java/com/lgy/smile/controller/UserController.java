@@ -329,5 +329,45 @@ public class UserController {
 		return "redirect:/user/logOut";
 	}
 
+//========================= 카카오 간편 로그인 ======================================================= >
+
+	// 카카오 로그인 아이디의 회원가입 여부 확인
+	@GetMapping("/kakaoEmailCheck")
+	public ResponseEntity<String> kakaoEmailCheck(@RequestParam HashMap<String, String> params) {
+		log.info("UserController ===> kakaoLogin ===> start");
+		UserDto user = userService.login(params);
+		
+		if( user != null ) {	// 회원가입된 이메일이므로 바로 로그인 처리
+			
+			log.info("UserController ===> kakaoLogin ===> if");
+			
+			
+			return ResponseEntity.ok().body("{\"exists\": true}");
+
+		}else { // 회원가입 되지 않은 이메일이므로 회원가입 화면으로 이동(이메일 주소 들고가기)
+			
+			log.info("UserController ===> kakaoLogin ===> else");
+			return ResponseEntity.ok().body("{\"exists\": false}");
+		}
+		
+	}
+
+	// 카카오 로그인 아이디가 회원인 경우 비밀번호 검증 없이 바로 로그인 처리
+//	@PostMapping("/kakaoLogin")
+//	public ResponseEntity<Integer> kakaoLogin(@RequestParam HashMap<String, String> params, HttpSession session) {
+//		
+//		
+//	}
+
 }
+
+
+
+
+
+
+
+
+
+
 
