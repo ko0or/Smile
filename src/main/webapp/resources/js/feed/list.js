@@ -18,6 +18,11 @@ $(document).ready(function() {
 
 
 	*/
+	
+	
+	
+	
+	
 
 // ========================================================================================================== >>
 
@@ -34,7 +39,8 @@ $(document).ready(function() {
 		
 			for( var i =0; i<data.length; i++ ) {
 				$(".main-content").append( 
-					getComponentByBoard( data[i].identity , data[i].nickname, data[i].created, data[i].content, data[i].user , data[i].likes) 
+					getComponentByBoard( data[i] )
+					 
 				);			
 			}
 			
@@ -72,7 +78,8 @@ $(document).ready(function() {
 				
 				//=> 해당 게시글에 존재하는 댓글 갯수만큼 반복하면서, 댓글 내용들을 표시
 				for ( var i=0; i < data.length; i ++ ) {						
-					row += getComponentByComment( data[i].identity , data[i].nickname, data[i].created, data[i].content, data[i].user);
+					row += getComponentByComment( data[i] );
+					
 				}
 
 
@@ -214,16 +221,18 @@ $(document).ready(function() {
 		$(".like").click(function() {
 			if ( $(this).children('i').hasClass("fa-regular") ) {
 				$(this).children('i').removeClass("fa-regular").addClass("fa-solid")
-				alert("좋아요 클릭");
 				
 			} else {
 				$(this).children('i').removeClass("fa-solid").addClass("fa-regular")
-				alert("좋아요 해제");
+
 			}
 			
 			
 				$.ajax({ 
 					url : "like_toggle" , method : "GET" , data : { "identity" : $(this).attr("id") }
+					, success : function() { 
+						//callBoards(); 
+					}
 				}) 
 				
 		})  // ~~ 버튼 이벤트 종료 [좋아요]
@@ -268,48 +277,51 @@ $(document).ready(function() {
 
 // ========================================================================================================== >>
 
-	function getComponentByBoard( identity , nickname, date, content, user, liked) {
-		
-		var boardIdentity = identity;
-		var show = userIdentity == user ? "block" : "none";
+	function getComponentByBoard( boardData ) {		
+
 		// userIdentity 로그인된 유저 pk.    identity db에 저장된 유저 pk
+		var show = userIdentity == boardData.user ? "block" : "none";
 
 
 		var row = `
 			<div class="content-wrapper">	
 			<div class="content-header">
 				<div class="profileImageIcon"></div>
-				<p><b>${nickname} </b></p>
-				<p><font color="grey">${date}</font> </p>
+				<p><b>${boardData.nickname} </b></p>
+				<p><font color="grey">${boardData.created}</font> </p>
 				
 
 				<div class="btn-group" style="display : ${show}" >
 					<button type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-gear"></i></button>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="modify?identity=${identity}">수정</a></li>
-						<li><a class="dropdown-item" href="delete?identity=${identity}">삭제</a></li>
+						<li><a class="dropdown-item" href="modify?identity=${boardData.identity}">수정</a></li>
+						<li><a class="dropdown-item" href="delete?identity=${boardData.identity}">삭제</a></li>
 					</ul>
 				</div>
 			</div>`
 			
-	if ( liked.indexOf(userIdentity) > -1 ) {
+	if ( boardData.likes.indexOf(userIdentity) > -1 ) {
 		row += `
-			<div class="content-body">${content}</div>
+			<div class="content-body">${boardData.content}</div>
+			<sub style="display: flex; justify-content: right; color: gray; margin-bottom: 30px;">좋아요 ${boardData.likeCount}개 · 댓글 ${boardData.commentCount}개</sub>
 			<div class="content-footer">
-				<button id="${identity}" class="like"><i class="fa-solid fa-heart"></i>
+
+
+				<button id="${boardData.identity}" class="like"><i class="fa-solid fa-heart"></i>
 				좋아요</button>
-				<button id="${identity}" class="comment"><i class="fa-regular fa-comment"></i>
+				<button id="${boardData.identity}" class="comment"><i class="fa-regular fa-comment"></i>
 				댓글달기</button>
 			</div>
 		</div>
 		`;	
 	} else {
 		row += `
-			<div class="content-body">${content}</div>
+			<div class="content-body">${boardData.content}</div>
+			<sub style="display: flex; justify-content: right; color: gray; margin-bottom: 30px;">좋아요 ${boardData.likeCount}개 · 댓글 ${boardData.commentCount}개</sub>
 			<div class="content-footer">
-				<button id="${identity}" class="like"><i class="fa-regular fa-heart"></i>
+				<button id="${boardData.identity}" class="like"><i class="fa-regular fa-heart"></i>
 				좋아요</button>
-				<button id="${identity}" class="comment"><i class="fa-regular fa-comment"></i>
+				<button id="${boardData.identity}" class="comment"><i class="fa-regular fa-comment"></i>
 				댓글달기</button>
 			</div>
 		</div>
@@ -329,21 +341,22 @@ $(document).ready(function() {
 
 
 
-	function getComponentByComment( identity , nickname, date, content, authorIdentity) {
+	function getComponentByComment( commentData ) {
+	// function getComponentByComment( identity , nickname, date, content, authorIdentity) {
 
 	return `
 
 						<!-- feed-comment-wrapper 클래스 안에 랜더링해주기 -->			  
-						<div class="feed-comments${identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
+						<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
 									
 									<div class="profileImageIcon"></div>
-									<h4 style="display: inline" id="${authorIdentity}">${nickname}</h4>
-									<sub style="color:grey">${date}</sub>	
-									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${content}</textarea>
+									<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
+									<sub style="color:grey">${commentData.created}</sub>	
+									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
 									
-									<button id="${identity}" class="comment-edit" style="border:none;background:white;color:grey;">
+									<button id="${commentData.identity}" class="comment-edit" style="border:none;background:white;color:grey;">
 									수정</button>
-									<button id="${identity}" class="comment-delete" style="border:none;background:white;color:grey;">
+									<button id="${commentData.identity}" class="comment-delete" style="border:none;background:white;color:grey;">
 									삭제</button>
 								</div>
 								

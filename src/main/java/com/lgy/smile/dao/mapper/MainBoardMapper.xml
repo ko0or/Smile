@@ -18,19 +18,20 @@
   	
   	<select id="list" resultType="com.lgy.smile.dto.MainBoardDto">
 		SELECT 
-			board.* 
-		    , user.nickname
+			user.nickname
+		    , board.* 
+		    , LENGTH(board.likes) - LENGTH(REPLACE(board.likes, ',', '')) "likeCount"
+		    , (SELECT count(*) FROM smile.comment_main WHERE board = board.identity) "commentCount"
+		
 		FROM 
-			smile.board_main board,
-			(
-				SELECT *
-				FROM smile.user user
-			) user
+			smile.user user,
+		    smile.board_main board
+		
 		WHERE
-			board.user = user.identity
-		ORDER BY 
+		    board.user = user.identity
+		ORDER BY
 			board.identity DESC
-		LIMIT ${start}, 5
+			LIMIT ${start}, 5
   	</select>
 
 	<insert id="modify" parameterType="hashmap">
