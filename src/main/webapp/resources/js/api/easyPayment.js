@@ -6,6 +6,8 @@
 		<script src="../resources/js/api/easyPayment.js"></script>
 
 
+	#. 사용 에시는 맨 아래 적어둠 : )
+
 ========================================================================================= */		
 
 
@@ -64,8 +66,16 @@ function requestPay(orderId, payType, pgValue, buyerEmailAddr, amount) {
   		카카오 : kakaopay
   		토스 : tosspayments
   		
-  		
   	
+  	#. 예시
   	
+  	function requestPay(orderId, payType, pgValue, buyerEmailAddr, amount)
+  	
+  	function requestPay(중고거래dto에있는PK값, 'card', 'tosspayments', 유저dto에있는이멜주소, 중고거래dto에있는price가격)
+  	function requestPay(중고거래dto에있는PK값, 'trans', 'tosspayments', 유저dto에있는이멜주소, 중고거래dto에있는price가격)
+  	
+  	  	
+  	function requestPay(중고거래dto에있는PK값, 'card', 'kakaopay', 유저dto에있는이멜주소, 중고거래dto에있는price가격)
+  	function requestPay(중고거래dto에있는PK값, 'trans', 'kakaopay', 유저dto에있는이멜주소, 중고거래dto에있는price가격)
   
  */
