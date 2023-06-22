@@ -20,7 +20,7 @@ public class DevUtils  {
 
 	/* ===== 파일 저장되는 공간 ===== */
 	private String savePath = "C:/upload/temp3/";
-	//private String savePath = "/home/ec2-user/tomcat9/webapps/First/images/";
+//	private String savePath = "/home/ec2-user/tomcat9/webapps/First_resources/images/";
 	public String getSavePath() { return savePath;	}
 	
 	/* ===== 이메일 발송 API 	===== */

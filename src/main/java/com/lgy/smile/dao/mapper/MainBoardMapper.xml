@@ -29,7 +29,8 @@
 		WHERE
 			board.user = user.identity
 		ORDER BY 
-			board.identity DESC;
+			board.identity DESC
+		LIMIT ${start}, 5
   	</select>
 
 	<insert id="modify" parameterType="hashmap">
@@ -44,5 +45,22 @@
   	</delete>
   	
   	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	<update id="like_toggle" parameterType="hashmap">
+  	<![CDATA[
+		UPDATE smile.board_main
+		SET likes = CASE WHEN likes LIKE '%, ${user}%' THEN REPLACE(likes, ', ${user}', '')
+		    ELSE CONCAT(likes, ', ', ${user})
+		    END
+		WHERE identity = ${identity};
+		]]>  		
+  	</update>
   	
 </mapper>

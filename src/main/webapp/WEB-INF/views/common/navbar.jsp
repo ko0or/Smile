@@ -4,7 +4,8 @@
  <!-- aws 배포할땐  앞에 /smile 빼고 배포하기 ★ -->
 <nav>
   <div class="position-relative" >
-    <img onclick="location.href='/smile/main/home'" src="../resources/imgs/title.png" class="title-banner mb-5" style="cursor: pointer;">
+      <img onclick="location.href='/smile/main/list'" src="../resources/imgs/title.png" class="title-banner mb-5" style="cursor: pointer;"> 
+<!--    <img onclick="location.href='/main/list'" src="../resources/imgs/title.png" class="title-banner mb-5" style="cursor: pointer;"> -->
     <ul class="desktop-nav">
       <li><a href="/smile/main/list"><i class="fa-solid fa-house"></i> 
 <!-- <li><a href="/main/list"><i class="fa-solid fa-house"></i> -->
