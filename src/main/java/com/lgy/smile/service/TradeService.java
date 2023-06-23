@@ -1,6 +1,7 @@
 package com.lgy.smile.service;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -144,6 +145,15 @@ public class TradeService implements TradeMapperInterface {
 			return false;
 		}
 		
+		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆		
+		if ( params.get("contacted") != null ) {
+			// 비대면 결제에 체크했다면,   contacted 값을 uncontacted(비대면) 으로 저장하고
+			params.replace("contacted", "비대면");
+		} else {
+			// 비대면 결제에 체크하지않았다면,  contacted 값을 contacted(대면) 으로 저장한다.
+			params.put("contacted", "만나요");
+		}
+		
 		//=> ☆ 파일 업로드
 		for (MultipartFile multipartFile : uploadFile) {
 			log.info("========================================================");
@@ -169,6 +179,10 @@ public class TradeService implements TradeMapperInterface {
 				
 				if ( multipartFile.getSize() > 0 ) {
 					dao.modifyWithImgPath(params);
+					log.info("@#@#사진이랑 같이 저장됨@#@#");
+				} else {
+					dao.modify(params);				
+					log.info("변경할 파일 없음");
 				}
 				
 				
@@ -176,14 +190,10 @@ public class TradeService implements TradeMapperInterface {
 				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
 				// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
 				log.info("파일 존재");
+
 				
-			} catch (IOException e) { 
-				
-				dao.modify(params);
-				log.info("변경할 파일 없음");
-				
-			} catch (Exception e) { 
-				e.printStackTrace(); 
+			} catch (NoSuchFileException e) { log.info("파일 없음");
+			} catch (Exception e) {  e.printStackTrace(); 
 			}
 			
 		} // ~ for 반복문 종료

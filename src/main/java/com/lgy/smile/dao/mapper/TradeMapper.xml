@@ -24,12 +24,13 @@
     </select>
   	
   	<update id="modify" parameterType="hashmap">
-		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}
+		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}, contacted = #{contacted}, address = #{address}
 			where identity=#{identity}
+			
     </update>
 
   	<update id="modifyWithImgPath" parameterType="hashmap">
-		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}, imgPath = #{imgPath}
+		UPDATE board_trade SET title = #{title}, content = #{content}, price = #{price}, imgPath = #{imgPath}, contacted = #{contacted}, address = #{address}
 			where identity=#{identity}
     </update>
   	

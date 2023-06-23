@@ -59,12 +59,18 @@ function getComponent( data ) {
 	
 
 
-   $.ajax({
+   function callBoards() {
+    
+        $.ajax({
    
       url : "getPosts" ,
       method : "GET" ,
+      data : { "start" : start } ,
       
       success : function( data ) {   
+      
+      	start += 5;
+      	
       
          for( var i=0; i<data.length; i++ ) {
             $(".main-content").append( getComponent(data[i]) );
@@ -187,9 +193,36 @@ function getComponent( data ) {
             }
          }) // ~ 버튼 이벤트 종료
    
+   
+   
+   
+   		boardUpdate = true;
 // =================================================================================   
       } // ~ success 콜백함수 끝   
    }) // ~ ajax 끝 	
+} // ~ callBoards 함수 끝
+// ========================================================================================================== >>
+
+
+
+
+
+	var start = 0;
+	var boardUpdate = true;
+	callBoards();
+	
+	$(window).scroll(function(){
+	        var scrollTop = $(document).scrollTop();
+	        var innerHeight = $(document).innerHeight();
+	        var scrollHeight = $(this).height();
+	
+	        if ( boardUpdate == true && scrollTop + innerHeight > scrollHeight) {
+	        	
+	        	
+	        }
+	});
+
 	
 	
+		
 })
