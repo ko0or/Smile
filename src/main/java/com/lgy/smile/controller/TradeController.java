@@ -2,6 +2,7 @@ package com.lgy.smile.controller;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,6 +19,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TradeController {
 
 	@Autowired private TradeService tradeService;
+	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 
 	// ★ trade(중고 거래) 글 목록
@@ -42,10 +45,12 @@ public class TradeController {
 	public String tradeList(Model model, HttpSession session) {
 		log.info("@# list");
 
-		ArrayList<TradeDto> list = tradeService.list();
-		model.addAttribute("list", list);
+		//ArrayList<TradeDto> list = tradeService.list();
+		//model.addAttribute("list", list);
+		//
 		model.addAttribute("user", devUtils.getUserIdentityToString(session) );
 		
+		//수정 삭제버튼 글 안으로 옮김
 		//model.addAttribute("show", "block" ); //톱니바퀴 표시
 		//model.addAttribute("show", "none" );  //톱니바퀴 숨김
 		
@@ -54,8 +59,10 @@ public class TradeController {
 	
 	// ★ trade(중고 거래) TradeDto에서 받아온 값들
 	@GetMapping("/getPosts")
-	public ResponseEntity< ArrayList<TradeDto> > getPosts() {
-		return ResponseEntity.status(HttpStatus.OK).body( tradeService.list() );
+	//ResponseEntity : ajax를 사용하기 위해 필요함
+	public ResponseEntity< ArrayList<TradeDto> > getPosts(@RequestParam HashMap<String, String> params) {
+		log.info("ajax로부터 전달받은 값 => " + params.toString() );
+		return ResponseEntity.status(HttpStatus.OK).body( tradeService.list(params) );
 	}
 	
 		
@@ -63,7 +70,7 @@ public class TradeController {
 	@GetMapping("/write")
 	public String tradeWrite(HttpSession session) {
 		
-		// 비로그인 상태라면, list 주소로 돌려보내고
+		// 비로그인 상태라면, 로그인 화면으로 돌려보내고
 		if ( devUtils.getUserInfo(session) == null ) return "redirect:/user/login"; 		
 				
 		else // 로그인상태라면, 글 쓰기 화면(views/trade/write.jsp 파일)을 보여준다 -!
@@ -77,6 +84,12 @@ public class TradeController {
 	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		log.info("@# write");
 
+		log.info("@@ 폰번호도 받아보려구함 ==>" + params.toString() );
+		
+		//int cerNumber = devUtils.smsSender( params.get("tel") );
+		//log.info("@ 인증번호 뭐로 발송됐음 ?? => " + cerNumber );
+		
+		
 		tradeService.write(params, imgPath, session);
 		
 		return "redirect:list";
@@ -151,7 +164,20 @@ public class TradeController {
 				
 
 	        // 오류발생했을땐 해당 메시지 + null 값 리턴
+			} catch (NoSuchFileException e) { 
 			} catch (Exception e) { e.printStackTrace();}		
 			return result;
 		}
+		
+		
+		
+		
+		
+		
+		@GetMapping("/content_view")
+		public ResponseEntity<TradeDto> content_view(@RequestParam HashMap<String, String> params) {
+			//=> 중고거래 게시글눌렀을때 모달에 보여질 정보를 보여주기 위한 역할 ★ 
+			return ResponseEntity.status(HttpStatus.OK).body( tradeService.contentView(params) ); 
+		}
+		
 }

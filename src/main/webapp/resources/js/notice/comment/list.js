@@ -20,9 +20,23 @@ $(document).ready(function() {
 					for (var i=0; i < data.length; i++) {
 				
 						//row에 밑에서 썻던 getComponent 함수에 data의 값을 하나씩 추가해서 넣어 준다 
-						row += getComponent(data[i]);
+						
+						//로그인한 유저 :userIdentity
+						//댓글작성자 번호 :data[i].user(data[i] =>댓글들 user => 작성자)
+						alert( "현재 표시중인 댓글DTO의 Identity 값: " + data[i].identity + ",댓글 작성자 번호는 => " + data[i].user + ",지금 로긴한 유저 번호는 => " + userIdentity );
+						
+						//지금 로그인한 유저와 댓글 작성자가 같냐
+						if ( userIdentity == data[i].user ) {
+							alert("본인이라서 수정/삭제 가능해야함");
+						//그럼 row에 그 댓글에 수정/삭제를 보여줘라
+							row += getComponent(data[i], "block");
+						} else {
+							alert("본인아니라서 수정/삭제 불가");
+						//아니면 없에라
+							row += getComponent(data[i], "none");
+						}
 				
-						//$(".content-footer").append( getComponent(data[i]) );
+						
 						
 					}
 	
@@ -169,8 +183,8 @@ $(document).ready(function() {
 // ======================================================================================================================= >		
 
 //	댓글 =>getComponent 함수에 data 매게변수를 넣어줌
-
-		function getComponent( data ) {
+//	show=>위에서 받은 display가 block 또는 none임
+		function getComponent( data, show ) {
 			
 			console.log(data);
 			
@@ -190,8 +204,8 @@ $(document).ready(function() {
 					readonly 
 					style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" >${data.content}</textarea>
 
-					
-				<div class="comment-footer">					
+					<!--display를 조건문에 썻기 때문에 그 조건에 맞게 보여주고 숨김-->
+				<div class="comment-footer" style="display:${show}">					
 					<button type="button" id="${data.identity}" class="comment-modify">수정</button>
 					<button type="button" id="${data.identity}" class="comment-delete">삭제</button>
 				</div>

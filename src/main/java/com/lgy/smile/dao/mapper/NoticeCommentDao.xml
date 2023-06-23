@@ -38,4 +38,15 @@
 		delete from comment_notice where identity=#{identity}
     </delete>
     
+    <insert id="replaycomment" parameterType="hashmap">
+    insert into comment_notice (identity, content, created, user,board,reply_by_user)    
+        SELECT null,comment.content,comment.created,comment.user,comment.board,comment.reply_by_user
+		FROM 
+		board.identity = #{identity}
+		smile.comment_notice comment ,
+		smile.user user
+   where
+    	user.nickname=#{nickname} =comment.user=#{user}
+    </insert>
+    
 </mapper>

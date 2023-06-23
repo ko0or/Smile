@@ -98,6 +98,19 @@ public class NoticeController {
 //		service단에 있는 contentView 메소드를 가지고 와서 board라는 이름으로 model에 넣어 준다.
 		model.addAttribute("board",service.contentView(params));
 		
+//		UserDto에 로그인된 유저 정보
+		UserDto user = devUtils.getUserInfo(session);
+		
+		if (user != null) {
+//		그 유저 정보에 identity값을 model에 넣어서 userIdentity 값으로 가지고 간다
+			model.addAttribute("userIdentity", devUtils.getUserInfo(session).getIdentity());
+			
+		}else {
+//			로그인을 하지 않았다면(getUserInfo)메소드에  값이 null인 거임 그럼 -1(identity값이 음수일수없으니까)
+			model.addAttribute("userIdentity",-1);
+			
+		}
+		
 //		devUtils 에 있는 getUserRoleIsAdmin(관리자)값이 참이면
 		if ( devUtils.getUserRoleIsAdmin(session) == true )  {
 			

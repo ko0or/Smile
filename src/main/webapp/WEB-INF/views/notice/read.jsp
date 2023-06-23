@@ -51,6 +51,8 @@
 <script>
 // js파일에서는 이엘 표기법을 사용 할 수 없기 때문에 jsp파일에서 변수로 만들어 준 후 
 	var boardIdentity = ${board.identity};
+// 	모델로 넘긴 useridentity를 변수로만들어서 스크립트 파일 에서 사용
+	var userIdentity = ${userIdentity};
 	
 </script>
 <!-- 경로를 만들어줌 -->

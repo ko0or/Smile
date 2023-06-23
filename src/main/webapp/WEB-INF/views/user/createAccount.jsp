@@ -27,17 +27,32 @@
 				<input name="nickname" type="text" class="form-control" id="floatingNickname" placeholder="번쩍점프 장인"> 
 				<label for="floatingNickname"><i>*</i>
 				닉네임</label>
-			</div>			
-							
-			<div class="form-floating mb-3">
-				<input name="id" type="email" class="form-control" id="floatingEmail" formaction="isDuplicated"  placeholder="a@naver.com"> 
-				<label for="floatingEmail"><i>*</i>
-				이메일 계정</label>
-				
-				<button id="isDuplicated" type="button" class="btn btn-primary">
-				중복체크</button>
 			</div>
-			
+
+			<c:choose>
+				<c:when test="${ id == null }">
+					<div class="form-floating mb-3">
+						<input name="id" type="email" class="form-control" id="floatingEmail" formaction="isDuplicated"  placeholder="a@naver.com"> 
+						<label for="floatingEmail"><i>*</i> 
+						이메일 계정</label>
+						<button id="isDuplicated" type="button" class="btn btn-primary">
+						중복체크</button>
+					</div>
+				</c:when>
+			</c:choose>
+
+			<c:choose>
+				<c:when test="${ id != null }">
+					<div class="form-floating mb-3">
+						<input name="id" type="email" class="form-control" id="floatingEmail" formaction="isDuplicated" style="text-align: left" value="${ id }" readonly="readonly">
+						<label for="floatingEmail"><i>*</i> 
+						이메일 계정 카카오 로그인</label>
+<!-- 						<button id="isDuplicated" type="button" class="btn btn-primary"> -->
+<!-- 						중복체크</button> -->
+					</div>
+				</c:when>
+			</c:choose>
+	
 			<div class="form-floating mb-3" style="display:none"  id="slideDown">
 				<input name="code" class="form-control" id="floatingCode">
 				<label for="floatingCode"><i>*</i>
@@ -75,7 +90,7 @@
 </body>
 <script>
 $(document).ready(function() {
-    
+
 // ★ 입력된 비밀번호와  재확인에 입력된 내용이 서로 같은지 확인하는 내용들 ==================== >>
 	$("#floatingPassword").on("keyup" ,function() {
 		if ($("#floatingPassword2").val().length > 0 ) {
@@ -161,8 +176,12 @@ $(document).ready(function() {
 									    text: "이메일 인증이 완료되었습니다!",
 									    showCancelButton: false,
 									    confirmButtonText: '확인'
-									})
-									
+									}).then(function(){
+											// 인증 성공하면 이메일 계정 입력부분 비활성화 및 색상변경(grey)
+											$("#floatingEmail").prop("readonly", true);
+											$("#floatingEmail").css("color", "grey");
+
+									});
 									
 									// 비밀번호까지 모두 입력되면 회원가입 버튼 활성화
 				    				function activeEvent() {
@@ -194,8 +213,6 @@ $(document).ready(function() {
 				    					
 				    				});
 				    				
-				    				
-				    				
 				    		 }
 				    		 // 인증 실패 시
 				    	  	 ,error: function(){
@@ -225,6 +242,45 @@ $(document).ready(function() {
 				})
 		   }
 		});
+	});
+	
+	
+	// 카카오 로그인으로 회원가입 화면으로 넘어온 경우에 input 태그에 모두 입력되면 회원가입 버튼 활성화
+	$(document).ready(function() {
+	    // Function to check if all input fields are filled
+	    function checkInputFields() {
+	        var nickname = $("#floatingNickname").val();
+	        var password = $("#floatingPassword").val();
+	        var password2 = $("#floatingPassword2").val();
+
+	        if (nickname !== "" && password !== "" && password2 !== "") {
+	            return true;
+	        }
+	        return false;
+	    }
+
+	    // Function to enable/disable the registration button
+	    function toggleRegistrationButton() {
+	        var allFieldsFilled = checkInputFields();
+	        if (allFieldsFilled) {
+	            $("#register").prop("disabled", false);
+	        } else {
+	            $("#register").prop("disabled", true);
+	        }
+	    }
+
+	    // Event handlers for keyup events on the input fields
+	    $("#floatingNickname, #floatingPassword, #floatingPassword2").on("keyup", function() {
+	        toggleRegistrationButton();
+	    });
+
+	    // Event handler for the registration button click
+	    $("#register").on("click", function() {
+	        if (checkInputFields()) {
+	            // Submit the form or perform any desired action
+	            $("#createAccount").submit();
+	        }
+	    });
 	});
 	
 })// ~~ end

@@ -51,7 +51,14 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	@Override
 	public void modifycomment(HashMap<String, String> param, HttpSession session) {
 		NoticeCommentMapperinterface dao =sqlSession.getMapper(NoticeCommentMapperinterface.class);
-		dao.modifycomment(param);
+	
+		int loginuser=devUtils.getUserInfo(session).getIdentity();
+		ArrayList<NoticeCommentDto> commentuser= dao.contentViewcomment(param);
+		//if (loginuser == dao.contentViewcomment(param)) {
+			
+			dao.modifycomment(param);
+		//}
+		
 		
 	}
 
@@ -64,14 +71,17 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	}
 
 	
+	@Override
+	public ArrayList<NoticeCommentDto> replaycomment(HashMap<String, String> param, HttpSession session) {
+		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
+		param.put("nickname", String.valueOf(devUtils.getUserInfo(session).getNickname()) );
+		
+		ArrayList<NoticeCommentDto> dtos = dao.replaycomment(param, session);
+		param.put("user",  String.valueOf( dtos.get(0).getUser() ) );
+		
+		return dao.replaycomment(param, session);
 	
-	
-	
-	
-	
-	
-	
-	
+	}
 	
 	
 	@Override
@@ -97,8 +107,10 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+}
+
+	
 
 	
 
 
-}
