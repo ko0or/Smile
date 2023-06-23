@@ -16,6 +16,10 @@ public interface MainCommentMapperInterface {
 	public ArrayList<MainCommentDto> list(HashMap<String, String> params);
 	
 	
+	//=> ★ 댓글 작성자 PK값 (identity컬럼) 반환하기
+	public int authorIdentityCheck(HashMap<String, String> params);
+	public int authorIdentityCheck(HashMap<String, String> params, HttpSession session);
+	
 	//=> ★ 댓글 새로 작성하기
 	public void write(HashMap<String, String> params);
 	public void write(HashMap<String, String> params, HttpSession session);

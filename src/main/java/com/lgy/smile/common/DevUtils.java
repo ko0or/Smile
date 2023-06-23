@@ -26,26 +26,28 @@ public class DevUtils  {
 	/* ===== 이메일 발송 API 	===== */
 	@Autowired private EmailSender emailSender;
 	 
+
  
 
 /*
  
 		  #. 리턴타입 |  메소드명
 
-			String 		| StringToPassword(String strFromInput)
-			boolean 		| psswordMatches(String strFromInput, String strFromDatabase)
+			String 	 | StringToPassword(String strFromInput)
+			boolean 	 | psswordMatches(String strFromInput, String strFromDatabase)
 					
-			String 		| getDate()
+			String 	 | getDate()
 
-			String 		| getUserIdentityToString(HttpSession session)
-			UserDto 	| getUserInfo(HttpSession session)
-			boolean 		| isLogin(HttpSession session)
-			boolean 		| userIdentityMatchesByJSP(HashMap<String, String>params, HttpSession session)
-			boolean 		| getUserRoleIsAdmin(HttpSession session)
+			String 	 | getUserIdentityToString(HttpSession session)
+			UserDto  | getUserInfo(HttpSession session)
+			boolean 	 | isLogin(HttpSession session)
+			boolean 	 | userIdentityMatchesByJSP(HashMap<String, String>params, HttpSession session)
+			boolean 	 | getUserRoleIsAdmin(HttpSession session)
 
-			int 				| emailSenderByCreate(String to)
-			int 				| emailSenderByForget(String to)
+			int 		     | emailSenderByCreate(String to)
+			int 		     | emailSenderByForget(String to)
   
+  			int		     | smsSender(String to)
   
   
  */	
@@ -136,8 +138,17 @@ public class DevUtils  {
 		return emailSender.sendEmail(to, sendType.forget);
 	}
 
+
 	
 	
 	
+	
+	// ========================================================================================================= ☆
+	
+	
+	// [★] 인증 번호 SMS문자 발송 메소드  ( 발송된 인증번호 숫자를 리턴하며,   하이픈"-" 포함해도 상관없음 ! )
+	public int smsSender(String to) {
+		return new SmsSender().send(to);
+	}
 	
 }

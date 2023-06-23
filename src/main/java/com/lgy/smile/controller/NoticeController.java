@@ -69,7 +69,6 @@ public class NoticeController {
 			return "notice/write"; 
 		
 		} // 관리자가 아니라면  목록 화면으로 추방
-		
 		return "redirect:/notice/list";
 		
 	}

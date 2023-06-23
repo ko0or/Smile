@@ -11,6 +11,8 @@ public class MainBoardDto {
 	private String likes;
 	private int user;
 	
+	private int likeCount;
+	private int commentCount;
 	
 	private String nickname;
 }
