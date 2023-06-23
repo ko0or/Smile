@@ -55,28 +55,23 @@ function kakaoLogin() {
                        		
                        		if(data.exists){	// true 이면 로그인 처리
                        			console.log("데이터 받는데 성공했고 받은 값이 true 이므로 로그인 처리하겠음");
+                       			location.href = "/smile/main/list";
+                       			
                        		}else {
                        			console.log("데이터 받는데 성공했고 받은 값이 false 이므로 회원가입 페이지로 넘어가겠음");
+                       			console.log("id값은? " + kakao_account.email);
+                       			location.href = "/smile/user/createAccount?id="+kakao_account.email;
                        		}
                        		
-                       }//success
-//                       ,error : function(data){
-//                       		console.log("error" + data);
-//                       }
-                    })
+                       }//ajax
+                    })//ajax
 
-
-
-
-              // 임시     kakaoLogout();
+                    kakaoLogout();
                 }
             }) // ~ (종료) 카카오 정보조회 시도
-    
           } // ~ (종료) 카카오 정보조회 성공시
       }) // ~ (종료) 카카오 로그인 요청
 }
-
-
 
 
 function kakaoLogout() {

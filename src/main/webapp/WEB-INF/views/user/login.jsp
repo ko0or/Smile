@@ -19,7 +19,7 @@
 		<p>반갑습니다- 싱글벙글 부산 커뮤니티 사이트입니다 ! </p>
 	</div>
 	
-	<!-- 아디, 비밀번호 입력 폼 화면 -->
+	<!-- 아이디, 비밀번호 입력 폼 화면 -->
 	<div class="form-wrapper">
 		<form id="loginForm" action="login" method="POST">
 		
