@@ -52,17 +52,20 @@
 <!-- 			</div> -->
 			
 			<div class="form-floating mb-3">
-				<div name="point" type="text" class="form-control" id="floatingPoint">
-				${ user.point }</div>
-				<label for="floatingPassword2"><i>*</i>
-				포인트</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
 				<div name="role" type="text" class="form-control" id="floatingRole">
 				${ user.role }</div>
 				<label for="floatingPassword2"><i>*</i>
 				회원구분</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="point" type="text" class="form-control" id="floatingPoint">
+				${ user.point }</div>
+				<label for="floatingPassword2"><i>*</i>
+				포인트</label>
+				<button id="pointUp" type="button" class="btn btn-primary">
+				포인트 충전
+				</button>		
 			</div>
 		</form>
 	</div>
@@ -79,19 +82,6 @@
 </section>
 <%@ include file="../common/footer.jsp" %>
 </body>
-<script>
-$(document).ready(function() {
-	
-	// 회원정보 수정 버튼 눌렀을 때 회원정보 수정 화면으로 이동
-    $("#modifyInfo").click(function(){
-    	location.href = "modify";
-    });
-	
-	// 로그아웃 버튼 눌렀을 때 세션 종료 후 메인 게시판으로 이동
-	$("#logOut").click(function(){
-		location.href = "logOut";
-	});
-
-})// ~~ end
-</script>
+<script src="../resources/js/user/info.js"></script>
+<script src="../resources/js/api/easyPayment.js"></script>
 </html>

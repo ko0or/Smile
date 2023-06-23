@@ -57,17 +57,17 @@
 			</div>
 			
 			<div class="form-floating mb-3">
-				<div name="point" type="text" class="form-control" id="floatingPoint" placeholder="point" style="color:grey">
-				${ user.point }</div>
-				<label for="floatingPassword2"><i>*</i>
-				포인트</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
 				<div name="role" type="text" class="form-control" id="floatingRole" placeholder="role" style="color:grey">
 				${ user.role }</div>
 				<label for="floatingPassword2"><i>*</i>
 				회원구분</label>				
+			</div>
+			
+			<div class="form-floating mb-3">
+				<div name="point" type="text" class="form-control" id="floatingPoint" placeholder="point" style="color:grey">
+				${ user.point }</div>
+				<label for="floatingPassword2"><i>*</i>
+				포인트</label>				
 			</div>
 		</form>
 	</div>
