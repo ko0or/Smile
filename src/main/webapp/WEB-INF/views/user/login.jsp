@@ -131,6 +131,7 @@ $(document).ready(function() {
 // 		console.log(inputEmail);
 
 		Swal.fire({
+			  icon: 'question',
 			  title: '이메일 주소를 입력해주세요',
 			  input: 'text',
 			  inputAttributes: {

@@ -62,8 +62,7 @@ function kakaoLogin() {
                        			console.log("id값은? " + kakao_account.email);
                        			location.href = "/smile/user/createAccount?id="+kakao_account.email;
                        		}
-                       		
-                       }//ajax
+                       }//ajax success
                     })//ajax
 
                     kakaoLogout();

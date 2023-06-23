@@ -381,14 +381,24 @@ public class UserController {
 		}
 		
 	}
-
-	// 카카오 로그인 아이디가 회원인 경우 비밀번호 검증 없이 바로 로그인 처리
-//	@PostMapping("/kakaoLogin")
-//	public ResponseEntity<Integer> kakaoLogin(@RequestParam HashMap<String, String> params, HttpSession session) {
-//		
-//		
-//	}
-
+	
+	@PostMapping("/pointUp")
+	public ResponseEntity<String> pointUp(@RequestParam HashMap<String, String> params, HttpSession session){
+		String paymentAmount = params.get("paymentAmount");
+		String paymentMethod = params.get("paymentMethod");
+		String paymentThrough = params.get("paymentThrough");
+		UserDto user = (UserDto) session.getAttribute("userInfo");
+		String id = user.getId();
+		
+		log.info("paymentAmount ===> " + paymentAmount);
+		log.info("paymentMethod ===> " + paymentMethod);
+		log.info("paymentThrough ===> " + paymentThrough);
+		log.info("id ===> " + id);
+		
+		return ResponseEntity.ok().body("{\"exists\": false}");
+	}
+	
+	
 }
 
 
