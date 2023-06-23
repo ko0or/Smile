@@ -24,6 +24,8 @@ public interface NoticeCommentMapperinterface {
 	public void deletecomment(HashMap<String, String> param);
 	public void deletecomment(HashMap<String, String> param, HttpSession session);
 
+	public ArrayList<NoticeCommentDto> replaycomment(@RequestParam HashMap<String, String> param, HttpSession session);
+	
 
 
 }

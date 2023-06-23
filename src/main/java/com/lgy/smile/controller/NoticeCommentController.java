@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.NoticeCommentDto;
+import com.lgy.smile.dto.NoticeDto;
 import com.lgy.smile.service.NoticeCommentService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notice/comment")
 public class NoticeCommentController {
 	@Autowired private NoticeCommentService commentService;
+	@Autowired private DevUtils devutils;
 	
 //	@GetMapping("/list")
 //	public int  count() {
@@ -46,7 +49,12 @@ public class NoticeCommentController {
 	
 	// ★ notice(공지) 댓글 읽기
 	@GetMapping("/read")
-	public ResponseEntity< ArrayList<NoticeCommentDto> > noticeRead(Model model, @RequestParam HashMap<String, String> params) {
+	public ResponseEntity< ArrayList<NoticeCommentDto> > noticeRead(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		//		 유저가 로그인 햇냐?
+		if (devutils.getUserInfo(session) != null) {
+			model.addAttribute("loginuser", devutils.getUserInfo(session));
+		}
 		return ResponseEntity.status(HttpStatus.OK).body( commentService.contentViewcomment(params) );
 	}
 	
@@ -54,9 +62,11 @@ public class NoticeCommentController {
 	// ★ notice(공지) 댓글 수정
 	@PostMapping("/edit")
 	@ResponseBody
-	public ResponseEntity<String> noticeEdit(@RequestParam HashMap<String, String> params, HttpSession session) {
+	public ResponseEntity<String> noticeEdit(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# edit");
-		commentService.modifycomment(params, session);
+			commentService.modifycomment(params, session);
+//			model.addAttribute("loginuser", devutils.getUserInfo(session));
+//			model.addAttribute("commentuser", NoticeCommentDto.ge)
 		log.info("edit 들어오니?");
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
