@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,11 +41,11 @@ public class TradeService implements TradeMapperInterface {
 
 	//* ☆ TradeMapperInterface의 list 값 가져오기 (TradeDto)
 	@Override
-	public ArrayList<TradeDto> list() {
+	public ArrayList<TradeDto> list(@RequestParam HashMap<String, String> param) {
 		log.info("@# TradeService.list() start");
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
-		ArrayList<TradeDto> list = dao.list();
+		ArrayList<TradeDto> list = dao.list(param);
 		
 		log.info("@# TradeService.list() end");
 		return list;
@@ -58,18 +60,21 @@ public class TradeService implements TradeMapperInterface {
 			
 		//=> ☆ 저장할 값 세팅하기
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+//		getUserInfo : 세션(로그인된 정보)이 있으면 유저 정보를 반환하는 메소드 ( 없으면 null,  따라서 null 여부로 분기처리 가능 )
 		UserDto user = devUtils.getUserInfo(session);
-		
+		//사진파일의 이름이 같으면 다른 글의 사진에도 영향이 있어서 UUID 추가해서 파일이름을 다르게 함
 		String fileIdentity = UUID.randomUUID().toString() + "_" ;
-		
+		//로그인 하지 않으면 return false; 로 컨트롤러 @GetMapping("/write")(get방식/화면)가서 "redirect:/user/login"실행됨
 		if ( user == null ) {
 			log.info("☆ 글 작성 실패 => 비로그인상태");
 			return false;
 		}
 
-		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆
 //		params.put("userPK", String.valueOf( user.getIdentity() ) );
-		params.put( "created", devUtils.getDate() );		
+		// getDate 작성일자를 반환하는 메소드
+		params.put( "created", devUtils.getDate() );	
+		
+		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆
 		if ( params.get("contacted") != null ) {
 			// 비대면 결제에 체크했다면,   contacted 값을 uncontacted(비대면) 으로 저장하고
 			params.replace("contacted", "비대면");
@@ -87,20 +92,21 @@ public class TradeService implements TradeMapperInterface {
 			log.info("========================================================");
 			
 			try { 				
-				
+				//getSavePath() : "C:/upload/temp3/" 사진 업로드 경로
 				File uploadFolder = new File( devUtils.getSavePath() );
-				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
+				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				
+				// => File saveFile = new File("업로드하고싶은 경로", "UUID_"+"저장하고싶은 파일명.확장자");				
 				File saveFile = new File( devUtils.getSavePath() , fileIdentity + multipartFile.getOriginalFilename());
-				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
 				
-				
+//				params로 받아온 값 : saveFile.getPath() 사용하니 객체확인이 안되었음
 				// params.put("imgPath", saveFile.getPath() );
-				params.put("imgPath", devUtils.getSavePath() + fileIdentity +multipartFile.getOriginalFilename() );
+//				params로 받아온 값 : "imgPath", "업로드하고싶은 경로"+"UUID_"+"저장하고싶은 파일명.확장자"
+				params.put("imgPath", devUtils.getSavePath() + fileIdentity + multipartFile.getOriginalFilename() );
+//				params로 받아온 값 : "user", 로그인 한 유저 정보 확인
 				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
-				log.info( params.toString() );
-				
+				log.info( params.toString() );				
 				
 				multipartFile.transferTo( saveFile ); 
 				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
@@ -135,15 +141,12 @@ public class TradeService implements TradeMapperInterface {
 	public boolean modify(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
 		log.info("@# TradeService.modify() start");
 		
+		//=> ☆ 저장할 값 세팅하기
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+//		getUserInfo : 세션(로그인된 정보)이 있으면 유저 정보를 반환하는 메소드 ( 없으면 null,  따라서 null 여부로 분기처리 가능 )
 		UserDto user = devUtils.getUserInfo(session);
-		
+		//사진파일의 이름이 같으면 다른 글의 사진에도 영향이 있어서 UUID 추가해서 파일이름을 다르게 함
 		String fileIdentity = UUID.randomUUID().toString() + "_" ;
-		
-		if ( user == null ) {
-			log.info("☆ 글 수정 실패 => 비로그인상태");
-			return false;
-		}
 		
 		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆		
 		if ( params.get("contacted") != null ) {
@@ -162,24 +165,29 @@ public class TradeService implements TradeMapperInterface {
 			log.info("========================================================");
 			
 			try { 				
-				
+				//getSavePath() : "C:/upload/temp3/" 사진 업로드 경로
 				File uploadFolder = new File( devUtils.getSavePath() );
-				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
 				// => 경로확인용 File 객체생성, 해당 경로가 없다면 하위폴더들을 만들어주기
-				
+				if (uploadFolder.exists() == false) { uploadFolder.mkdirs(); }
+				// => File saveFile = new File("업로드하고싶은 경로", "UUID_"+"저장하고싶은 파일명.확장자");
 				File saveFile = new File( devUtils.getSavePath() , fileIdentity + multipartFile.getOriginalFilename());
-				// => File saveFile = new File("업로드하고싶은 경로", "저장하고싶은 파일명.확장자");
 				
-				
+//				params로 받아온 값 : saveFile.getPath() 사용하니 객체확인이 안되었음				
 				// params.put("imgPath", saveFile.getPath() );
+//				params로 받아온 값 : "imgPath", "업로드하고싶은 경로"+"UUID_"+"저장하고싶은 파일명.확장자"				
 				params.put("imgPath", devUtils.getSavePath() + fileIdentity + multipartFile.getOriginalFilename() );
+//				params로 받아온 값 : "user", 로그인 한 유저 정보 확인
 				params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
 				log.info( params.toString() );				
 				
+//				params로 받아온 값 : "price", ex>1,000원을 1000으로 
+				params.replace("price", params.get("price").replace(",", "") );
 				
+//				업로드 된 파일 용량이 0 보다 크면 사진이과 내용 수정
 				if ( multipartFile.getSize() > 0 ) {
 					dao.modifyWithImgPath(params);
 					log.info("@#@#사진이랑 같이 저장됨@#@#");
+//				아니면 사진은 그대로 내용만 수정	
 				} else {
 					dao.modify(params);				
 					log.info("변경할 파일 없음");
@@ -210,10 +218,6 @@ public class TradeService implements TradeMapperInterface {
 		
 		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
 		UserDto user = devUtils.getUserInfo(session);
-
-		if ( user == null ) {
-			return false;
-		}
 		
 		// 1. 게시글 번호로 SELECT 조회
 		TradeDto dto = dao.contentView(params);
@@ -233,10 +237,7 @@ public class TradeService implements TradeMapperInterface {
 		
 		return false;
 		
-	}
-
-
-	
+	}	
 	
 	
 	@Override
@@ -267,4 +268,9 @@ public class TradeService implements TradeMapperInterface {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public ArrayList<TradeDto> list() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

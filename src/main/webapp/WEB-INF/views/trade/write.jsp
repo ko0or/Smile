@@ -46,7 +46,7 @@
 	
 	<div class="input-tel mb-3">
 		<div class="left form-floating">
-  			<input type="tel" class="form-control" id="floatingInput" required>
+  			<input name="tel" type="tel" class="form-control" id="floatingInput" required>
   			<label for="floatingInput">휴대폰 번호 입력</label>
   		</div>  		
   		<div class="right">
