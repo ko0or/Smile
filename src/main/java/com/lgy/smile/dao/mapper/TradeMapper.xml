@@ -11,15 +11,19 @@
 	    )
   	</insert>
 
-<!-- 	select이고 여러줄 보여줄거라서 ArrayList로 -->
-  	<select id="list" resultType="com.lgy.smile.dto.TradeDto">
-		SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
-		FROM board_trade ORDER BY identity DESC
+<!-- 	LIMIT ${start}, 5 : start 변수 + 5개씩 화면단에 보여줌 -->
+  	<select id="list" resultType="com.lgy.smile.dto.TradeDto" parameterType="hashmap">
+		SELECT 
+			identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
+		FROM 
+			smile.board_trade 
+		ORDER BY identity DESC
+		LIMIT ${start}, 5
   	</select>
 
 <!-- 	select이고 한줄 보여줄거라서 ArrayList로 안하고 TradeDto로-->
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
-        SELECT identity, title, content, created, contacted, imgPath, status, price, address, user 
+        SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
         	from board_trade where identity=#{identity}
     </select>
   	

@@ -14,11 +14,16 @@ public interface TradeMapperInterface {
 
 	// ★ trade(중고 거래) 글 목록
 	public ArrayList<TradeDto> list();
+	public ArrayList<TradeDto> list(@RequestParam HashMap<String, String> param);
+	
+	
 	// ★ trade(중고 거래) 글 작성
 	public boolean write(@RequestParam HashMap<String, String> param);
 	public boolean write(@RequestParam HashMap<String, String> param, MultipartFile[] uploadFile, HttpSession session);
+	
 	// ★ trade(중고 거래) 글 내용 보기
 	public TradeDto contentView(@RequestParam HashMap<String, String> param);
+	
 	// ★ trade(중고 거래) 글 수정
 	public boolean modify(@RequestParam HashMap<String, String> param);
 	public boolean modify(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session);

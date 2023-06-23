@@ -18,6 +18,7 @@ import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+import sun.print.resources.serviceui;
 
 @Controller
 @RequestMapping("/user")
@@ -289,15 +290,34 @@ public class UserController {
 	}
 	
 	// ★ user(유저) 회원가입 화면
+//	@GetMapping("/createAccount")
+//	public String userCreateAccount() {
+//		return "user/createAccount";
+//	}
+	
 	@GetMapping("/createAccount")
-	public String userCreateAccount() {
-		return "user/createAccount";
+	public String createAccount(@RequestParam HashMap<String, String> params, Model model) {
+//	public ResponseEntity<String> createAccount(@RequestParam HashMap<String, String> params, Model model) {
+		log.info("UserController ===> GET createAccount ===> start");
+		String id = params.get("id");
+		log.info("id 값 받았니? " +id);
+		model.addAttribute("id", id);
+		log.info(""+model);
+		log.info("UserController ===> GET createAccount ===> end");
+
+		return "user/createAccount"; // 값도 다 받았는데 왜 이동하지 않지?
+//		return ResponseEntity.ok().body("{\"id\": "+id+"}");
 	}
 	
 	// ★ user(유저) 회원가입 처리
 	@PostMapping("/createAccount")
 	public String userCreateAccount(@RequestParam HashMap<String, String> params) {
-		log.info("UserController ===> createAccount ===> start");
+		log.info("UserController ===> POST createAccount ===> start");
+		
+		log.info("nickname ===> " +params.get("nickname"));
+		log.info("id ===> " +params.get("id"));				// 카카오 로그인 => 이게 null 로 들어옴
+		log.info("password ===> " +params.get("password"));
+		log.info("password2 ===> " +params.get("password2"));
 		
 		// 입력받은 비밀번호를 암호화하는 메소드(StringToPassword) 호출
 		String password = devUtils.StringToPassword(params.get("password"));
@@ -305,6 +325,8 @@ public class UserController {
 		// params 값을 replace 로 바꿔치기 한 후 회원가입 진행
 		params.replace("password", password);
 		userService.register(params);
+		
+		log.info("UserController ===> POST createAccount ===> start");
 		
 		return "user/login";
 	}
@@ -333,32 +355,50 @@ public class UserController {
 
 	// 카카오 로그인 아이디의 회원가입 여부 확인
 	@GetMapping("/kakaoEmailCheck")
-	public ResponseEntity<String> kakaoEmailCheck(@RequestParam HashMap<String, String> params) {
+	public ResponseEntity<String> kakaoEmailCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("UserController ===> kakaoLogin ===> start");
 		UserDto user = userService.login(params);
+		log.info("user ==> "+ user);
 		
 		if( user != null ) {	// 회원가입된 이메일이므로 바로 로그인 처리
 			
 			log.info("UserController ===> kakaoLogin ===> if");
 			
+			session.setAttribute("userInfo", user);
+			session.setMaxInactiveInterval(1800);
+			log.info("@# => session.getAttribute(\"userInfo\") " + session.getAttribute("userInfo"));
 			
 			return ResponseEntity.ok().body("{\"exists\": true}");
 
 		}else { // 회원가입 되지 않은 이메일이므로 회원가입 화면으로 이동(이메일 주소 들고가기)
 			
 			log.info("UserController ===> kakaoLogin ===> else");
+			
+			String id = params.get("id");
+			log.info("전달받은 파라미터의 id 값 " + id);
+			
 			return ResponseEntity.ok().body("{\"exists\": false}");
 		}
 		
 	}
-
-	// 카카오 로그인 아이디가 회원인 경우 비밀번호 검증 없이 바로 로그인 처리
-//	@PostMapping("/kakaoLogin")
-//	public ResponseEntity<Integer> kakaoLogin(@RequestParam HashMap<String, String> params, HttpSession session) {
-//		
-//		
-//	}
-
+	
+	@PostMapping("/pointUp")
+	public ResponseEntity<String> pointUp(@RequestParam HashMap<String, String> params, HttpSession session){
+		String paymentAmount = params.get("paymentAmount");
+		String paymentMethod = params.get("paymentMethod");
+		String paymentThrough = params.get("paymentThrough");
+		UserDto user = (UserDto) session.getAttribute("userInfo");
+		String id = user.getId();
+		
+		log.info("paymentAmount ===> " + paymentAmount);
+		log.info("paymentMethod ===> " + paymentMethod);
+		log.info("paymentThrough ===> " + paymentThrough);
+		log.info("id ===> " + id);
+		
+		return ResponseEntity.ok().body("{\"exists\": false}");
+	}
+	
+	
 }
 
 
