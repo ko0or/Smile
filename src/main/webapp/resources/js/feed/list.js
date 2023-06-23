@@ -14,7 +14,7 @@ $(document).ready(function() {
 		 .. getComponentByBoard()
 		 .. getComponentByComment()
 
-
+		.. 스크롤 바 이벤트
 
 
 	*/
@@ -85,16 +85,31 @@ $(document).ready(function() {
 
 
 				//=> 댓글 갯수만큼 모두 표시했다면? 마지막으로 댓글 작성란 보여주기
-				row += `						
-					<div style="position: absolute; bottom: 0px; left: 0px; display: flex; justify-content: space-between; width: 100%;">
-						<div class="form-floating" style="flex: 3;">
-							<textarea placeholder="댓글작성란" class="form-control" id="InputComment" style="max-height: 200px;"></textarea>
-							<label for="InputComment" class="form-label">댓글 작성</label>
-						</div>
-						<button id="commentWriteBtn" class="btn btn-primary" style="flex: 1; margin: 0 10px"><i class="fa-solid fa-check"></i>
-						</button>
-					</div>						  	
-				`;
+
+				if ( userIdentity == -1 ) {
+					row += `						
+						<div style="position: absolute; bottom: 0px; left: 0px; display: flex; justify-content: space-between; width: 100%;">
+							<div class="form-floating" style="flex: 3;">
+								<textarea disabled placeholder="댓글작성란" class="form-control" id="InputComment" style="max-height: 200px;"></textarea>
+								<label for="InputComment" class="form-label">로그인 후 이용 가능합니다</label>
+							</div>
+							<button disabled id="commentWriteBtn" class="btn btn-primary" style="flex: 1; margin: 0 10px"><i class="fa-solid fa-check"></i>
+							</button>
+						</div>						  	
+					`;
+				} else {
+					row += `						
+						<div style="position: absolute; bottom: 0px; left: 0px; display: flex; justify-content: space-between; width: 100%;">
+							<div class="form-floating" style="flex: 3;">
+								<textarea placeholder="댓글작성란" class="form-control" id="InputComment" style="max-height: 200px;"></textarea>
+								<label for="InputComment" class="form-label">댓글 작성</label>
+							</div>
+							<button id="commentWriteBtn" class="btn btn-primary" style="flex: 1; margin: 0 10px"><i class="fa-solid fa-check"></i>
+							</button>
+						</div>						  	
+					`;
+
+				}
 				
 
 
@@ -135,7 +150,18 @@ $(document).ready(function() {
 							"board" : boardIdentity ,
 							"content" : $("#InputComment").val()
 						} 
-						, success : function() { callComments(boardIdentity); }
+						, success : function() { 
+						
+						// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
+						var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
+						var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
+						var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount + 1) + "개");
+                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
+						
+						// 병경된 내용을 (댓글)을 화면에 표시
+						callComments(boardIdentity); 					
+							
+						}
 					})
 
 				})
@@ -165,7 +191,7 @@ $(document).ready(function() {
 								"identity" : $(this).attr("id") ,
 								"content" : $(this).prev().val()
 							}
-                        , success : function() { callComments(boardIdentity); }
+                        , success : function() { callComments(boardIdentity);  }
                         })
 
                     }
@@ -189,7 +215,18 @@ $(document).ready(function() {
                             url : "comment/delete" ,
                             method : "GET" ,
                             data : { "identity" : $(this).attr("id")  } ,
-                            success : function() { callComments(boardIdentity); }
+                            success : function() { 
+                            	 
+								// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
+								var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
+								var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
+								var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount - 1) + "개");
+		                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
+								
+								// 병경된 내용을 (댓글)을 화면에 표시
+								callComments(boardIdentity); 					
+                            	
+                            }
                         })
 
                     }
@@ -219,22 +256,47 @@ $(document).ready(function() {
 
 		// ☆ 버튼 이벤트 등록 [게시글 좋아요]
 		$(".like").click(function() {
+		
+			if ( userIdentity == -1 ) {
+
+				Swal.fire({
+					icon : 'warning',
+					title: '요청 실패',
+					text : '해당 기능을 이용하기위해 로그인이 필요합니다',
+					confirmButtonText: '확인',
+					showCancelButton: false,
+					cancelButtonText: `닫기`,
+				  })
+
+				  return;
+			}
+
+			// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
+			var originalText = $(".content-wrapper" + $(this).attr("id") + " sub").text();
+			var myLikeCount = parseInt( originalText.split("좋아요 ")[1].split("개")[0] );	
+			
+		
 			if ( $(this).children('i').hasClass("fa-regular") ) {
 				$(this).children('i').removeClass("fa-regular").addClass("fa-solid")
-				
+				var replacedText = originalText.replace(/좋아요 [0-9]+개/g, "좋아요 " + (myLikeCount + 1) + "개");
+				// 그 다음 실행될 내용 =>  $(".content-wrapper" + $(this).attr("id") + " sub").text( replacedText );
+								
 			} else {
 				$(this).children('i').removeClass("fa-solid").addClass("fa-regular")
-
+				var replacedText = originalText.replace(/좋아요 [0-9]+개/g, "좋아요 " + (myLikeCount - 1) + "개");
+				// 그 다음 실행될 내용 =>  $(".content-wrapper" + $(this).attr("id") + " sub").text( replacedText );
 			}
 			
 			
-				$.ajax({ 
-					url : "like_toggle" , method : "GET" , data : { "identity" : $(this).attr("id") }
-					, success : function() { 
-						//callBoards(); 
-					}
-				}) 
+			$.ajax({ 
+				url : "like_toggle" , method : "GET" , data : { "identity" : $(this).attr("id") }
+				, success : function() { 
+					//callBoards(); 
+				}
+			}) 
 				
+				
+			$(".content-wrapper" + $(this).attr("id") + " sub").text( replacedText );					
 		})  // ~~ 버튼 이벤트 종료 [좋아요]
 		
 		
@@ -242,7 +304,7 @@ $(document).ready(function() {
 
 		// ☆ 버튼 이벤트 등록 [댓글 목록]
 		$(".comment").click(function() {
-			
+			 
 
 			//=> 댓글 목록을 SweetAlert2 모달 라이브러리로 보여주기
 			Swal.fire({
@@ -251,7 +313,7 @@ $(document).ready(function() {
 					showConfirmButton: false ,
 					width: 900 ,
 					html: `
-					<div class="feed-comment-wrapper" style="min-height: 70vh; padding:10px; overflow-x: hidden;">
+					<div id="`+$(this).attr("id")+`" class="feed-comment-wrapper" style="min-height: 70vh; padding:10px; overflow-x: hidden;">
 
 								<!-- ★ ajax 로 랜더링되는 부분 ★ -->
 
@@ -259,9 +321,7 @@ $(document).ready(function() {
 					`
 			}) // ~~ swal(모달) 화면 끝 !
 				
-			
-
-
+		
 			callComments( $(this).attr("id") );
 				
 
@@ -284,7 +344,7 @@ $(document).ready(function() {
 
 
 		var row = `
-			<div class="content-wrapper">	
+			<div class="content-wrapper content-wrapper${boardData.identity}">	
 			<div class="content-header">
 				<div class="profileImageIcon"></div>
 				<p><b>${boardData.nickname} </b></p>
@@ -342,27 +402,34 @@ $(document).ready(function() {
 
 
 	function getComponentByComment( commentData ) {
-	// function getComponentByComment( identity , nickname, date, content, authorIdentity) {
 
-	return `
-
-						<!-- feed-comment-wrapper 클래스 안에 랜더링해주기 -->			  
-						<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
-									
-									<div class="profileImageIcon"></div>
-									<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
-									<sub style="color:grey">${commentData.created}</sub>	
-									<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
-									
-									<button id="${commentData.identity}" class="comment-edit" style="border:none;background:white;color:grey;">
-									수정</button>
-									<button id="${commentData.identity}" class="comment-delete" style="border:none;background:white;color:grey;">
-									삭제</button>
+		// (삼항 연산자로 분기처리 => 본인이면 댓글 수정,삭제 버튼까지 보이도록 함)
+		return userIdentity == commentData.user 
+						?	 // 댓글 작성자 본인일경우 (수정, 삭제 표시)
+						`					
+							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
+								<div class="profileImageIcon"></div>
+										<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
+										<sub style="color:grey">${commentData.created}</sub>	
+										<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
+										
+										<button id="${commentData.identity}" class="comment-edit" style="border:none;background:white;color:grey;">
+										수정</button>
+										<button id="${commentData.identity}" class="comment-delete" style="border:none;background:white;color:grey;">
+										삭제</button>
 								</div>
-								
-
-	`
-
+							</div>
+						`
+						
+						:	 // 댓글 작성자 본인이 아닐경우
+						`				
+							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
+								<div class="profileImageIcon"></div>
+								<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
+								<sub style="color:grey">${commentData.created}</sub>	
+								<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
+							</div>`
+						
 	}
 
 
