@@ -1,6 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <meta name="viewport" content="width=device-width, initial-scale=1">
  
+ <div class="notification" style="position: fixed; right: 40px; top: 30px; cursor: pointer; display: none;">
+ 	  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+    	0
+    	<span class="visually-hidden">unread messages</span>
+  	</span>
+ 	<i class="fa-regular fa-bell animate__swing" style="font-size: x-large; "></i>
+ </div>
+ 
+ 
  <!-- aws 배포할땐  앞에 /smile 빼고 배포하기 ★ -->
 <nav>
   <div class="position-relative" >
@@ -31,3 +40,4 @@
 
 
 <style> @import '../resources/css/common/navbar.css' </style>
+<script src="../resources/js/common/navbar.js"></script>

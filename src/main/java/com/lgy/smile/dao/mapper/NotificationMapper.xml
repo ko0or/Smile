@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lgy.smile.dao.NotificationMapperInterface">
+
+	<select id="count" resultType="int" parameterType="hashmap">
+				SELECT 
+					COUNT(identity)
+				FROM 
+					smile.notification
+				WHERE user = #{user};	
+	</select>
+
+  	<select id="list" resultType="com.lgy.smile.dto.NotificationDto" parameterType="hashmap">
+				SELECT 
+					* 
+				FROM 
+					smile.notification
+				WHERE user = #{user};
+  	</select>  	
+
+	<insert id="create" parameterType="hashmap">
+				INSERT INTO smile.notification VALUES(
+					null, #{msg} ,#{created} , #{user}
+				);
+	</insert>  	
+
+	<delete id="delete" parameterType="hashmap">
+				DELETE FROM smile.notification 
+				WHERE identity = #{identity}
+	</delete>  	
+  	
+</mapper>

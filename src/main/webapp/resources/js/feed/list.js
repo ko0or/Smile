@@ -141,6 +141,7 @@ $(document).ready(function() {
 
 
 				//=> 댓글 작성버튼 이벤트 등록
+				$("#commentWriteBtn").off("click");
 				$("#commentWriteBtn").click(function() {
 					
 					$.ajax({
@@ -170,6 +171,7 @@ $(document).ready(function() {
 
 
 				//=> 댓글 수정버튼 이벤트 등록
+				$(".comment-edit").off("click");
 				$(".comment-edit").click(function() {					
 	
                     if ( $(this).text().indexOf("수정") > -1 ) {
@@ -202,6 +204,7 @@ $(document).ready(function() {
 
 
 				//=> 댓글 삭제버튼 이벤트 등록
+				$(".comment-delete").off("click");
 				$(".comment-delete").click(function() {
 
                     if ( $(this).text().indexOf("취소") > -1 ) {
@@ -255,6 +258,7 @@ $(document).ready(function() {
 
 
 		// ☆ 버튼 이벤트 등록 [게시글 좋아요]
+		$(".like").off("click");
 		$(".like").click(function() {
 		
 			if ( userIdentity == -1 ) {
@@ -303,6 +307,7 @@ $(document).ready(function() {
 
 
 		// ☆ 버튼 이벤트 등록 [댓글 목록]
+		$(".comment").off("click");
 		$(".comment").click(function() {
 			 
 

@@ -69,9 +69,16 @@ table, th, td, a, p, div, span, li, button, input, textarea, select, option, h1,
 	
 }
 
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) { overflow : auto !important; }
+body.swal2-shown { padding-right: 0px !important; }
+.trade-info-wrapper { max-height: 600px; }
+
 /*
 body{ -ms-overflow-style: none; } 
 ::-webkit-scrollbar { display: none; }
 */
 
+  
 </style>
+
+  

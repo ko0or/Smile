@@ -31,9 +31,6 @@ public class MainService implements MainBoardMapperInterface {
 	/* ☆ 마이바티스 ☆ */
 	@Autowired private SqlSession sqlSession;
 	
-	/* ☆ 댓글 생성,변경,삭제 서비스  ☆ */ 
-	@Autowired private CommentService commentService;
-	
 	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 
