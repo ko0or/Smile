@@ -16,5 +16,7 @@ public class NoticeCommentDto {
 	private String nickname;
 	private int user;
 	private int board;
-	private int reply_by_user;
+	private int group;
+	private int index;
+	private int target_user;
 }

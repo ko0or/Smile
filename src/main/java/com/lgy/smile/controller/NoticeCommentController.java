@@ -32,18 +32,22 @@ public class NoticeCommentController {
 	@Autowired private DevUtils devutils;
 	
 //	@GetMapping("/list")
-//	public int  count() {
-//		return commentService.getCount();
-//	}
+
 	
 	
 	@PostMapping("/write")
 	@ResponseBody
-	public ResponseEntity<String> noticeWrite(@RequestParam HashMap<String, String> params, HttpSession session) {
+	public ResponseEntity<String> noticeWrite(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# write");
-		commentService.writecomment(params, session);		
+		
+		
+			commentService.writecomment(params, session);
+			commentService.orignalindexcomment(params);
+			commentService.replaycomment(params);
+			
 		
 		return ResponseEntity.status(HttpStatus.OK).body("success");
+		
 	}
 	
 	
@@ -54,7 +58,8 @@ public class NoticeCommentController {
 		//		 유저가 로그인 햇냐?
 		if (devutils.getUserInfo(session) != null) {
 			model.addAttribute("loginuser", devutils.getUserInfo(session));
-		}
+		} else {model.addAttribute("loginuser", "noLogin"); } 
+		
 		return ResponseEntity.status(HttpStatus.OK).body( commentService.contentViewcomment(params) );
 	}
 	

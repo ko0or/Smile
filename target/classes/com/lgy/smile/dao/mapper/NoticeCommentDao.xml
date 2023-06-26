@@ -11,9 +11,16 @@
 <!-- WHERE board.identity = #{identity} -->
 <!--     </select> -->
     <insert id="writecomment" parameterType="hashmap">
-    insert into comment_notice(identity, content, created, user,board) values(
-			null , #{content} , #{created} , #{user} , #{board}
+    insert into comment_notice values(
+			null , #{content} , #{created} , #{user} , #{board} , 
+			(SELECT IFNULL(MAX(comment.group)+1 , 0) FROM board_notice board, comment_notice comment WHERE board.identity =  #{board} AND board.identity = comment.board) 
+               , 0 , 0
+            )
 		)
+<!--     insert into comment_notice(identity, content, created, user,board) values( -->
+<!-- 			null , #{content} , #{created} , #{user} , #{board} -->
+<!-- 		) -->
+
     </insert>
      <select id="contentViewcomment" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeCommentDto">
 		SELECT 
@@ -27,6 +34,22 @@
 			board.identity = #{identity}
 			AND board.identity = comment.board
 		    AND user.identity = comment.user
+		 ORDER BY
+			comment.group,
+		    comment.index
+
+<!-- 				SELECT  -->
+<!-- 			comment.* -->
+<!-- 		FROM  -->
+<!-- 			smile.comment_notice comment -->
+<!-- 			, smile.board_notice board -->
+<!-- 		WHERE -->
+<!-- 			board.identity = #{identity} -->
+<!-- 		    AND board.identity = comment.board -->
+<!-- 		ORDER BY -->
+<!-- 		    comment.group -->
+<!-- 		    , comment.identity  -->
+<!-- 		; -->
     </select>
     
     <update id="modifycomment" parameterType="hashmap">
@@ -37,16 +60,30 @@
     <delete id="deletecomment" parameterType="hashmap">
 		delete from comment_notice where identity=#{identity}
     </delete>
+   
+   	<update id="orignalindexcomment" parameterType="hashmap">
+   		UPDATE 
+		comment_notice comment
+	SET 
+		comment.index = comment.index+1
+	WHERE 
+		( comment.board = #{board} AND comment.group = #{group} )
+	    AND comment.index > #{index} ;
+   	</update>
     
     <insert id="replaycomment" parameterType="hashmap">
-    insert into comment_notice (identity, content, created, user,board,reply_by_user)    
-        SELECT null,comment.content,comment.created,comment.user,comment.board,comment.reply_by_user
-		FROM 
-		board.identity = #{identity}
-		smile.comment_notice comment ,
-		smile.user user
-   where
-    	user.nickname=#{nickname} =comment.user=#{user}
+     INSERT INTO comment_notice (identity, content, created, user, board, `group`, `index`, target_user)
+VALUES (
+    null, 
+    #{content}, 
+    #{created}, 
+    #{user}, 
+    #{board},
+    #{group}, 
+    IFNULL(#{index}+1, 0), 
+    #{target_user}
+);
+
     </insert>
     
 </mapper>
