@@ -32,7 +32,11 @@ $(document).ready(function() {
 
 			url : "getPosts" ,
 			method : "GET" ,
-			data : { "start" : start } ,
+			data : { 
+				"start" : start,
+				"searchByNickname" : searchByNickname,
+				"searchByBoardIdentity" : searchByBoardIdentity 
+			} ,
 			success : function( data ) {	
 			
 			start += 5;
@@ -182,6 +186,7 @@ $(document).ready(function() {
                         $(".feed-comments" + $(this).attr("id") + " textarea").css({"border" : "1px solid #ccc" , "outline" : "initial", "cursor" : "text"})
                         $(this).text("저장");
                         $(this).next().text("취소");
+                        $(this).next().next().css("display", "none");
 
                     } else if ( $(this).text().indexOf("저장") > -1 ) {
 
@@ -226,17 +231,52 @@ $(document).ready(function() {
 								var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount - 1) + "개");
 		                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
 								
-								// 병경된 내용을 (댓글)을 화면에 표시
+								// 변경된 내용을 (댓글)을 화면에 표시
 								callComments(boardIdentity); 					
                             	
                             }
                         })
 
                     }
+				}) // ~ 댓글 삭제버튼 이벤트 끝
 
 
-				})
 
+
+
+                
+                //=> 답글 버튼 이벤트 등록 (답글 작성 폼 보여주기)
+				$(".comment-reply").off("click");
+				$(".comment-reply").click(function() {
+                    
+                    $(".reply-wrapper").remove();
+                    $(this).parent().append(`
+                    
+                        <div class="reply-wrapper">
+                            <textarea name="reply" class="form form-control" style="    margin-top: 30px; margin-bottom: 15px;"></textarea>
+                            <button class="reply-write" style="border: none; background: white; color: gray;">
+                                완료</button>
+                            <button class="reply-cancel" style="border: none; background: white; color: gray;">
+                                취소</button>
+                        </div>
+                    
+                    `);
+
+                    //=> 댓글 입력란 이벤트 등록(자동 높이 조절)
+				    autosize($('textarea'));
+
+                    //=> 이벤트 등록 (답글 작성)
+                    $(".reply-write").off("click");
+                    $(".reply-write").click(function() {
+                        alert("글 쓰기");
+                    })
+
+                    //=> 이벤트 등록 (답글 취소)
+                    $(".reply-cancel").off("click");
+                    $(".reply-cancel").click(function() {
+                        $(this).parent().remove();
+                    })
+                }) // ~~ (답글 작성 폼 보여주기)
 
 
 
@@ -408,10 +448,10 @@ $(document).ready(function() {
 
 	function getComponentByComment( commentData ) {
 
-		// (삼항 연산자로 분기처리 => 본인이면 댓글 수정,삭제 버튼까지 보이도록 함)
-		return userIdentity == commentData.user 
-						?	 // 댓글 작성자 본인일경우 (수정, 삭제 표시)
-						`					
+        var row =  ``;
+        // 댓글 작성자 본인일경우 (수정, 삭제 표시)
+		if (  userIdentity == commentData.user  ) {
+						row += `					
 							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
 								<div class="profileImageIcon"></div>
 										<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
@@ -422,19 +462,31 @@ $(document).ready(function() {
 										수정</button>
 										<button id="${commentData.identity}" class="comment-delete" style="border:none;background:white;color:grey;">
 										삭제</button>
+										<button id="${commentData.identity}" class="comment-reply" style="border:none;background:white;color:grey;">
+										답글</button>
 								</div>
 							</div>
-						`
-						
-						:	 // 댓글 작성자 본인이 아닐경우
-						`				
+						`;
+
+        // 댓글 작성자 본인이 아닐경우
+        } else {
+						row += `										
 							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
 								<div class="profileImageIcon"></div>
 								<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 								<sub style="color:grey">${commentData.created}</sub>	
-								<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
-							</div>`
-						
+								<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>`
+                        
+                        // 로그인 상태일경우, 답글 버튼을 표시
+                        if ( userIdentity >= 0 ) { 
+                            row += `
+                            <button id="${commentData.identity}" class="comment-reply" style="border:none;background:white;color:grey;">
+							답글</button>`;
+                        }
+                row += `</div>`;
+        }
+		
+		return row;
 	}
 
 

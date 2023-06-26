@@ -35,15 +35,21 @@ public class MainController {
 	
 	// ★ main(피드) 목록
 	@GetMapping("/list")
-	public String mainList(Model model, HttpSession session) {
-		
+	public String mainList(@RequestParam HashMap<String, String> params, Model model, HttpSession session) {
 		
 		
 		UserDto dto = devUtils.getUserInfo(session);
-		if ( dto == null ) {
-			model.addAttribute("userIdentity", -1  );			
-		} else 
-			model.addAttribute("userIdentity", dto.getIdentity()  );
+		if ( dto == null ) { model.addAttribute("userIdentity", -1  );			
+		} else {  model.addAttribute("userIdentity", dto.getIdentity()  ); }
+		
+		//☆=> 닉네임에 대한 검색 결과 출력하기
+		if ( params.get("searchByNickname") == null ) { params.put("searchByNickname", "\"\""); }
+		model.addAttribute("searchByNickname", params.get("searchByNickname"));  
+		
+		//☆=> 해당 닉네임으로 작성된 게시글 번호에 대한 검색 결과 출력하기 
+		if ( params.get("searchByBoardIdentity") == null ) { params.put("searchByBoardIdentity", "\"\""); }
+		model.addAttribute("searchByBoardIdentity", params.get("searchByBoardIdentity"));  
+		
 		
 		return "feed/list";
 	}	
@@ -53,6 +59,7 @@ public class MainController {
 	@ResponseBody
 	public ResponseEntity< List<MainBoardDto> > getPosts(@RequestParam HashMap<String, String> params) {		
 		
+		log.info( params.toString() );
 		ArrayList<MainBoardDto> dtos = mainService.list(params);		
 		return ResponseEntity.status(HttpStatus.OK).body( dtos );
 	}

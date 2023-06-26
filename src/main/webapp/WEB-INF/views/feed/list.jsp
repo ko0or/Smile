@@ -33,7 +33,8 @@
 // UserDto dto = devUtils.getUserInfo(session);
 // model.addAttribute("userIdentity", dto.getIdentity()  );
 var userIdentity = ${userIdentity};
-
+var searchByNickname = ${searchByNickname};
+var searchByBoardIdentity = ${searchByBoardIdentity};
 </script>
 <script src="../resources/js/feed/list.js"></script>
 </html>

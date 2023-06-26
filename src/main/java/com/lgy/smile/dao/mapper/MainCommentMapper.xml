@@ -20,18 +20,23 @@
 				SELECT 
 					comment.* ,
 				    user.nickname
-				FROM 	
-					smile.comment_main comment ,
+				FROM 
+				    smile.comment_main comment,
 				    smile.user user
 				WHERE 
 					comment.board = #{boardIdentity}
 				    AND comment.user = user.identity
+				ORDER BY
+					comment.group,
+				    comment.index
   	</select>
   	
 
 	<insert id="write" parameterType="hashmap">
 				INSERT INTO smile.comment_main VALUES(
 					null , #{content} , #{created} , #{user} , #{board}
+					, (SELECT IFNULL(MAX(comment.group)+1 , 0) FROM smile.board_main board, smile.comment_main comment WHERE board.identity = #{board} AND board.identity = comment.board) 
+					, 0 , 0
 				)
 	</insert>  	
 
