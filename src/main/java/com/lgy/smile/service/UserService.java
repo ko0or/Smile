@@ -23,6 +23,9 @@ public class UserService implements UserMapperInterface {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Autowired
+	DevUtils dev;
+	
 	@Override
 	public UserDto login(@RequestParam HashMap<String, String> params) {
 		
@@ -128,6 +131,45 @@ public class UserService implements UserMapperInterface {
 		
 		userDao.delete(params);
 		log.info("UserService ===> delete ===> end");
+	}
+
+
+
+	@Override
+	public void pointUp(HashMap<String, String> params) {
+		log.info("UserService ===> pointUp ===> start");
+		
+		String id = params.get("id");
+		String point = params.get("point");
+		log.info("id ===> " +id);
+		log.info("point ===> " +point);
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.pointUp(params);
+		
+		log.info("UserService ===> pointUp ===> end");
+	}
+
+
+
+	@Override
+	public String getPoint(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> getPoint ===> start");
+
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		params.put("identity", dev.getUserIdentityToString(session));
+		String point = userDao.getPoint(params);
+		
+		log.info("UserService ===> getPoint ===> end");
+		return point;
+	}
+
+	
+
+	@Override
+	public String getPoint(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

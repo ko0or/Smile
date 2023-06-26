@@ -1,5 +1,3 @@
-document.write('<script src="../resources/js/api/easyPayment.js"></script>');
-
 $(document).ready(function() {
 	
 	// 회원정보 수정 버튼 눌렀을 때 회원정보 수정 화면으로 이동
@@ -50,74 +48,26 @@ $(document).ready(function() {
 					  /* Read more about isConfirmed, isDenied below */
 					  if (result.isConfirmed) {
 						Swal.fire('Saved!', '', 'success')
+
+						console.log("saved까지 완료. 날짜구하기");
+				        var date = new Date();
+				        var dateNum = date.getTime();
+				        console.log(date);
+				        console.log(dateNum);
+				        		
+				        // 주문번호 만들기(사용자 identity + 현재시간 밀리초) 
+				       	var orderId = user_identity + "" + dateNum
+				        console.log(orderId);
+
+						// 이메일 주소 받기
+						console.log(user_id);
 						
-						console.log("saved까지 완료. AJAX 전단계");
-						requestPay(1234, method, through, 'zihye.choi@gmail.com', amount);
+						// easyPayment.js 에 정의된 requestPay 메소드 호출하여 카카오페이 or 토스페이먼츠 연결 
+						requestPay(dateNum, method, through, user_id, amount);
 						
-						  // AJAX 요청 보내기
-						  $.ajax({
-							type: 'POST',
-							url: 'pointUp',
-							//dataType: "application/JSON",
-							data: {
-							  paymentAmount: amount ,
-							  paymentMethod: method ,
-							  paymentThrough: through
-							},
-							success: function(response) {
-							  // 요청 성공 시 수행할 동작
-							  console.log('요청 성공:', response);
-							},
-							error: function(xhr, status, error) {
-							  // 요청 실패 시 수행할 동작
-							  console.log('요청 실패:', error);
-							}
-						  }); // ~ajax 끝
 					  };
 					
 			}); // 포인트 충전 눌렀을 때 끝
 		})
 		
-		
-			
-// 		Swal.fire({
-// 			icon: 'question',
-// 			title: '포인트 충전 금액을 선택하세요.',
-// 			input: 'number',
-// 			inputAttributes: {
-// 				step: 1000
-// 			},
-// 			confirmButtonText: '확인',
-// 			showCancelButton: true,
-// 			cancelButtonText: '취소',
-// 		});
-		
-// 		Swal.fire({
-// 			icon: 'question',
-// 			title: '결제 방법을 선택하세요.',
-// 			input: 'select',
-// 			inputOptions: {
-// 				cards: '카드결제',
-// 				trans: '계좌이체'
-// 			},
-// 			confirmButtonText: '확인',
-// 			showCancelButton: true,
-// 			cancelButtonText: '취소',
-// 		});
-
-// 		Swal.fire({
-// 			icon: 'question',
-// 			title: '결제 수단을 선택하세요.',
-// 			input: 'select',
-// 			inputOptions: {
-// 				kakaopay: '카카오페이',
-// 				tosspayments: '토스페이먼츠'
-// 			},
-// 			confirmButtonText: '확인',
-// 			showCancelButton: true,
-// 			cancelButtonText: '취소',
-// 		});
-		
-	
-	
 })// ~~ end

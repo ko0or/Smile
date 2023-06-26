@@ -18,6 +18,11 @@ public interface UserMapperInterface {
 	public void delete(HashMap<String, String> params);
 	public void delete(HashMap<String, String> params, HttpSession session);
 	
+	public void pointUp(HashMap<String, String> params);
+	
+	
+	public String getPoint(HashMap<String, String> params);
+	public String getPoint(HashMap<String, String> params, HttpSession session);
 }
 
 
