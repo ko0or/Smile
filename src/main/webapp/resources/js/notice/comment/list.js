@@ -23,15 +23,15 @@ $(document).ready(function() {
 						
 						//로그인한 유저 :userIdentity
 						//댓글작성자 번호 :data[i].user(data[i] =>댓글들 user => 작성자)
-						alert( "현재 표시중인 댓글DTO의 Identity 값: " + data[i].identity + ",댓글 작성자 번호는 => " + data[i].user + ",지금 로긴한 유저 번호는 => " + userIdentity );
+
 						
 						//지금 로그인한 유저와 댓글 작성자가 같냐
 						if ( userIdentity == data[i].user ) {
-							alert("본인이라서 수정/삭제 가능해야함");
+
 						//그럼 row에 그 댓글에 수정/삭제를 보여줘라
 							row += getComponent(data[i], "block");
 						} else {
-							alert("본인아니라서 수정/삭제 불가");
+
 						//아니면 없에라
 							row += getComponent(data[i], "none");
 						}
@@ -64,7 +64,7 @@ $(document).ready(function() {
 
 
 					
-						// 댓글 수정버튼 눌렀을때 작동할 내용
+					// 댓글 수정버튼 눌렀을때 작동할 내용
 					$(".comment-modify").click(function() {
 					//내 자신".comment-modify"text가 indexOf(인덱스)-1보다 큰것이 수정이냐
 					if($(this).text().indexOf("수정")>-1){
@@ -134,7 +134,7 @@ $(document).ready(function() {
 												
 					}) // ~ 댓글 삭제버튼 이벤트 끝 !
 
-
+					
 
 
 
@@ -160,8 +160,59 @@ $(document).ready(function() {
 						
 					}) // ~ 댓글 작성버튼 이벤트 끝 !
 
+					
 
 
+
+
+					//=> 답글 버튼 이벤트 등록 (답글 작성 폼 보여주기)
+					$(".comment-reply").off("click");
+					$(".comment-reply").click(function() {
+							
+							$(".reply-wrapper").remove();
+							$(this).parent().append(`
+							
+								<div class="reply-wrapper">
+									<textarea name="reply" class="form form-control" style="    margin-top: 30px; margin-bottom: 15px;"></textarea>
+									<button class="reply-write" style="border: none; background: white; color: gray;">
+										완료</button>
+									<button class="reply-cancel" style="border: none; background: white; color: gray;">
+										취소</button>
+								</div>
+							
+							`);
+
+							//=> 댓글 입력란 이벤트 등록(자동 높이 조절)
+							autosize($('textarea'));
+
+							//=> 이벤트 등록 (답글 작성)
+							$(".reply-write").off("click");
+							$(".reply-write").click(function() {
+								alert("글 쓰기");
+								
+							$.ajax({
+							url:"comment/write?identity="+identity
+							,type :"post"
+							,data :{ "content" : $(this).prev().val() }
+							,success : function( ) {
+								 callComments();
+							}
+						}) // ~~ajax 끝   
+						})
+						
+						
+						
+						$(".reply-cancel").click(function(){
+						
+						$(this).parent().remove();
+						})
+								
+							//=> 이벤트 등록 (답글 취소)
+							$(".reply-cancel").off("click");
+							$(".reply-cancel").click(function() {
+								$(this).parent().remove();
+							})
+						}) // ~~ (답글 작성 폼 보여주기)
 
 
 					// ★ 댓글입력화면 높이조절
@@ -186,9 +237,9 @@ $(document).ready(function() {
 //	show=>위에서 받은 display가 block 또는 none임
 		function getComponent( data, show ) {
 			
-			console.log(data);
+			var row = ``;
 			
-			return `
+			row +=  `
 			
 			<div id="commentIdentity${data.identity}" class="comment-wrapper mt-5">
 			
@@ -203,16 +254,38 @@ $(document).ready(function() {
 					class = "modify-textarea"  
 					readonly 
 					style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" >${data.content}</textarea>
+					<div class="comment-footer">
+				`;	
+				
+				if ( userIdentity == -1) {
+					// 비 로그인 상태일때
 
-					<!--display를 조건문에 썻기 때문에 그 조건에 맞게 보여주고 숨김-->
-				<div class="comment-footer" style="display:${show}">					
-					<button type="button" id="${data.identity}" class="comment-modify">수정</button>
-					<button type="button" id="${data.identity}" class="comment-delete">삭제</button>
-				</div>
-			</div>
-		</div>
-			
-			`;
+
+				} else if ( userIdentity == data.user ) {
+					// 로그인 + 작성자 본인일때
+					row += `
+							<button type="button" id="${data.identity}" class="comment-modify">
+							수정</button>
+							<button type="button" id="${data.identity}" class="comment-delete">
+							삭제</button>
+							<button id="${data.identity}" class="comment-reply" style="border:none;background:white;color:grey;">
+							답글</button>
+					`;
+
+				} else {
+					// 로그인 + 작성자가 아닐때
+					row += `
+						<button id="${data.identity}" class="comment-reply" style="border:none;background:white;color:grey;">
+						답글</button>
+					`;
+
+				}
+
+
+
+
+					row += `</div></div></div>`;
+					return row;
 		}	
 		
 

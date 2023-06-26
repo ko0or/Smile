@@ -12,9 +12,10 @@ public class UserDto {
 	private String id;
 	private String pwd;
 	private String nickname;
-	private int point;
+	private String point;
 	private String role;
 }
+
 
 
 

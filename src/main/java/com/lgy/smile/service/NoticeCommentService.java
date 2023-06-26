@@ -69,19 +69,20 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		dao.deletecomment(param);
 		
 	}
-
+	@Override
+	public void orignalindexcomment(HashMap<String, String> param) {
+		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
+		dao.orignalindexcomment(param);
+		
+	}
 	
 	@Override
-	public ArrayList<NoticeCommentDto> replaycomment(HashMap<String, String> param, HttpSession session) {
+	public ArrayList<NoticeCommentDto> replaycomment(HashMap<String, String> param) {
 		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
-		param.put("nickname", String.valueOf(devUtils.getUserInfo(session).getNickname()) );
 		
-		ArrayList<NoticeCommentDto> dtos = dao.replaycomment(param, session);
-		param.put("user",  String.valueOf( dtos.get(0).getUser() ) );
-		
-		return dao.replaycomment(param, session);
-	
+		return dao.replaycomment(param);
 	}
+
 	
 	
 	@Override
@@ -107,6 +108,8 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
 }
 
 	
