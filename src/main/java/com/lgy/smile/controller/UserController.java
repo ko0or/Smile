@@ -379,26 +379,30 @@ public class UserController {
 			
 			return ResponseEntity.ok().body("{\"exists\": false}");
 		}
-		
 	}
 	
 	@PostMapping("/pointUp")
 	public ResponseEntity<String> pointUp(@RequestParam HashMap<String, String> params, HttpSession session){
-		String paymentAmount = params.get("paymentAmount");
-		String paymentMethod = params.get("paymentMethod");
-		String paymentThrough = params.get("paymentThrough");
-		UserDto user = (UserDto) session.getAttribute("userInfo");
-		String id = user.getId();
+		log.info("UserController ===> pointUp ===> start");
+		String point = params.get("amount");
 		
-		log.info("paymentAmount ===> " + paymentAmount);
-		log.info("paymentMethod ===> " + paymentMethod);
-		log.info("paymentThrough ===> " + paymentThrough);
+		UserDto user = (UserDto) session.getAttribute("userInfo");
+		String pointTotal = userService.getPoint(params, session);
+		user.setPoint(pointTotal);
+		
+		String id = user.getId();	// 실제 쿼리에 사용될 파라미터
+		
+		log.info("point ===> " + point);
 		log.info("id ===> " + id);
 		
-		return ResponseEntity.ok().body("{\"exists\": false}");
+		params.put("point", point);
+		params.put("id", id);
+		userService.pointUp(params);
+		
+		log.info("UserController ===> pointUp ===> end");
+		return ResponseEntity.ok().body( pointTotal );
+//		return ResponseEntity.ok().body("{\"exists\": true}");
 	}
-	
-	
 }
 
 

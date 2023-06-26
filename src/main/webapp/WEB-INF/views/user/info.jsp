@@ -82,6 +82,11 @@
 </section>
 <%@ include file="../common/footer.jsp" %>
 </body>
-<script src="../resources/js/user/info.js"></script>
+<script>
+	var user_id = "${ user.id }"
+	var user_identity = ${ user.identity }
+</script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="../resources/js/api/easyPayment.js"></script>
+<script src="../resources/js/user/info.js"></script>
 </html>
