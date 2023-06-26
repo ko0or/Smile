@@ -15,6 +15,13 @@
 	    ORDER BY identity DESC
   	</select>
   	
+  	<select id="sellerList" resultType="com.lgy.smile.dto.ChattingRoomDto" parameterType="hashmap">
+	    SELECT * 
+	    FROM chattingroom
+	    WHERE seller = #{seller}
+	    ORDER BY identity DESC
+  	</select>
+  	
   	<select id="contentView" resultType="com.lgy.smile.dto.ChattingRoomDto" parameterType="hashmap">
 	    SELECT * 
 	    FROM chattingroom

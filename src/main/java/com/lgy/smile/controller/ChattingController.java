@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.ChattingDto;
 import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
 
@@ -27,7 +31,10 @@ public class ChattingController {
 	ChattingService chattingService;
 	
 	@Autowired
-	ChattingRoomService chatttingRoomService;
+	ChattingRoomService chattingRoomService;
+	
+	@Autowired
+	DevUtils devUtils;
 	
 //	채팅 전체 목록 불러오는 메소드
 	@GetMapping("/getChattings")
@@ -39,7 +46,7 @@ public class ChattingController {
 //	board 아이디(게시글 번호)와 buyer 아이디(구매자 번호)로 채팅방 번호를 찾아서 해당 채팅창 번호의 채팅 모두 불러오는 메소드
 	@PostMapping("/getChatting")
 	public ResponseEntity<List<ChattingDto>> getChatting(@RequestParam HashMap<String, String> params) {
-		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
+		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
 		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
@@ -69,10 +76,21 @@ public class ChattingController {
 //	채팅방 화면 테스트페이지
 	@GetMapping("/chatContentTest")
 	public String chatContentTest(@RequestParam HashMap<String, String> params, Model model) {
-		ChattingRoomDto roomDto = chatttingRoomService.contentView(params);
+		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
 		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
 		model.addAttribute("list", list);
 		return "/trade/test/chatContentTest";
 	}
 
+	@GetMapping("/chatContent")
+	public String chatContent(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
+		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
+		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+		UserDto user = devUtils.getUserInfo(session);
+		model.addAttribute("user", user);
+		model.addAttribute("room", roomDto);
+		model.addAttribute("list", list);
+		return "/trade/chatContent";
+	}
+	
 }
