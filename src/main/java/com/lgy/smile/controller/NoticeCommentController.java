@@ -40,11 +40,15 @@ public class NoticeCommentController {
 	public ResponseEntity<String> noticeWrite(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# write");
 		
-		
+//		identity==null이냐는 분기처리를 한 이유는 ajax에서 댓글에는 identity를 사용하지 않았기 떄문에 null
+		if (params.get("identity")==null) {
+			// 그래서 그냥 댓글
 			commentService.writecomment(params, session);
-			commentService.orignalindexcomment(params);
-			commentService.replaycomment(params);
 			
+		} else {
+			// 대댓글
+			commentService.replaycomment(params, session);
+		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body("success");
 		
