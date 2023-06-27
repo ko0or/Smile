@@ -108,8 +108,14 @@
 
 
 	<!--  댓글 삭제하기 -->
-	<delete id="delete" parameterType="hashmap">
+	<delete id="deleteByIdentity" parameterType="hashmap">
 				DELETE FROM smile.comment_main 
 				WHERE identity = #{identity}
+	</delete>  	  	
+	
+	<!--  댓글 삭제하기 -->
+	<delete id="deleteByGroup" parameterType="hashmap">
+				DELETE FROM smile.comment_main comment
+				WHERE comment.group = #{group}
 	</delete>  	  	
 </mapper>

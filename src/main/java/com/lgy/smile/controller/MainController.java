@@ -37,7 +37,6 @@ public class MainController {
 	@GetMapping("/list")
 	public String mainList(@RequestParam HashMap<String, String> params, Model model, HttpSession session) {
 		
-		
 		UserDto dto = devUtils.getUserInfo(session);
 		if ( dto == null ) { model.addAttribute("userIdentity", -1  );			
 		} else {  model.addAttribute("userIdentity", dto.getIdentity()  ); }

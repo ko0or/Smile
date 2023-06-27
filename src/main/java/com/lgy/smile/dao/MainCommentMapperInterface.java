@@ -36,8 +36,10 @@ public interface MainCommentMapperInterface {
 	
 	
 	//=> ★ 등록된 댓글 삭제하기
-	public void delete(HashMap<String, String> params);
-	public void delete(HashMap<String, String> params, HttpSession session);
+	public void deleteByIdentity(HashMap<String, String> params);
+	public void deleteByIdentity(HashMap<String, String> params, HttpSession session);
+	public void deleteByGroup(HashMap<String, String> params);
+	public void deleteByGroup(HashMap<String, String> params, HttpSession session);
 
 	
 	

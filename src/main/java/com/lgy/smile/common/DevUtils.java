@@ -13,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lgy.smile.common.EmailSender.sendType;
+import com.lgy.smile.controller.NotificationController;
 import com.lgy.smile.dto.UserDto;
+import com.lgy.smile.service.NotificationService;
 
 @Service
 public class DevUtils  {
@@ -25,6 +27,9 @@ public class DevUtils  {
 	
 	/* ===== 이메일 발송 API 	===== */
 	@Autowired private EmailSender emailSender;
+	
+	/* ===== 사이트내 알람 띄우기	===== */
+	@Autowired private NotificationService notificationService;
 	 
 
  
@@ -37,7 +42,7 @@ public class DevUtils  {
 			boolean 	 | psswordMatches(String strFromInput, String strFromDatabase)
 					
 			String 	 | getDate()
-
+			String 	 | getDateCustom()
 
             String      | intToString(int number) 
 			String 	 | getUserIdentityToString(HttpSession session)
@@ -51,7 +56,9 @@ public class DevUtils  {
   
   			int		     | smsSender(String to)
   
-  
+            void         | createNotification(int userIdentity, String message, String urlPath)
+            void         | createNotification(String userIdentity, String message, String urlPath)
+            
  */	
 	
 	// [★] 입력받은 문자열을 암호화
@@ -75,6 +82,16 @@ public class DevUtils  {
 		LocalDateTime now = LocalDateTime.now();
 		Date date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 작성", new Locale("ko", "KR"));
+		String formattedDate = sdf.format(date);
+		
+		return formattedDate;
+	}
+	
+	// [★] 작성일자를 반환하는 메소드 ( 매개변수를 이용해서 원하는 포맷방식을 사용할 수 있음 )
+	public String getDateCustom(String format) {
+		LocalDateTime now = LocalDateTime.now();
+		Date date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+		SimpleDateFormat sdf = new SimpleDateFormat(format, new Locale("ko", "KR"));
 		String formattedDate = sdf.format(date);
 		
 		return formattedDate;
@@ -157,4 +174,14 @@ public class DevUtils  {
 		return new SmsSender().send(to);
 	}
 	
+	
+	
+	
+	
+	// ========================================================================================================= ☆
+	
+	
+	//★=> 알람 만들기(받을유저identity번호, 메시지내용, 클릭시 이동할 url주소)
+	public void createNotification(int userIdentity, String message, String urlPath) 	  {	notificationService.create(userIdentity, message, urlPath); }
+	public void createNotification(String userIdentity, String message, String urlPath) {	notificationService.create(userIdentity, message, urlPath); }
 }

@@ -41,8 +41,12 @@
 		 where identity=#{identity}
     </update>
     
-    <delete id="deletecomment" parameterType="hashmap">
+    <delete id="deletecommentByIdentity" parameterType="hashmap">
 		delete from comment_notice where identity=#{identity}
+    </delete>
+    
+    <delete id="deletecommentByGroup" parameterType="hashmap">
+		delete from comment_notice board where board.group = #{group}
     </delete>
    
 <!--    대댓글을 쓰기 위한 사이의 공간을 만들어 줌 => comment.index = comment.index+1을 하게 되면 index를 한칸 띄어줌 -->

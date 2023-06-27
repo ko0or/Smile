@@ -21,8 +21,10 @@ public interface NoticeCommentMapperinterface {
 	public void modifycomment(@RequestParam HashMap<String, String> param);
 	public void modifycomment(@RequestParam HashMap<String, String> param, HttpSession session);
 
-	public void deletecomment(HashMap<String, String> param);
-	public void deletecomment(HashMap<String, String> param, HttpSession session);
+	public void deletecommentByIdentity(HashMap<String, String> param);
+	public void deletecommentByIdentity(HashMap<String, String> param, HttpSession session);
+	public void deletecommentByGroup(HashMap<String, String> param);
+	public void deletecommentByGroup(HashMap<String, String> param, HttpSession session);
 	
 //	댓글과 댓글 사이에 대댓글을 쓰기위해 공간을 비워 주기 위해 update문을 쓴 매퍼
 	public void orignalindexcomment(@RequestParam HashMap<String, String> param);

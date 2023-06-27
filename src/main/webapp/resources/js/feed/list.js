@@ -123,7 +123,13 @@ $(document).ready(function() {
 				} else { 
 					$("#swal2-title").html("댓글 " + dataLength + "개");
 				}
+                        
 
+                        //=> 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
+                        var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
+                        var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
+                        var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 "+dataLength+"개");
+                        $(".content-wrapper" + boardIdentity + " sub").text( replacedText );
 
 
 				//=> 위에서 만들어진 내용을 SweetAlert2 모달화면에 보여주기 @
@@ -155,16 +161,9 @@ $(document).ready(function() {
 							"board" : boardIdentity ,
 							"content" : $("#InputComment").val()
 						} 
-						, success : function() { 
-						
-						// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
-						var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
-						var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
-						var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount + 1) + "개");
-                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
-						
-						// 병경된 내용을 (댓글)을 화면에 표시
-						callComments(boardIdentity); 					
+						, success : function() { 					
+						      // 변경된 내용을 (댓글)을 화면에 표시
+						      callComments(boardIdentity); 					
 							
 						}
 					})
@@ -223,16 +222,9 @@ $(document).ready(function() {
                             url : "comment/delete" ,
                             method : "GET" ,
                             data : { "identity" : $(this).attr("id")  } ,
-                            success : function() { 
-                            	 
-								// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
-								var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
-								var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
-								var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount - 1) + "개");
-		                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
-								
-								// 변경된 내용을 (댓글)을 화면에 표시
-								callComments(boardIdentity); 					
+                            success : function() { 								
+                              // 변경된 내용을 (댓글)을 화면에 표시
+                              callComments(boardIdentity); 					
                             	
                             }
                         })
@@ -278,15 +270,8 @@ $(document).ready(function() {
 								"replyTargetIdentity" : replyTargetIdentity
 							} 
 							, success : function() { 
-							
-							// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
-							var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
-							var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
-							var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount + 1) + "개");
-							$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
-							
-							// 병경된 내용을 (댓글)을 화면에 표시
-							callComments(boardIdentity); 					
+                                                // 변경된 내용을 (댓글)을 화면에 표시
+                                                callComments(boardIdentity); 					
 								
 							}
 						}) // ~~ ajax 끝

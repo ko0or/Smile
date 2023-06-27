@@ -106,7 +106,7 @@ public class MainCommentService implements MainCommentMapperInterface {
 
 
 	@Override
-	public void delete(HashMap<String, String> params, HttpSession session) {
+	public void deleteByIdentity(HashMap<String, String> params, HttpSession session) {
 
 		//=> ★ 등록된 댓글 삭제하기
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
@@ -115,11 +115,23 @@ public class MainCommentService implements MainCommentMapperInterface {
 		int commentAuthorUserIdentity = dao.authorIdentityCheck(params);
 		if ( userIdentity == commentAuthorUserIdentity ) {
 			
-			dao.delete(params);
-			log.info("@ => 로그인된 유저와 댓글 작성자가 일치하여 댓글을 삭제했습니다.");
+			dao.deleteByIdentity(params);
 			return;
 		}
-		log.info("@ => 삭제 실패! 댓글 작성자 본인이 아닙니다.");
+	}
+	
+	@Override
+	public void deleteByGroup(HashMap<String, String> params, HttpSession session) {
+		
+		//=> ★ 등록된 댓글 삭제하기
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		
+		int userIdentity = devUtils.getUserInfo(session).getIdentity();
+		int commentAuthorUserIdentity = dao.authorIdentityCheck(params);
+		if ( userIdentity == commentAuthorUserIdentity ) {
+			dao.deleteByGroup(params);
+			return;
+		}
 	}
 	
 	
@@ -136,6 +148,7 @@ public class MainCommentService implements MainCommentMapperInterface {
 		
 		//=> ★ (대댓글을 작성하기 위해 필요) 기존 댓글의 그룹번호, 그리고 인덱스(깊이) 정보를 가져와주는 기능
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		if ( params.get("replyTargetIdentity") == null ) { params.put("replyTargetIdentity", params.get("identity")); }
 		return dao.commentInfo(params);
 	}
 	
@@ -198,7 +211,8 @@ public class MainCommentService implements MainCommentMapperInterface {
 	/* ☆ 매퍼 오버라이딩 + 오버로딩 */
 	@Override public void write(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */	 	}
 	@Override public void modify(HashMap<String, String> params) 	{	 	/* TODO Auto-generated method stub */		}
-	@Override public void delete(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
+	@Override public void deleteByIdentity(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
+	@Override public void deleteByGroup(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
 	@Override public int authorIdentityCheck(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }
 	@Override public MainCommentDto commentInfo(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return null; }
 	@Override public void replyWrite(HashMap<String, String> params) { /* TODO Auto-generated method stub */ }	

@@ -25,13 +25,28 @@ import lombok.extern.slf4j.Slf4j;
 public class NotificationController {
 
 	/* ☆ 실제 처리를 담당하는 서비스 계층  ☆ */
-	@Autowired NotificationService service;
+	@Autowired private NotificationService service;
 	
 	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
-	@Autowired DevUtils devUtils;
+	@Autowired private DevUtils devUtils;
 	
 	
 	
+	
+	
+
+	
+	//=> ★ 알람 생성 메소드 확인은 서비스 계층으로 .. !
+	
+	
+	
+	
+	
+	
+	
+	
+
+//============================================================================================================== >>
 	
 	
 	@GetMapping("/count")//★=> 알람 목록을 반환
@@ -56,16 +71,8 @@ public class NotificationController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
-	
-	
-	@PostMapping("/create")//★=> 알람 생성하기
-	public ResponseEntity<Void> create(@RequestParam HashMap<String, String> params) {
-		service.create(params);
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
-	
-	
-	
+
+	//★=> 알람 삭제하기
 	@PostMapping("/delete")//★=> 알람 삭제하기
 	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params) {
 		service.delete(params);

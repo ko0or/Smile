@@ -29,8 +29,14 @@
 
 <!-- 	select이고 한줄 보여줄거라서 ArrayList로 안하고 TradeDto로-->
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
-        SELECT identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
-        	from board_trade where identity=#{identity}
+		SELECT 
+			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user, user.nickname
+		FROM
+			smile.board_trade board,
+		    smile.user user
+		WHERE 
+			board.identity = #{identity}
+		    AND user.identity = board.user        	
     </select>
   	
   	<update id="modify" parameterType="hashmap">

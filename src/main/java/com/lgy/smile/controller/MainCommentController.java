@@ -81,12 +81,20 @@ public class MainCommentController {
 	
 	//=> ★ 등록된 댓글 삭제하기
 	@GetMapping("/delete") @ResponseBody
-	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {
+	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {		
+		MainCommentDto dto = commentService.commentInfo(params, session);
 		
-		log.info("@# delete Controller start()");
-		log.info("@# modify Controller params => " + params.toString());
-		commentService.delete(params, session);
-		log.info("@# delete Controller end()");
+		if ( dto.getIndex() == 0 ) {
+			//=> ☆ 댓글 삭제시엔 해당 대댓글들도 삭제,
+			params.put("group", devUtils.intToString(dto.getGroup()));
+			commentService.deleteByGroup(params, session);
+			
+		} else {
+			//=> ☆ 대댓글 삭제시엔, 해당 대댓글만 삭제
+			commentService.deleteByIdentity(params, session);
+		}
+		
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

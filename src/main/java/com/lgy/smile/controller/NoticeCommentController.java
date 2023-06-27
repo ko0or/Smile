@@ -82,8 +82,17 @@ public class NoticeCommentController {
 	// ★ notice(공지) 댓글 삭제
 	@GetMapping("/delete")
 	public ResponseEntity<String> noticeDelete(@RequestParam HashMap<String, String> params, HttpSession session) {
-		log.info("@# delete");
-		commentService.deletecomment(params,session);
+		NoticeCommentDto dto = commentService.commentInfo(params);
+		
+		if ( dto.getIndex() == 0 ) {
+			//=> ☆ 댓글 삭제시엔 해당 대댓글들도 삭제,
+			params.put("group", devutils.intToString(dto.getGroup()));
+			commentService.deletecommentByGroup(params, session);
+			
+		} else {
+			//=> ☆ 대댓글 삭제시엔, 해당 대댓글만 삭제
+			commentService.deletecommentByIdentity(params, session);
+		}
 		return ResponseEntity.status(HttpStatus.OK).build();
 		
 	}
