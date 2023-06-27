@@ -45,26 +45,19 @@ $(document).ready(function() {
 					  ]
 					}
 				  }).then((result) => {
-					  /* Read more about isConfirmed, isDenied below */
 					  if (result.isConfirmed) {
 						Swal.fire('Saved!', '', 'success')
 
-						console.log("saved까지 완료. 날짜구하기");
+				        // 주문번호 만들기(사용자 identity + 현재시간 밀리초) 
 				        var date = new Date();
 				        var dateNum = date.getTime();
-				        console.log(date);
-				        console.log(dateNum);
-				        		
-				        // 주문번호 만들기(사용자 identity + 현재시간 밀리초) 
 				       	var orderId = user_identity + "" + dateNum
-				        console.log(orderId);
 
 						// 이메일 주소 받기
 						console.log(user_id);
 						
 						// easyPayment.js 에 정의된 requestPay 메소드 호출하여 카카오페이 or 토스페이먼츠 연결 
 						requestPay(dateNum, method, through, user_id, amount);
-						
 					  };
 					
 			}); // 포인트 충전 눌렀을 때 끝

@@ -116,19 +116,18 @@ $(document).ready(function() {
 		}
 	})
 	
-	// 이메일 중복 확인
+// ====================== 일반 회원가입 처리 ==================================================
 	$("#isDuplicated").click(function(){
-		console.log("actionform 으로 이동함33")
+		// 이메일 중복 확인
+		// id 가 floatingEmail 인 input 태그의 데이터(사용자가 입력한 이메일 주소)를 변수로 저장
 		var formData = $("#floatingEmail").serialize();
-		console.log("formData ===> " + formData);
 		
 		$.ajax({
 			type: "POST"
 		   ,data: formData
 		   ,url: "isDuplicated"
 		   ,success: function(data, code){
-				
-			   // 중복확인 후 이메일 인증번호 발송동의 여부
+			   // 중복확인 버튼 클릭 후 이메일 인증번호 발송동의 여부를 묻는 스왈창
 			   Swal.fire({
 				    icon: 'success',
 				    title: '본인확인 필요',
@@ -137,21 +136,18 @@ $(document).ready(function() {
 				    showCancelButton: true ,
 			    	cancelButtonText : '취소'
 			    	
-			    // 동의하면 이메일로 인증번호 발송
 				}).then((result) => {
+			      // "확인" 클릭으로 이메일 인증 동의하면 인증번호 발송
 				  if (result.isConfirmed) {
 					  Swal.fire('인증번호 발송 완료!', '', 'success')
 					  
+					  // "다시" id 가 floatingEmail 인 input 태그의 데이터(사용자가 입력한 이메일 주소)를 변수로 저장
 					  var formData = $("#floatingEmail").serialize();
-					  console.log("인증번호 전송 확인 눌렀음 formData ===> " + formData);
 					  
 					  $.ajax({
 						  type: "POST"
 						 ,data: formData
 						 ,url: "sendCode"
-						 ,success: function(data){
-							 console.log("인증번호 전송 완료")
-						 }
 					  });
 					  
 					  // 인증번호 입력창 보여주기 
@@ -159,8 +155,8 @@ $(document).ready(function() {
 				      
 					  // 사용자가 인증번호 입력 후 확인 누르면 인증번호 비교
 				      $("#checkCode").click(function(){
+		  		    	  // id 가 floatingCode 인 input 태그의 데이터(사용자가 입력한 인증번호)를 변수로 저장
 				    	  var formData = $("#floatingCode").serialize();
-				    	  console.log("입력한 코드를 확인하기 위해서 보내기 formData ===> " + formData);
 				    	  
 				    	  $.ajax({
 				    		  type: "POST"
@@ -168,16 +164,14 @@ $(document).ready(function() {
 				    		 ,url: "checkCode"
  			    			 // 인증 성공 시
 				    		 ,success: function(data){
-				    			 console.log("success222")
-				    			 
 								   Swal.fire({
 									    icon: 'success',
 									    title: '인증 완료',
 									    text: "이메일 인증이 완료되었습니다!",
 									    showCancelButton: false,
 									    confirmButtonText: '확인'
+									// 인증 성공하면 이메일 계정 입력부분 비활성화 및 색상변경(grey)
 									}).then(function(){
-											// 인증 성공하면 이메일 계정 입력부분 비활성화 및 색상변경(grey)
 											$("#floatingEmail").prop("readonly", true);
 											$("#floatingEmail").css("color", "grey");
 
@@ -212,7 +206,6 @@ $(document).ready(function() {
 				    					$("#createAccount").submit();
 				    					
 				    				});
-				    				
 				    		 }
 				    		 // 인증 실패 시
 				    	  	 ,error: function(){
@@ -226,13 +219,12 @@ $(document).ready(function() {
 									    confirmButtonText: '확인'
 									})
 				    	  	 }
-				    	  });
-				      });
-				  }
-		   		})
-	   		}
+				    	  }); // ajax (checkCode)
+				      });	// click (checkCode)
+				  }	// 이메일 주소로 인증번호 발송하시겠습니까? "확인" 버튼 클릭했을 시
+		   		})// then(result)
+	   		} // 이메일 중복확인 성공하는 경우
 		   , error : function(data, status){
-
 			   Swal.fire({
 				    icon: 'warning',
 				    title: '이메일 중복',
@@ -241,13 +233,17 @@ $(document).ready(function() {
 				    confirmButtonText: '확인'
 				})
 		   }
-		});
-	});
-	
-	
-	// 카카오 로그인으로 회원가입 화면으로 넘어온 경우에 input 태그에 모두 입력되면 회원가입 버튼 활성화
+		}); // ajax (isDuplicated)
+	}); // click (isDuplicated)
+})// ~~ end
+
+
+//====================== 카카오 회원가입 처리 ==================================================
+// 카카오 로그인으로 회원가입 화면으로 넘어온 경우에 input 태그에 모두 입력되면 회원가입 버튼 활성화
+if(${ id != null }){
 	$(document).ready(function() {
-	    // Function to check if all input fields are filled
+		
+	    // input 태그에 입력된 값들이 null 이 아닌 경우 true 반환하는 함수
 	    function checkInputFields() {
 	        var nickname = $("#floatingNickname").val();
 	        var password = $("#floatingPassword").val();
@@ -259,7 +255,7 @@ $(document).ready(function() {
 	        return false;
 	    }
 
-	    // Function to enable/disable the registration button
+	    // checkInputFields() 함수의 리턴값에 따라 회원가입버튼(register)을 활성화/비활성화
 	    function toggleRegistrationButton() {
 	        var allFieldsFilled = checkInputFields();
 	        if (allFieldsFilled) {
@@ -269,7 +265,7 @@ $(document).ready(function() {
 	        }
 	    }
 
-	    // Event handlers for keyup events on the input fields
+	    // keyup 으로    Event handlers for keyup events on the input fields
 	    $("#floatingNickname, #floatingPassword, #floatingPassword2").on("keyup", function() {
 	        toggleRegistrationButton();
 	    });
@@ -282,7 +278,7 @@ $(document).ready(function() {
 	        }
 	    });
 	});
-	
-})// ~~ end
+}
+
 </script>
 </html>

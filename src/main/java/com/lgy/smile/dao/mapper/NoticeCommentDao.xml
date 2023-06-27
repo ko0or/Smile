@@ -3,29 +3,25 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lgy.smile.dao.NoticeCommentMapperinterface">
-
-<!--     <select id="getCount" resultType="int"> -->
- <!--         SELECT count(*) FROM comment_notice -->
-<!--           SELECT COUNT(comment.content)  -->
-<!-- FROM smile.board_notice board, smile.comment_notice comment -->
-<!-- WHERE board.identity = #{identity} -->
-<!--     </select> -->
+<!-- 댓글을 달기 위해 쓰는 insert문 => group+1인 이유는 댓글을 쓰게 되면 그 그룹이 증가 해야지만 대댓글을 작성할떄 그 group을 가지고 대댓글을 씀 -->
     <insert id="writecomment" parameterType="hashmap">
-    insert into comment_notice values(
-			null , #{content} , #{created} , #{user} , #{board} , 
-			(SELECT IFNULL(MAX(comment.group)+1 , 0) FROM board_notice board, comment_notice comment WHERE board.identity =  #{board} AND board.identity = comment.board) 
-               , 0 , 0
-            )
+	    insert into comment_notice values(
+				null , #{content} , #{created} , #{user} , #{board} 
+				 ,(SELECT IFNULL(MAX(comment.group)+1 , 0) FROM smile.board_notice board, smile.comment_notice comment WHERE board.identity = #{board} AND board.identity = comment.board)  
+	             , 0 , 0
+	            
 		)
-<!--     insert into comment_notice(identity, content, created, user,board) values( -->
-<!-- 			null , #{content} , #{created} , #{user} , #{board} -->
-<!-- 		) -->
-
     </insert>
+    
+<!--     댓글을 보기 위해 쓰는 select문 =>(SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname" -->
+<!-- 	를 사용한 이유는 대댓글에 대댓글을 쓸때 OO님에게 답글의 OO님의 닉네임 값을 가져가기 위함 -->
+<!-- AND board.identity = comment.board 게시글을 묶고 -->
+<!--  AND user.identity = comment.user 유저 정보를 묶는다 -->
      <select id="contentViewcomment" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeCommentDto">
 		SELECT 
 			user.nickname ,
-		    comment.*
+		    comment.* ,
+		    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname"
 		FROM 
 			smile.board_notice board ,
 		    smile.comment_notice comment , 
@@ -38,18 +34,6 @@
 			comment.group,
 		    comment.index
 
-<!-- 				SELECT  -->
-<!-- 			comment.* -->
-<!-- 		FROM  -->
-<!-- 			smile.comment_notice comment -->
-<!-- 			, smile.board_notice board -->
-<!-- 		WHERE -->
-<!-- 			board.identity = #{identity} -->
-<!-- 		    AND board.identity = comment.board -->
-<!-- 		ORDER BY -->
-<!-- 		    comment.group -->
-<!-- 		    , comment.identity  -->
-<!-- 		; -->
     </select>
     
     <update id="modifycomment" parameterType="hashmap">
@@ -61,6 +45,8 @@
 		delete from comment_notice where identity=#{identity}
     </delete>
    
+<!--    대댓글을 쓰기 위한 사이의 공간을 만들어 줌 => comment.index = comment.index+1을 하게 되면 index를 한칸 띄어줌 -->
+<!-- 그렇게 되면 한칸이 비워지게됨 그리고 and절을 보게되면 만약 댓글이 3개이고 인덱스가 2라고 가정 햇을때 저 문장은 참이 되기때문에 띄어줌 -->
    	<update id="orignalindexcomment" parameterType="hashmap">
    		UPDATE 
 		comment_notice comment
@@ -71,19 +57,45 @@
 	    AND comment.index > #{index} ;
    	</update>
     
+<!--     그렇게 한칸 비워진 곳에 대댓글을 삽입하기 위함 => 그래서 IFNULL이 디벨로퍼에서NVL임 그래서 IFNULL을 사용하여 그 비워진 값에 넣어줌 -->
+<!-- 근데 만약 비워 진게 없으면 0인게 대댓글을 누른게 아니라 댓글을 다는 거임 -->
     <insert id="replaycomment" parameterType="hashmap">
      INSERT INTO comment_notice (identity, content, created, user, board, `group`, `index`, target_user)
-VALUES (
-    null, 
-    #{content}, 
-    #{created}, 
-    #{user}, 
-    #{board},
-    #{group}, 
-    IFNULL(#{index}+1, 0), 
-    #{target_user}
-);
-
+	 VALUES (
+    	null, 
+    	#{content}, 
+    	#{created}, 
+    	#{user}, 
+	    #{board},
+	    #{group}, 
+	    IFNULL(#{index}+1, 0), 
+	    #{target_user}
+	 );
     </insert>
+    
+    
+    
+    <!-- 대댓글을 달기위해, 해당 댓글의 정보 불러오기위해서 씀  -->
+    <select id="commentInfo" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeCommentDto">
+    	SELECT 
+    		* 
+   		FROM 
+   			smile.comment_notice 
+ 		WHERE 
+ 			identity = #{identity};
+    </select>
+    
+<!--    대댓글에 대댓글을 달게 되면 그 대댓글이 해당 대댓글에 맨 밑으로 가게 하기위해 사용 => 원래 맨 밑으로 가게 하려면 max에 +1을 해야 하는데 이미 update문에서 +1을 해줌   -->
+<!-- 하지만 이것도 null일경우가 있음 대댓글이 없을 경우임 그럼 그냥 0의 값을 주는거임 -->
+    <select id="commentnew" resultType="int" parameterType="hashmap">
+		SELECT
+			IFNULL(MAX(comment.index),0)
+		FROM
+			smile.comment_notice comment 
+		WHERE
+			comment.group = #{group}
+			AND comment.board = #{board}
+
+    </select>
     
 </mapper>
