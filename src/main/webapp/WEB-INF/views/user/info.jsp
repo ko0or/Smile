@@ -37,20 +37,6 @@
 				이메일 계정</label>
 			</div>
 			
-<!-- 			<div class="form-floating mb-3"> -->
-<!-- 				<div name="password" type="password" class="form-control" id="floatingPassword"> -->
-<%-- 				${ user.pwd }</div>  --%>
-<!-- 				<label for="floatingPassword"><i>*</i> -->
-<!-- 				비밀번호</label>				 -->
-<!-- 			</div> -->
-			
-<!-- 			<div class="form-floating mb-3"> -->
-<!-- 				<div name="password2" type="password" class="form-control" id="floatingPassword2"> -->
-<%-- 				${ user.pwd }</div> --%>
-<!-- 				<label for="floatingPassword2"><i>*</i> -->
-<!-- 				비밀번호 재확인</label>				 -->
-<!-- 			</div> -->
-			
 			<div class="form-floating mb-3">
 				<div name="role" type="text" class="form-control" id="floatingRole">
 				${ user.role }</div>

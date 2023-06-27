@@ -93,12 +93,10 @@
 <script>
 $(document).ready(function() {
 	
-	// 회원정보 수정 버튼 눌렀을 때 처리
+// ====================== 회원정보 수정 버튼 눌렀을 때 처리 ===========================================
     $("#modifyInfo").click(function(){
-    	//$("#modifyForm").submit();
 
 		var formData = $("#modifyForm").serialize();
-		console.log("@# ====> " + formData);
 		
 		$.ajax({
 			type: "POST"
@@ -113,40 +111,31 @@ $(document).ready(function() {
 				    text: "회원정보 수정을 완료했습니다!",
 				    showCancelButton: false,
 				    confirmButtonText: '확인'
-
 				})
 			   .then(function(){
 			   		location.href = "/smile/user/info";
 			   })
-
-// 			   location.href = "/smile/user/info";
-// 			   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
-// 			   ★ aws 배포시 => location.href = "/main/list";		
 		   }
 		   ,error : function(){
 			   //alert("비밀번호가 일치하지 않습니다!");
 			   
 			   Swal.fire({
-
 				    icon: 'warning',
 				    title: '변경 실패',
 				    text: "비밀번호를 다시 확인해주세요",
 				    showCancelButton: false,
 				    confirmButtonText: '확인'
-
 				})
-			   
-// 			   location.href = "login";		// 실패알람 확인 클릭하면 로그인 페이지로 이동
 		   }
 		});
     });
-	
-	// 뒤로가기 버튼 눌렀을 때 처리
+
+// ====================== 뒤로가기 버튼 눌렀을 때 처리 ===========================================
 	$("#goBack").click(function(){
 		history.back();
 	});
-	
-	// 회원탈퇴 링크 클릭했을 때 처리
+
+// ====================== 회원탈퇴 링크 클릭했을 때 처리 ===========================================
 	$("#unregister").click(function(){
 		Swal.fire({
 			icon: 'question' ,
@@ -156,15 +145,10 @@ $(document).ready(function() {
 			showCancelButton: false ,
 			showDenyButton: true,
 			denyButtonText: '취소'
-// 			cancelButtonText : '취소'
-			
 		// 탈퇴 버튼 클릭하면 탈퇴 처리
 		}).then((result) => {
-			
 			if(result.isConfirmed) {
-				
 				var formData = $("#modifyForm").serialize();
-//	 			var formData = id:${ user.id }
 				console.log("@# ====> " + formData);
 				
 				$.ajax({
