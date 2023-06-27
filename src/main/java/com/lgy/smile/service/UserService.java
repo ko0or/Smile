@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,48 +19,57 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class UserService implements UserMapperInterface {
 
-	@Autowired
-	private SqlSession sqlSession;
+	@Autowired private SqlSession sqlSession;
+	@Autowired private DevUtils devUtils;
 	
-	@Autowired
-	DevUtils dev;
+//=========================== 회원 로그인 ===================================================== >
 	
+	// 로그인 처리를 위해 DB정보 조회 (SELECT 쿼리 실행)
 	@Override
 	public UserDto login(@RequestParam HashMap<String, String> params) {
+		log.info("UserService ===> login ===> start");
 		
+		// UserMapperInterface 사용하여 DAO 객체 생성 (MyBatis 를 통해 DB 연결)
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
-		UserDto dto = userDao.login( params );
 		
+		// login.jsp 의 폼태크에서 받은 id 와 password 값을 매개변수로 DAO 객체의 login 메소드 호출(리턴값 DTO)
+		UserDto dto = userDao.login(params);
+		
+		log.info("UserService ===> login ===> end");
 		return dto;
 	}
 
+
+//============== 회원가입 처리 ================================================================== >
 	
-	
+	// 이메일 중복확인 (SELECT 쿼리 실행)
 	@Override
-	public void modify(HashMap<String, String> params, HttpSession session) {
-		log.info("UserService ===> modify start");
+	public UserDto isDuplicated(HashMap<String, String> params) {
+		log.info("UserService ===> isDuplicated ===> start");
 		
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		UserDto dto = userDao.isDuplicated(params);
 		
-		log.info("UserService ===> modify ===> userDao ===> " + userDao);
-		
-		UserDto user = new DevUtils().getUserInfo(session);
-		log.info("UserService ===> modify ===> user ===> " + user);
-		
-		params.put("id", user.getId() );
-		log.info( params.toString() );
-		
-		userDao.modify(params);
-		
-		log.info("UserService ===> modify end");
+		log.info("UserService ===> isDuplicated ===> end");
+		return dto;
 	}
-
+	
+	// 회원가입 처리 (INSERT 쿼리 실행)
 	@Override
-	public void modify(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		
+	public void register(HashMap<String, String> params) {
+		log.info("UserService ===> register ===> start");
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.register(params);
+		log.info("UserService ===> register ===> end");
 	}
 
+	
+//========================= 카카오 간편 로그인 ======================================================= >
+	
+	
+//=================== 임시 비밀번호 발급 ============================================================= >
+	
+	// 임시 비밀번호로 DB 정보 업데이트
 	@Override
 	public void tempPwd(HashMap<String, String> params) {
 		log.info("UserService ===> tempPwd ===> start");
@@ -71,76 +79,40 @@ public class UserService implements UserMapperInterface {
 		
 		log.info("UserService ===> tempPwd ===> end");
 	}
+	
+	
+//=================== 회원정보 조회 및 수정 ============================================================= >
 
-	
-	
-	
-	
-	
-	// ☆ 유저 정보조회 기능 필요 ( pk로 검색 )
-	// public 유저DTO findByPK(int userPK) { ... return 유저dto  }
-	
-	
-	
-	
-	// ☆ 유저 정보조회 기능 필요 ( 닉네임으로 검색 )
-	// public 유저DTO findByNickname(String nickName) { ... return 유저dto  }	
-	
-	
-	
-	
-	// ☆ "중복여부체크" 눌렀을때,  해당 이메일ID 와 닉네임이 사용중인지 확인후 리턴하는 메소드 필요
-	// public boolean isDuplicated(Model model) {  ... 조건문 if-else로 return 분기처리 true/false }
-	@Override
-	public UserDto isDuplicated(HashMap<String, String> params) {
-		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
-		UserDto dto = userDao.isDuplicated(params);
-		
-		return dto;
-	}
-
-
-	
-	// ☆ user(유저) 회원가입을 처리하는 메소드 필요	
-	// 위에서 만든 isDuplicated 메소드가 false 일때 진행 ex->  if ( isDuplicated(model) == true ) { ... }
-	// dao 객체 호출해서 insert 쿼리진행
-	@Override
-	public void register(HashMap<String, String> params) {
-		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
-		userDao.register(params);
-	}
 
 	@Override
-	public void delete(HashMap<String, String> params) {
+	public void modify(HashMap<String, String> params) {
 		// TODO Auto-generated method stub
 		
-	}	
-
+	}
+	
 	@Override
-	public void delete(HashMap<String, String> params, HttpSession session) {
-		log.info("UserService ===> delete ===> start");
+	public void modify(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> modify ===> start");
 		
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
-//		UserDto user = (UserDto) session.getAttribute("userInfo");
-//		log.info("user ===> "+user);
+		UserDto user = new DevUtils().getUserInfo(session);
+		params.put("id", user.getId() );
+		log.info( params.toString() );
+		userDao.modify(params);
 		
-//		String id = params.get("id");
-//		String pwd = params.get("password");
-//		log.info("id ===> "+id);
-//		log.info("pwd ===> "+pwd);
-		
-		userDao.delete(params);
-		log.info("UserService ===> delete ===> end");
+		log.info("UserService ===> modify ===> end");
 	}
 
+	
+//=================== 포인트 충전 =========================================================================== >
 
-
+	// 입력된 포인트 금액(amount)을 쿼리로 DB에 업데이트
 	@Override
 	public void pointUp(HashMap<String, String> params) {
 		log.info("UserService ===> pointUp ===> start");
 		
-		String id = params.get("id");
-		String point = params.get("point");
+		String id = params.get("id");			// 기준이 되는 이메일 주소
+		String point = params.get("point");		// 추가할 포인트 금액
 		log.info("id ===> " +id);
 		log.info("point ===> " +point);
 		
@@ -149,15 +121,20 @@ public class UserService implements UserMapperInterface {
 		
 		log.info("UserService ===> pointUp ===> end");
 	}
-
-
-
+	
+	@Override
+	public String getPoint(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	// identity 기준으로 현재 포인트 가져오기
 	@Override
 	public String getPoint(HashMap<String, String> params, HttpSession session) {
 		log.info("UserService ===> getPoint ===> start");
 
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
-		params.put("identity", dev.getUserIdentityToString(session));
+		params.put("identity", devUtils.getUserIdentityToString(session));
 		String point = userDao.getPoint(params);
 		
 		log.info("UserService ===> getPoint ===> end");
@@ -165,31 +142,21 @@ public class UserService implements UserMapperInterface {
 	}
 
 	
-
+//========================= 회원 탈퇴처리 ====================================================================== >
+	
 	@Override
-	public String getPoint(HashMap<String, String> params) {
+	public void delete(HashMap<String, String> params) {
 		// TODO Auto-generated method stub
-		return null;
+	}	
+
+	// 회원탈퇴 처리
+	@Override
+	public void delete(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> delete ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.delete(params);
+		
+		log.info("UserService ===> delete ===> end");
 	}
-
-
-
-	
-/*
-	  	☆ 로그인 버튼 눌렀을때 AJAX 방식으로 처리하는 컨트롤러 필요
-  		＃ 예시
-  		
-  		ResponseEntity<Void> 로그인체크 () {
-		
-			DAO객체 dao참조변수 = new DAO객체();
-		
-			if ( dao참조변수.findByAccount(받은아디, 받은비번) == true ) {
-				return new ResponseEntity<>(HttpStatus.OK); // HTTP Status 200 (성공)
-			} else {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // HTTP Status 400 (잘못된 요청)
-			}
-	  	}
-	  	
- */
-	
 }

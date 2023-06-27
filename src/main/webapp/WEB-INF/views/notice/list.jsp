@@ -88,14 +88,14 @@
 <%@ include file="../common/footer.jsp"%>
 </body>
 <script>
-	$(document).ready(function() {
+$(document).ready(function() {
 
-		   window.onpageshow = function(event){
-			      if(event.persisted || (window.performance && window.performance.navigation.type==2)){
-			         location.reload(); //새로고침
-			      }
-			   }
-		   
-	})// ~~ end
+   window.onpageshow = function(event){
+	      if(event.persisted || (window.performance && window.performance.navigation.type==2)){
+	         location.reload(); //새로고침
+	      }
+	   }
+	   
+})// ~~ end
 </script>
 </html>
