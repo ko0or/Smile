@@ -8,5 +8,7 @@ public class NotificationDto {
 	private String msg;
 	private String created;
 	private int user;
+	private String nickname;
+	private String url_path;
 }
 

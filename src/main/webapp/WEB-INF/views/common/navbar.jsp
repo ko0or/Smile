@@ -6,7 +6,7 @@
     	0
     	<span class="visually-hidden">unread messages</span>
   	</span>
- 	<i class="fa-regular fa-bell animate__swing" style="font-size: x-large; "></i>
+ 	<i class="fa-regular fa-bell animate__animated animate__swing" style="font-size: x-large; "></i>
  </div>
  
  

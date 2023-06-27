@@ -13,10 +13,14 @@
 
   	<select id="list" resultType="com.lgy.smile.dto.NotificationDto" parameterType="hashmap">
 				SELECT 
-					* 
+					notification.*,
+				    user.nickname
 				FROM 
-					smile.notification
-				WHERE user = #{user};
+					smile.notification notification,
+				    smile.user user
+				WHERE 
+					notification.user = #{user}
+					AND notification.user = user.identity
   	</select>  	
 
 	<insert id="create" parameterType="hashmap">

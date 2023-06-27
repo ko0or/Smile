@@ -24,7 +24,7 @@
 			<c:forEach items="${list}" var = "dto">
 				<tr>
 <%-- 					<td>${dto.identity}</td> --%>
-					<td><a href="../chat/chatContentTest?board=${dto.board}&buyer=${dto.buyer}" style="background-color: aqua;">${dto.identity}</a></td>
+					<td><a href="../chat/chatContent?board=${dto.board}&buyer=${dto.buyer}" style="background-color: aqua;">${dto.identity}</a></td>
 					<td>${dto.board}</td>
 					<td>${dto.seller}</td>
 					<td>${dto.buyer}</td>

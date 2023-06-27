@@ -2,13 +2,13 @@ $(document).ready(function(){
 //=============================================================================================================>
 
 	//=> ★ URL 자동 변환기	
-    function urlConverter(originalURL) {
+    function urlConverter(mappingURL) {
     
     var urlCheck = window.location.href;
 	    if ( urlCheck.indexOf("smile") >= 0 ) {
-	    	return "http://" + window.location.host + "/smile/" + originalURL;
+	    	return "http://" + window.location.host + "/smile/" + mappingURL;
 	    }
-	    return window.location.host + "/" + originalURL;
+	    return window.location.host + "/" + mappingURL;
     }
     
     
@@ -33,7 +33,7 @@ $(document).ready(function(){
 			}, // ~~ success 종료
 			error : function() { 
 				// 로그인 상태가 아닐경우, 타이머를 중단함
-				clearInterval( notificationCheck ); 
+				clearInterval( notificationCheckTimer ); 
 			}
 		}) // ~~ ajax 끝					
 	}
@@ -41,45 +41,118 @@ $(document).ready(function(){
 	notificationCheck();
 //=============================================================================================================>	
 
-	//=> 알람 버튼을 눌렀을때
+	//=> ★ 알람 (종 모양) 눌렀을때 모달창 열어주기
 	$(".notification").click(function() {		
 		
 		//=> 모달 띄우고
 		Swal.fire({
 		    icon: 'success',
-		    title: '테스트',
-		    html: `<div class="notification-wrapper">테스트중</div>`,
+		    title: ' ',
+		    width: 900 ,
+		    html: `<div class="notification-wrapper" style="max-height:300px; overflow-y: auto;">
+		    
+				<div class="d-flex justify-content-center loading">
+				    <div class="spinner-border" role="status">
+				        <span class="visually-hidden">Loading...</span>
+				    </div>
+				</div>
+		    
+		    </div>
+		    `,
 		    showCancelButton: false,
 		    confirmButtonText: '확인'
 		});
 		
 		
-		//=> 모달에 내용 보여주기
-		$.ajax({
-			url : urlConverter("notification/list"),
-			success : function( data ) {
-				
-				for (var i=0; i < data.length; i ++) {
-					
-				}
-				$(".notification-wrapper").append("<h1>정보 가져오기 성공함</h1>");
-			}
-		})
-		
-		
-		
+		//=> 모달에 내용 보여주기		
+		callNotifications();
 	})	 // ~~ 알람 버튼 클릭시 이벤트 종료
 
 	
 
 //=============================================================================================================>
 
+	//=> ★ 알람창 화면에 데이터 보여주기 (데이터 바인딩)
+	function callNotifications() {
+	
+		$.ajax({
+			url : urlConverter("notification/list"),
+			success : function( data ) {
+				
+				if ( data.length == 0 ) { $("button.swal2-confirm.swal2-styled").click(); }
+				
+				var row = ``;
+				$(".notification-wrapper > .loading").remove();
+				
+				
+				for (var i=0; i < data.length; i ++) {
+					row += getComponent( data[i] );
+				}
+				
+				$(".notification-wrapper").html( row );
+				$("#swal2-title").text( "새로운 소식이 " + data.length + "건 조회되었습니다 : )" );
+				setEvent();
+				
+			}
+		})	
+	}
+
+
+	//=> ☆ 위에있는 callNotifications 가 호출하는 함수 ▼
 	function getComponent( data ) {
 	
 		return `
-		
-			<div></div>
+	
+        		<div class="alert alert-light alert-dismissible fade show" role="alert" style="text-align:left;">
+					<div class="notificationItems" id="${data.url_path}">
+						<b>${data.nickname}</b>님이 댓글을 남겼습니다.<br>
+						    <div style="display: block; margin-top: 10px;"><sub>${data.created}</sub></div><br>
+						    <div style="white-space: pre-line; display: block;">${data.msg}</div>
+					</div>
+					<button id="${data.identity}" type="button" class="btn-close notification-close-btn" ></button>
+				</div>	
 		
 		`;
 	}
+	
+	
+//=============================================================================================================>
+
+
+	function setEvent() {
+	
+		$(".notification-close-btn").off("click");
+		$(".notification-close-btn").click(function() {
+		
+		$.ajax({
+			url : urlConverter("notification/delete"),
+			method : "POST",
+			data : { "identity" : $(this).attr("id") },
+			success : function() {
+
+				//=> 알람 삭제성공시, 변경된 데이터로 다시 보여주기 (랜더링)
+				callNotifications();
+
+			}
+		}) // ~~ ajax 끝		
+		}) // ~~ 알람 삭제 버튼 이벤트 끝
+	
+	
+		$(".notificationItems").off("click");	
+		$(".notificationItems").click(function(){
+		
+			var urlPath = urlConverter($(this).attr("id"));
+			window.open( urlPath  );				
+		})
+	
+	} // ~~ 이벤트 등록 끝
+	
+	
+	
+	
+	
+
+	
+	
+	
 }) // ~~ 자바스크립트 끝

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +16,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lgy.smile.common.DevUtils;
+import com.lgy.smile.dto.ChattingDto;
 import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
+import com.lgy.smile.service.ChattingService;
 
 @Controller
 @RequestMapping("/chatroom")
 public class ChattingRoomController {
 	
-	@Autowired
-	private ChattingRoomService chattingRoomService;
+	@Autowired private ChattingService chattingService;
+	@Autowired private ChattingRoomService chattingRoomService;
+	@Autowired private DevUtils devUtils;
 	
 //	채팅방 전체 목록 불러오는 메소드
 	@GetMapping("/getChattingRooms")
@@ -38,11 +45,33 @@ public class ChattingRoomController {
 		return ResponseEntity.status(HttpStatus.OK).body(dto);
 	}
 	
-//	채팅방 작성
-	@PostMapping("/write")
-	public String chattingRoomWrite(@RequestParam HashMap<String, String> params) {
-		chattingRoomService.write(params);
-		return "/trade/test/chatRoomListTest";
+//	board 아이디(게시글 번호), seller 아이디(판매자 번호)와 buyer 아이디(구매자 번호)로 채팅방 작성
+	@RequestMapping("/write")
+	public String chattingRoomWrite(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
+		
+		params.put("buyer", devUtils.getUserIdentityToString(session));
+		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
+		UserDto user = devUtils.getUserInfo(session);
+		if(Integer.parseInt(params.get("seller")) == user.getIdentity()) {
+			return "redirect:/trade/list";
+		}
+		try {
+			roomDto.toString();
+			ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+			
+			model.addAttribute("user", user);
+			model.addAttribute("room", roomDto);
+			model.addAttribute("list", list);
+			return "/trade/chatContent";
+		} catch(Exception e) {
+			chattingRoomService.write(params);
+			roomDto = chattingRoomService.contentView(params);
+			ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+			model.addAttribute("user", user);
+			model.addAttribute("room", roomDto);
+			model.addAttribute("list", list);
+			return "/trade/chatContent";			
+		}
 	}
 	
 //	채팅방 삭제
@@ -67,4 +96,10 @@ public class ChattingRoomController {
 		return "/trade/test/chatRoomListTest";
 	}
 	
+	@GetMapping("/chatRoomListSeller")
+	public String chatRoomListSeller(@RequestParam HashMap<String, String> params, Model model) {
+		ArrayList<ChattingRoomDto> list = chattingRoomService.sellerList(params);
+		model.addAttribute("list", list);
+		return "/trade/test/chatRoomListTest";
+	}
 }

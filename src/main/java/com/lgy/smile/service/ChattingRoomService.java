@@ -25,6 +25,14 @@ public class ChattingRoomService implements ChattingRoomInterface{
 		ArrayList<ChattingRoomDto> list = dao.list();
 		return list;
 	}
+	
+	@Override
+	public ArrayList<ChattingRoomDto> sellerList(HashMap<String, String> params) {
+		ChattingRoomInterface dao = sqlSession.getMapper(ChattingRoomInterface.class);
+		ArrayList<ChattingRoomDto> list = dao.sellerList(params);
+		return list;
+	}
+
 
 	@Override
 	public ChattingRoomDto contentView(HashMap<String, String> params) {
@@ -33,13 +41,19 @@ public class ChattingRoomService implements ChattingRoomInterface{
 	}
 
 	@Override
-	public void write(HashMap<String, String> params) {
+	public int write(HashMap<String, String> params) {
 		
 		log.info("========= chattingroom write ========");
 		
 		ChattingRoomInterface dao = sqlSession.getMapper(ChattingRoomInterface.class);
 		
-		dao.write(params);
+		try {
+			dao.write(params);
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	@Override
@@ -50,5 +64,4 @@ public class ChattingRoomService implements ChattingRoomInterface{
 		
 		dao.delete(params);
 	}
-
 }

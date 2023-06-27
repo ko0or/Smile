@@ -2,7 +2,7 @@
 <%@ page session="false" pageEncoding="UTF-8" %>
 <html>
 <head>
-	<%@ include file="../../common/librarys.jsp" %>
+	<%@ include file="../common/librarys.jsp" %>
 <style>
 	.wrap {
 	    padding: 10px 0;
@@ -80,18 +80,16 @@
 </style>
 </head>
 <body>
-<%@ include file="../../common/navbar.jsp" %>
+<%@ include file="../common/navbar.jsp" %>
 <!-- -------------------------------------------------------------------------- -->
 <!-- <style>@import 'resources/css/main.css'</style>  -->
 <section>
-<h1>Chatting Content Test</h1>
-
-<h2>Chatting Room : ${list[0].chattingroom}</h2>
+<h1 align="center">1:1 대화</h1>
 	<div class="wrap">
 		<div id="chattest">
 			<c:forEach items="${list}" var = "dto">
 				<c:choose>
-					<c:when test="${dto.sender == list[0].sender}">
+					<c:when test="${user.identity == dto.receiver}">
 						<div class="chat ch1">
 						<div>
 							<div class="icon"><i class="fa-solid fa-user"></i></div>
@@ -116,21 +114,19 @@
 	
 	<div style="display: flex; justify-content: space-around; margin: 10px">
 		<form id="frm" method="post" action="#" onsubmit="return false;">
-			<input type="hidden" name="board" value="${list[0].board}">
-			<input type="hidden" name="seller" value="${list[0].seller}">
-			<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
-			<input type="hidden" name="sender" value="${list[0].sender}">
-			<input type="hidden" name="receiver" value="${list[0].receiver}">
+			<input type="hidden" name="board" value="${room.board}">
+			<input type="hidden" name="seller" value="${room.seller}">
+			<input type="hidden" name="chattingroom" value="${room.identity}">
+			<input type="hidden" name="sender" value="${user.nickname}">
+			<c:choose>
+				<c:when test="${user.identity == room.seller}">
+					<input type="hidden" name="receiver" value="${room.buyer}">
+				</c:when>
+				<c:otherwise>
+					<input type="hidden" name="receiver" value="${room.seller}">
+				</c:otherwise>
+			</c:choose>
 			<p>메세지&nbsp;<input id="text1" type="text" name="msg"> <input type="reset" onclick="fn_submit()" value="입력"></p>
-		</form>
-		
-		<form id="frm2" method="post" action="#" onsubmit="return false;">
-			<input type="hidden" name="board" value="${list[0].board}">
-			<input type="hidden" name="seller" value="${list[0].seller}">
-			<input type="hidden" name="chattingroom" value="${list[0].chattingroom}">
-			<input type="hidden" name="sender" value="${list[0].receiver}">
-			<input type="hidden" name="receiver" value="${list[0].sender}">
-			<p>메세지&nbsp;<input id="text2" type="text" name="msg"> <input type="reset" onclick="fn_submit2()" value="입력"></p>
 		</form>
 	</div>
     
@@ -139,7 +135,7 @@
 
 <!-- -------------------------------------------------------------------------- -->
 </section>
-<%@ include file="../../common/footer.jsp" %>
+<%@ include file="../common/footer.jsp" %>
 </body>
 <script>
 $(document).ready(function() {
@@ -155,16 +151,7 @@ $(document).ready(function() {
 			$.ajax({
 				type:"post"
 				,data:formData
-				,url:"write"
-			});
-		}
-		function fn_submit2() {
-			var formData = $("#frm2").serialize();
-			
-			$.ajax({
-				type:"post"
-				,data:formData
-				,url:"write"
+				,url:"../chat/write"
 			});
 		}
 		

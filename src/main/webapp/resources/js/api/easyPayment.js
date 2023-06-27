@@ -33,6 +33,29 @@ function requestPay(orderId, payType, pgValue, buyerEmailAddr, amount) {
         if (rsp.success) {
             console.log('결제성공');
             console.log(rsp.imp_uid);
+            console.log(amount);
+			
+						  // AJAX 요청 보내기
+						  $.ajax({
+							type: 'POST',
+							url: 'pointUp',
+							//dataType: "application/JSON",
+							data: { 
+							  amount: amount
+							},
+							success: function(response) {
+							  // 요청 성공 시 수행할 동작
+							  console.log('요청 성공:', response);
+							  
+							  $("#floatingPoint").text(response);
+							  
+							},
+							error: function(xhr, status, error) {
+							  // 요청 실패 시 수행할 동작
+							  console.log('요청 실패:', error);
+							}
+						  }); // ~ajax 끝
+						  
         } else {
             console.log('결제시도했었음');
             console.log(rsp);
