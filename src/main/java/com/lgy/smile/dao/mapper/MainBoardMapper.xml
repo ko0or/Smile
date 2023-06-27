@@ -4,18 +4,23 @@
 <mapper namespace="com.lgy.smile.dao.MainBoardMapperInterface">
 
 
+	<!-- 게시글 작성 -->
   	<insert id="write" parameterType="hashmap">
 	    INSERT INTO board_main VALUES (
 	    	null ,  #{content} , #{date} , 0 , #{userPK}
 	    )
   	</insert>
 
+
+	<!-- 게시글 보기 -->
   	<select id="content_view" resultType="com.lgy.smile.dto.MainBoardDto">
 	    SELECT * 
 	    FROM board_main
 	    WHERE identity = #{identity}
   	</select>
+
   	
+  	<!-- 게시글 목록 -->
   	<select id="list" resultType="com.lgy.smile.dto.MainBoardDto">
   	<![CDATA[
 		SELECT 
@@ -37,26 +42,23 @@
 		]]>
   	</select>
 
+
+	<!-- 게시글 수정 -->
 	<insert id="modify" parameterType="hashmap">
 		UPDATE board_main
 		SET content = #{content}
 		WHERE identity = ${identity}
   	</insert>
   	
+  	
+  	<!-- 게시글 삭제 -->
   	<delete id="delete" parameterType="hashmap">
   		DELETE FROM board_main
   		WHERE identity = #{identity}
   	</delete>
   	
   	
-  	
-  	
-  	
-  	
-  	
-  	
-  	
-  	
+  	<!-- 게시글 좋아요(토글) -->
   	<update id="like_toggle" parameterType="hashmap">
   	<![CDATA[
 		UPDATE smile.board_main

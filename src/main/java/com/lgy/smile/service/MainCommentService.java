@@ -39,11 +39,6 @@ public class MainCommentService implements MainCommentMapperInterface {
 	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 
-	/* ☆ 매퍼 오버라이딩 + 오버로딩 */
-	@Override public void write(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */	 	}
-	@Override public void modify(HashMap<String, String> params) 	{	 	/* TODO Auto-generated method stub */		}
-	@Override public void delete(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
-
 	
 	
 	
@@ -79,8 +74,10 @@ public class MainCommentService implements MainCommentMapperInterface {
 		params.put("user", devUtils.getUserIdentityToString(session));
 		
 		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
-		dao.write(params);
-		
+		if ( devUtils.isLogin(session) == true) {
+			//=> ★ 로그인상태일때만 동작
+			dao.write(params);
+		}
 	}
 
 
@@ -132,9 +129,79 @@ public class MainCommentService implements MainCommentMapperInterface {
 	
 	
 	
+	
+	
 	@Override
-	public int authorIdentityCheck(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		return 0;
+	public MainCommentDto commentInfo(HashMap<String, String> params, HttpSession session) {
+		
+		//=> ★ (대댓글을 작성하기 위해 필요) 기존 댓글의 그룹번호, 그리고 인덱스(깊이) 정보를 가져와주는 기능
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		return dao.commentInfo(params);
 	}
+	
+	
+	
+	@Override
+	public void replyPush(HashMap<String, String> params, HttpSession session) {
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		if ( devUtils.isLogin(session) == true ) {
+			//=> ★ 로그인상태일때만 동작
+			dao.replyPush(params);
+		}		
+	}
+
+	
+	
+	@Override
+	public void replyWrite(HashMap<String, String> params, HttpSession session) {
+		MainCommentMapperInterface dao = sqlSession.getMapper(MainCommentMapperInterface.class);
+		if ( devUtils.isLogin(session) == true ) {
+			//=> ★ 로그인상태일때만 동작
+			
+			params.put("created", devUtils.getDate());
+			params.put("user", devUtils.getUserIdentityToString(session));
+			
+			MainCommentDto dto = dao.commentInfo(params);
+			
+			params.put("group", devUtils.intToString(dto.getGroup()) );
+			params.put("index", devUtils.intToString(dto.getIndex()) );
+			params.put("target_user", devUtils.intToString(dto.getUser()) );
+			
+
+			if ( dto.getIndex() == 0 ) {
+				//=> ☆ 그냥 댓글에 대댓글 작성할때
+				params.replace("index", devUtils.intToString(dao.replyLastIndex(params)) ); 
+				dao.replyWrite(params);
+				
+			} else {
+				//=> ☆ 대댓글에 대댓글을 작성하는 경우
+				dao.replyPush(params);
+				dao.replyWrite(params);
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* ☆ 매퍼 오버라이딩 + 오버로딩 */
+	@Override public void write(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */	 	}
+	@Override public void modify(HashMap<String, String> params) 	{	 	/* TODO Auto-generated method stub */		}
+	@Override public void delete(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
+	@Override public int authorIdentityCheck(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }
+	@Override public MainCommentDto commentInfo(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return null; }
+	@Override public void replyWrite(HashMap<String, String> params) { /* TODO Auto-generated method stub */ }	
+	@Override public void replyPush(HashMap<String, String> params) { /* TODO Auto-generated method stub */ }	
+	@Override public int replyLastIndex(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }	
 }

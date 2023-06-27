@@ -51,8 +51,19 @@ public class MainCommentController {
 	//=> ★ 댓글 새로 작성하기
 	@PostMapping("/write") @ResponseBody
 	public ResponseEntity<Void> write(@RequestParam HashMap<String, String> params, HttpSession session) {
+	
+		log.info("@@ 대댓글 테스트중 params => " + params.toString() );
 		
-		commentService.write(params, session);
+		if ( params.get("replyTargetIdentity") == null ) {
+			//=> ☆ 대댓글 대상이 없다면,  일반 댓글 생성
+			commentService.write(params, session);
+			
+		} else {
+			//=> ☆ 대댓글 대상이 있다면, 대댓글로 생성
+			commentService.replyWrite(params, session);
+			
+		}
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
