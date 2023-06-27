@@ -14,11 +14,17 @@
 <!-- 	LIMIT ${start}, 5 : start 변수 + 5개씩 화면단에 보여줌 -->
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto" parameterType="hashmap">
 		SELECT 
-			identity, title, content, created, contacted, imgPath, status, FORMAT(price, 0) "price", address, user 
+			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user 
 		FROM 
-			smile.board_trade 
-		ORDER BY identity DESC
-		LIMIT ${start}, 5
+			smile.board_trade board,
+			smile.user user
+		WHERE 
+			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%')
+			AND board.user = user.identity
+		ORDER BY 
+			identity DESC
+		LIMIT 
+			${start}, 5
   	</select>
 
 <!-- 	select이고 한줄 보여줄거라서 ArrayList로 안하고 TradeDto로-->
@@ -41,4 +47,25 @@
   	<delete id="delete" parameterType="hashmap">
 		DELETE from board_trade where identity=#{identity}
     </delete>
+    
+    <select id="telCheck" parameterType="hashmap" resultType="int">
+		SELECT 
+			COUNT(tel)
+		FROM 
+			smile.user
+		WHERE 
+			tel = ${tel}
+		    AND identity = ${user}
+    </select>
+    
+    
+  	<update id="telUpdate" parameterType="hashmap">
+		UPDATE 
+			smile.user
+		SET 
+			tel = #{tel}
+		WHERE
+			identity = #{user}
+    </update>
+        
 </mapper>

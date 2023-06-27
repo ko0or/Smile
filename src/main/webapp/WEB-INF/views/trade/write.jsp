@@ -93,6 +93,105 @@
 <script>
 $(document).ready(function() {
 	
+	function smsCheck_step1() {
+		
+		Swal.fire({
+			  icon : 'info',
+			  title: '휴대폰 인증',
+			  text : '인증되지 않은 휴대폰 번호입니다.',
+			  showCancelButton: true,
+			  confirmButtonText: '문자 인증 하기',
+			  cancelButtonText : '취소',
+			}).then((result) => {
+
+			  if (result.isConfirmed) {
+				//=> 휴대폰 문자 인증 요청을 클릭했다면 ( 다음 단계로 .. )
+				smsCheck_step2();		  
+			  }
+			  
+		})
+	}	
+	
+	function smsCheck_step2() {
+		
+		$.ajax({
+			url : "telUpdate",
+			data : { 
+				"telAuthentication" : "yes",
+				"tel" : $("input[name='tel']").val()
+			},
+			method : "POST",
+			success : function () {
+
+				Swal.fire({
+					  icon : 'info',
+					  title: '휴대폰 인증',
+					  text : '발송된 인증번호를 입력해주세요',
+					  input: 'text',
+					  showCancelButton: true,
+					  confirmButtonText: '확인',
+					  cancelButtonText : '취소',
+					}).then((result) => {
+						
+						  if (result.isConfirmed) {
+							  //=> 인증번호를 입력하고, 클릭을 했다면 ( 다음 단계로 .. )
+							  smsCheck_step3(result.value);
+						  }
+						  
+				}) // ~ swal 모달				
+			} // ~ (ajax, success 콜백 함수)
+			
+		}) // ~ ajax
+	} // ~function
+	
+	
+	
+	function smsCheck_step3(inputValue) {
+		
+		$.ajax({
+			url : "telCheck",
+			method : "GET",
+			data : { "tel" : inputValue },
+			success : function ( data ) {
+
+				if ( data == true ) {
+				// 문자 발송한뒤 변경된 user 테이블에 tel 컬럼 값과   입력 받은 값이 일치하다면
+					 
+					//=> 입력된 휴대폰 번호를 DB에 저장함 ( data에 `telAuthentication` 이 없기 때문에 받은 값 그대로 UPDATE 진행)
+					$.ajax({
+						url : "telUpdate",
+						data : { "tel" : $("input[name='tel']").val() },
+						method : "POST",
+						success : function() {
+							Swal.fire({
+								  icon : 'success',
+								  title: '휴대폰 인증',
+								  text : '인증에 성공 했습니다!',
+								  confirmButtonText: '확인',
+							})
+							$("#then").slideDown(500);
+							getMap("부산광역시 연제구 중앙대로 1001");
+						} // ~~ success
+					}) // ~~ ajax
+						
+				} else {
+					Swal.fire({
+						  icon : 'error',
+						  title: '휴대폰 인증',
+						  text : '인증에 실패 했습니다',
+						  confirmButtonText: '확인',
+					})					
+				}					
+			} // ~ (ajax, success 콜백 함수)
+			
+		}) // ~ ajax		  
+	} // ~ function
+	
+	
+	
+
+	
+	
 	// 비대면 결제여부 스위칭 (분기처리: 주소선택하기 화면 슬라이딩)	  ========================================================== >>
 	$("#flexSwitchCheckDefault").change(function() {
 		  if ($(this).is(":checked")) {
@@ -106,15 +205,38 @@ $(document).ready(function() {
 	
 	// ★ 휴대폰 인증하기 버튼 눌렀을때 ( 중간에 있는 버튼 ) ========================================================== >>
 	$("#authentication").click(function() {
-		Swal.fire({
-			  title : '인증된 회원',
-			  icon : 'success',
-			  html : `본인인증에 성공했습니다 !`,
-			  confirmButtonText : '확인',
-			})
-	  
-		$("#then").slideDown(500);
-  		getMap("부산광역시 연제구 중앙대로 1001");
+		
+		$.ajax({
+			url : "telCheck",
+			method : "GET",
+			data : { "tel" : $("input[name='tel']").val() },
+			success : function( data ) {
+				
+				alert("존재유무 => " + data );
+				
+				if ( data == true ) {
+					Swal.fire({
+						  title : '인증된 회원',
+						  icon : 'success',
+						  html : `본인인증에 성공했습니다 !`,
+						  confirmButtonText : '확인',
+						})
+				  
+					$("#then").slideDown(500);
+					getMap("부산광역시 연제구 중앙대로 1001");
+				} else { // ~ (data==true)
+				
+					smsCheck_step1();
+					
+				}
+				
+				
+			} // ~ (ajax, success)		
+		}) // ~ ajax
+		
+		
+		
+
 	}) // ~ 버튼 이벤트 끝 !
 	
 	

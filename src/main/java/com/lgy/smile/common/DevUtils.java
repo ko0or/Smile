@@ -38,6 +38,8 @@ public class DevUtils  {
 					
 			String 	 | getDate()
 
+
+            String      | intToString(int number) 
 			String 	 | getUserIdentityToString(HttpSession session)
 			UserDto  | getUserInfo(HttpSession session)
 			boolean 	 | isLogin(HttpSession session)
@@ -81,6 +83,10 @@ public class DevUtils  {
 	
 	// ========================================================================================================= ☆	
 
+	// [★] 숫자를 문자열로 변환해주는 메소드
+	public String intToString(int number) {
+		return String.valueOf(number);
+	}
 	
 	// [★] 유저 세션에 있는 identity (PK값)을 문자열로 반환하는 메소드
 	public String getUserIdentityToString(HttpSession session) {

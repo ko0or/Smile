@@ -21,7 +21,11 @@ $(document).ready(function() {
    
             url : "getPosts" ,
             method : "GET" ,
-            data : { "start" : start } ,
+            data : { 
+            	"start" : start,
+				"searchByNickname" : searchByNickname,
+				"searchByBoardIdentity" : searchByBoardIdentity  
+            } ,
       
             success : function( data ) {   
       

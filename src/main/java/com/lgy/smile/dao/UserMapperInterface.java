@@ -6,23 +6,32 @@ import com.lgy.smile.dto.UserDto;
 
 public interface UserMapperInterface {
 	
+	// 로그인 처리 (id 값을 기준으로 DB조회 -> DTO 리턴)
 	public UserDto login(HashMap<String, String> params);
-	public void modify(HashMap<String, String> params);
-	public void modify(HashMap<String, String> params, HttpSession session);
-	public void tempPwd(HashMap<String, String> params);
 	
+	// 회원가입 처리 (파라미터 값을 받아서 생성 쿼리 실행) 
+	public void register(HashMap<String, String> params);
+
+	// 회원가입 처리 (id 값을 기준으로 DB조회 -> DTO 리턴) => 사실상 login 과 중복
 	public UserDto isDuplicated(HashMap<String, String> params);
 	
-	public void register(HashMap<String, String> params);
+	// 회원가입 처리 (id 기준으로 암호화된 비밀번호로 업데이트) 
+	public void tempPwd(HashMap<String, String> params);
 	
-	public void delete(HashMap<String, String> params);
-	public void delete(HashMap<String, String> params, HttpSession session);
-	
+	// 포인트 충전 처리 (id 기준으로 포인트 금액 업데이트)
 	public void pointUp(HashMap<String, String> params);
 	
-	
+	// 포인트 가져오기 (identity 값을 기준으로 DB조회 -> point 를 String 으로 리턴)
 	public String getPoint(HashMap<String, String> params);
 	public String getPoint(HashMap<String, String> params, HttpSession session);
+	
+	// 회원정보 수정 처리 (id 기준으로 비밀번호와 닉네임 업데이트)
+	public void modify(HashMap<String, String> params);
+	public void modify(HashMap<String, String> params, HttpSession session);
+	
+	// 회원정보 삭제 처리 (id 기준으로 해당 행 삭제)
+	public void delete(HashMap<String, String> params);
+	public void delete(HashMap<String, String> params, HttpSession session);
 }
 
 

@@ -6,10 +6,15 @@ import lombok.Data;
 public class MainCommentDto {
 	
 	private int identity;
+	private String nickname;
 	private String content;
 	private String created;
+	
 	private int user;
 	private int board;
+	private int group;
+	private int index;
+	private int target_user;
 	
-	private String nickname;
+	private String target_user_nickname;
 }

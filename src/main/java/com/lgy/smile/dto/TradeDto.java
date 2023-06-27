@@ -19,6 +19,8 @@ public class TradeDto {
 	private String address;	
 	private String price;
 	private int user;
+	private String nickname;
+	private String tel;
 	
 }
 

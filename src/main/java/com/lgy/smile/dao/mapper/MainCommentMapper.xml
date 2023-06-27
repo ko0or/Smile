@@ -4,6 +4,7 @@
 <mapper namespace="com.lgy.smile.dao.MainCommentMapperInterface">
 
 
+	<!-- 작성자 본인인지 확인 -->
   	<select id="authorIdentityCheck" resultType="int" parameterType="hashmap">
 				SELECT 
 					user.identity     
@@ -15,11 +16,23 @@
 			    	AND comment.identity = #{identity}	
 	</select>
 
+	<!-- 댓글 정보 조회 -->
+  	<select id="commentInfo" resultType="com.lgy.smile.dto.MainCommentDto" parameterType="hashmap">
+				SELECT 
+					*
+				FROM 
+					smile.comment_main comment
+				WHERE
+					comment.identity = #{replyTargetIdentity}	
+	</select>
 
+
+	<!-- 댓글 목록 불러오기  -->
   	<select id="list" resultType="com.lgy.smile.dto.MainCommentDto" parameterType="hashmap">
 				SELECT 
 					comment.* ,
-				    user.nickname
+				    user.nickname ,
+				    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname"
 				FROM 
 				    smile.comment_main comment,
 				    smile.user user
@@ -32,6 +45,7 @@
   	</select>
   	
 
+	<!-- 댓글 작성하기 -->
 	<insert id="write" parameterType="hashmap">
 				INSERT INTO smile.comment_main VALUES(
 					null , #{content} , #{created} , #{user} , #{board}
@@ -40,18 +54,62 @@
 				)
 	</insert>  	
 
-	<insert id="modify" parameterType="hashmap">
+
+	<!-- (1/3) 대댓글 작성하기 : 대댓글에 대댓글 달기위해 1칸씩 뒤로 밀어내기 -->
+	<update id="replyPush">
+				UPDATE 
+					smile.comment_main comment
+				SET 
+					comment.index = comment.index + 1
+				WHERE 
+					comment.board = #{board}
+					AND comment.group = #{group}
+				    AND comment.index > #{index}	
+	</update>
+	
+	<!-- (2/3) 대댓글 작성하기 : 댓글에 대댓글 다는 경우일때 -->
+	<select id="replyLastIndex" resultType="int" parameterType="hashmap">
+				SELECT 
+					IFNULL(MAX(comment.index)+1, 0)
+				FROM 
+					smile.comment_main comment 
+				WHERE 
+					comment.group = #{group}
+				    AND comment.board = #{board}
+	</select>
+
+	
+	<!-- (3/3) 대댓글 작성하기 : 실제 대댓글 작성 쿼리 -->
+	<insert id="replyWrite">
+				INSERT INTO 
+					smile.comment_main(
+						identity, content, created, user, board
+						, smile.comment_main.group
+						, smile.comment_main.index, target_user
+					)
+				
+				VALUES(
+					null , #{content} , #{created} , #{user} , #{board}
+					, #{group}
+					, #{index}+1 , #{target_user}
+				)	
+	</insert>
+
+
+	<!--  댓글 수정하기 -->
+	<update id="modify" parameterType="hashmap">
 				UPDATE 
 					smile.comment_main 
 				SET 
 					content = #{content}
 				WHERE 
 					identity = #{identity}
-	</insert>  	
+	</update>  	
 
+
+	<!--  댓글 삭제하기 -->
 	<delete id="delete" parameterType="hashmap">
 				DELETE FROM smile.comment_main 
 				WHERE identity = #{identity}
-	</delete>  	
-  	
+	</delete>  	  	
 </mapper>
