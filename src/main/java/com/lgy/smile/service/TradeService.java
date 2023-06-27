@@ -240,6 +240,44 @@ public class TradeService implements TradeMapperInterface {
 	}	
 	
 	
+	
+	
+	@Override
+	public int telCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		//=> 로그인 상태면,  전달받은 정보로 회원 인증된 전화번호인지 확인후 리턴 ( 0: 미인증,   1: 인증 )
+		if ( devUtils.isLogin(session) == true ) {			
+			params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
+			log.info("user => " + String.valueOf( devUtils.getUserInfo(session).getIdentity()) );
+			
+			TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+			return dao.telCheck(params);
+		}		
+		
+		return 0;
+	}
+	
+	
+	
+	/* ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 @Override */ 
+	public void telUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
+		if ( devUtils.isLogin(session) == true ) {			
+			params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));			
+			TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+			dao.telUpdate(params);
+		}		
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	public int telCheck(@RequestParam HashMap<String, String> params) { return -1; }
+	
 	@Override
 	public boolean write(HashMap<String, String> param) {
 		// TODO Auto-generated method stub	
@@ -273,4 +311,6 @@ public class TradeService implements TradeMapperInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override public void telUpdate(@RequestParam HashMap<String, String> params) {}
 }

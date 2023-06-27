@@ -42,9 +42,16 @@ public class TradeController {
 
 	// ★ trade(중고 거래) 글 목록
 	@GetMapping("/list")
-	public String tradeList(Model model, HttpSession session) {
+	public String tradeList(@RequestParam HashMap<String, String> params, Model model, HttpSession session) {
 		log.info("@# list");
 
+		//☆=> 닉네임에 대한 검색 결과 출력하기
+		if ( params.get("searchByNickname") == null ) { params.put("searchByNickname", "\"\""); }
+		model.addAttribute("searchByNickname", params.get("searchByNickname"));  
+		
+		//☆=> 해당 닉네임으로 작성된 게시글 번호에 대한 검색 결과 출력하기 
+		if ( params.get("searchByBoardIdentity") == null ) { params.put("searchByBoardIdentity", "\"\""); }
+		model.addAttribute("searchByBoardIdentity", params.get("searchByBoardIdentity"));  
 		//ArrayList<TradeDto> list = tradeService.list();
 		//model.addAttribute("list", list);
 		//
@@ -84,16 +91,14 @@ public class TradeController {
 	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
 		log.info("@# write");
 
-		log.info("@@ 폰번호도 받아보려구함 ==>" + params.toString() );
-		
-		//int cerNumber = devUtils.smsSender( params.get("tel") );
-		//log.info("@ 인증번호 뭐로 발송됐음 ?? => " + cerNumber );
-		
-		
 		tradeService.write(params, imgPath, session);
-		
 		return "redirect:list";
 	}
+	
+	
+	
+	
+	
 
 	// ★ trade(중고 거래) 글 읽기
 	@RequestMapping("/write_view")
@@ -180,4 +185,53 @@ public class TradeController {
 			return ResponseEntity.status(HttpStatus.OK).body( tradeService.contentView(params) ); 
 		}
 		
+		
+		
+		
+		
+		@GetMapping("/telCheck")
+		public ResponseEntity<Boolean> telCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
+
+			params.replace("tel", params.get("tel").replaceAll("-", "") );
+			int result = tradeService.telCheck(params, session);
+			
+			if ( result == 1 ) {
+				//=> 입력된 전화번호가 DB에 등록된 번호라면 ? (인증 성공)
+				
+				return ResponseEntity.status(HttpStatus.OK).body( true );
+			} else {
+				//=> 입력된 전화번호가 DB에 등록되지않았다면 ? (인증 실패)
+				return ResponseEntity.status(HttpStatus.OK).body( false );
+			}			
+		}
+		
+		@PostMapping("/telUpdate") 
+		public ResponseEntity<Boolean> telUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
+			
+			/* ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 */
+			params.replace("tel", params.get("tel").replaceAll("-", "") );
+			
+			if ( params.get("telAuthentication") != null ) {
+				//=> 휴대폰 인증 요청이라면
+				
+				// (1) devUtils 이용해서 인증번호를 보내고 + 보낸 인증번호를 변수로 받음
+				int certificationNumber = devUtils.smsSender(params.get("tel"));
+				
+				// (2) params 값이 <String, String> = 문자열이기때문에, 위의 숫자를 넣을 수 없음
+				// 그래서, String.valueOf() 메소드를 이용해서 숫자 -> 문자열로 변경
+				String stringTel = String.valueOf(certificationNumber);
+				
+				// (3) 위에 2번 덕분에 문자여롤 바뀐걸 tel 에 집어넣고
+				params.replace("tel", stringTel);			
+				
+				// (4) 메소드 실행하면,  마이바티스에 #{tel} 이  인증번호로 업데이트 되버림 
+				tradeService.telUpdate(params, session);
+				
+			} else {
+				//=> 인증 요청이 아니라면
+				tradeService.telUpdate(params, session);
+			}
+			
+			return ResponseEntity.status(HttpStatus.OK).body( true );
+		}
 }
