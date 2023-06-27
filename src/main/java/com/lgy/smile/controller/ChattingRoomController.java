@@ -48,25 +48,40 @@ public class ChattingRoomController {
 //	board 아이디(게시글 번호), seller 아이디(판매자 번호)와 buyer 아이디(구매자 번호)로 채팅방 작성
 	@RequestMapping("/write")
 	public String chattingRoomWrite(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
-		
+//		param으로는 board id / seller id 넘어옴
+//		buyer id를 session에서 받아서 넣어줌
 		params.put("buyer", devUtils.getUserIdentityToString(session));
+//		채팅룸 dto roomDto 객체에 board id / seller id / buyer id로 채팅방 생성하는 chattingroom service 호출해서 담음
 		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
+//		유저 dto user에 세션에서 유저 정보 받아옴
 		UserDto user = devUtils.getUserInfo(session);
+		try {
+//			user가 없으면(로그인 안돼있으면) 로그인창으로 보내기
+			user.toString();
+		} catch (Exception e) {
+			return "/user/login";
+		}
+//		임시로 판매자와 내 정보가 같으면(내 글 문의하기 눌렀을 경우) 로그인 창으로 보내기
 		if(Integer.parseInt(params.get("seller")) == user.getIdentity()) {
 			return "redirect:/trade/list";
 		}
 		try {
+//			roomDto가 있으면(채팅방이 이미 존재하면) 채팅방번호로 채팅들 조회하는 서비스 호출해서 채팅dto리스트 list에 담음
 			roomDto.toString();
 			ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
-			
+//			세션 정보는 user, 채팅방정보는 room, 채팅리스트는 list에 담아서 chatContent 채팅방 페이지로 리턴
 			model.addAttribute("user", user);
 			model.addAttribute("room", roomDto);
 			model.addAttribute("list", list);
 			return "/trade/chatContent";
 		} catch(Exception e) {
+//			roomDto가 없으면(채팅방이 없으면) board id, buyer id, seller id로 채팅방 생성하는 서비스 호출해서 생성
 			chattingRoomService.write(params);
+//			생성한 채팅방 정보를 다시 roomDto에 담음
 			roomDto = chattingRoomService.contentView(params);
+//			roomDto의 채팅방 번호로 조회한 채팅들 전부를 list에 담음
 			ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+//			세션 정보는 user, 채팅방정보는 room, 채팅리스트는 list에 담아서 chatContent 채팅방 페이지로 리턴
 			model.addAttribute("user", user);
 			model.addAttribute("room", roomDto);
 			model.addAttribute("list", list);
