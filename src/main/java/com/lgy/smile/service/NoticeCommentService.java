@@ -23,13 +23,6 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	@Autowired SqlSession sqlSession;
 	@Autowired DevUtils devUtils;
 	
-//	@Override
-//	public int getCount(int comment) {
-//		
-//		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
-//		return dao.getCount("com.lgy.smile.dao.mapperNoticeCommentDao.getCount",comment);
-//		
-//	}
 
 	@Override
 	public void writecomment(HashMap<String, String> param, HttpSession session) {
@@ -55,10 +48,8 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	
 		int loginuser=devUtils.getUserInfo(session).getIdentity();
 		ArrayList<NoticeCommentDto> commentuser= dao.contentViewcomment(param);
-		//if (loginuser == dao.contentViewcomment(param)) {
 			
 			dao.modifycomment(param);
-		//}
 		
 		
 	}
@@ -84,7 +75,9 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		
 		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
 		param.put("created", devUtils.getDate());
+		
 		//param.put("user", String.valueOf(devUtils.getUserInfo(session).getIdentity()) );
+//		위에 주석 문이랑 같은 거임
 		param.put("user", devUtils.getUserIdentityToString(session) );
 		
 //		dto에 commentInfo를 연결해준다 그래서 commentInfo도 dto로 받는 것이다.

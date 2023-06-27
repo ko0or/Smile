@@ -27,9 +27,6 @@
 		insert into board_notice(identity, title, content, created, view, user) values(
 			null , #{title} , #{content} , #{created} , 0 , #{user}
 		)
-<!-- 		insert into board_notice(identity, title, content) values( -->
-<!-- 			null , #{title} , #{content}  -->
-<!-- 		) -->
     </insert>
     
     <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">

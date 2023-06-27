@@ -31,7 +31,6 @@ public class NoticeCommentController {
 	@Autowired private NoticeCommentService commentService;
 	@Autowired private DevUtils devutils;
 	
-//	@GetMapping("/list")
 
 	
 	

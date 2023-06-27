@@ -201,6 +201,7 @@ $(document).ready(function() {
                            alert("글 쓰기");
                            
                            $.ajax({
+                           //이 identity는 완료버튼의 id 값임
                            url:"comment/write?identity="+identity
                            ,type :"POST"
                            //data는 컨트롤러 단에 전송 하려고 하는 거임
