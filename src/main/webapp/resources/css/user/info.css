@@ -1,57 +1,110 @@
 @charset "UTF-8";
 
-.info-wrapper {
-	position: relative;
-	padding: 20px;
+
+/* 2023-06-28 추가 : 프로필 이미지 */
+
+.profile-wrapper {
 	display: flex;
     justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 50px;
+} 
+.profile-wrapper  .profile-img {
+    min-width: 250px;
+    height: 250px;
+    border: 1px solid silver;
+    border-radius: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+    position: relative;
+}
+.profile-wrapper  .profile-img::before {
+  content: "새 창에서 열기"; 
+  display: flex; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px;
+  transition: all 0.3s;
+  transform: translate(-50%, -50%); /* 가상 요소를 정중앙으로 정렬 */
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  color: rgba(255, 255, 255, 0);  
+  cursor: pointer;
+}
+.profile-wrapper  .profile-img:hover::before {
+  color: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, 0.4);
 }
 
-.info-wrapper > .logo {
+.profile-wrapper .profile-info { 
+	margin-left: 60px;
+   	position: relative;
+    top: 70px;
+}
+
+
+
+.btn-group-board > button {
+    width: 960px;
+    height: 100px;
+    border: none;
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.0);
+    background: white;
+    border-radius: 5px;
+    transition: all 0.3s;
+    background: rgba(0,0,0,0);
+}
+.btn-group-board > button:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.btn-group-board > p {
+	position: relative;
+    bottom: 25px;
+    background: white;
+    display: inline;
+    left: 410px;
+    padding: 20px;
+}
+.btn-group-board > p:nth-child(3) {
+    position: relative;
+    left: 360px;
+}
+.btn-group-board > p > b {
+	color: mediumslateblue;	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 회원정보 수정 화면 */
+.modify-footer {
 	text-align: center;
+	margin-top: 70px;
 }
-
-.info-wrapper > div {
-	margin-bottom: 20px;
+.modify-footer .btn {
+	width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
 }
-
-.info-wrapper > .logo,
-.info-wrapper > .from-wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-content: center;
+.modify-footer  p {
+	position: relative;
+    bottom: 25px;
+    background: white;
+    display: inline;
+    padding: 20px;
 }
-
-.info-wrapper > .form-wrapper a {
-	position: absolute;
-	left: 5px;
-}
-
-input[name=nickname],
-input[name=password],
-input[name=password2],
-div[name=id],
-div[name=point],
-div[name=role],
-h3 {
-	width: 500px;
-}
-
-.btns {
-    text-align: center;
-}
-
-.form-wrapper > #floatingEmail div {
-	color: "red";
-}
-
-
-
-..info-wrapper > .btns {
-	margin-top: 70px;	
-}
-
-button { height: 60px; padding: 5px; width: 500px; margin: 5px 0; border: none; }

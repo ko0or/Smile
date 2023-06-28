@@ -9,15 +9,15 @@
 <!-- -------------------------------------------------------------------------- -->
 <!-- <style>@import '../resources/css/user.css'</style> -->
 <style>@import '../resources/css/user/info.css'</style>
-<section>
+<section style="display: flex; justify-content: center;">
 <!-- -------------------------------------------------------------------------- -->
 
-<div class="info-wrapper">
+<div class="info-wrapper" style="width: 520px;">
 	
 	<!-- 회원정보 수정 배너부분 -->
-	<div class="logo">
-		<h1><i class="fa-brands fa-github"></i>
-		회원 정보 수정 화면</h1>
+	<div class="logo" style="text-align: center;">
+		<h1><i class="fa-solid fa-user-pen"></i>
+		회원 정보 수정</h1>
 		<p>회원정보 수정 화면입니다! </p>
 	</div>
 		
@@ -71,19 +71,22 @@
 		</form>
 	</div>
 
-	<p>회원정보 수정을 저장하시겠습니까? </p>
-
-	<div class="btns">
-		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정 저장</button>
-		<button id="goBack" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
-		뒤로가기</button>
-	</div>
+	<div class="modify-footer">
+		<br><hr><p>회원정보 수정을 저장하시겠습니까? </p>
 	
-	<h1 style="color: grey;">OR</h1><br>
-	<a href="#" id="unregister">회원탈퇴 (클릭)</a>
-
+		<div class="btns">
+			<button id="modifyInfo" type="button" class="btn btn-primary"><i class="fa-solid fa-user-check"></i> 
+			회원정보 수정 저장</button>
+			<button id="goBack" type="button" class="btn btn-warning"><i class="fa-solid fa-rotate-left"></i> 
+			뒤로가기</button>
+		</div>
+		
+		<br><br>
+		<h1 style="color: grey;">OR</h1>
+		<a href="#" id="unregister">회원탈퇴 (클릭)</a>
+	
+	</div>
 </div>
-
 
 <!-- -------------------------------------------------------------------------- -->
 </section>

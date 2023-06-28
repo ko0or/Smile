@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lgy.smile.common.DevUtils;
-import com.lgy.smile.controller.NotificationController;
 import com.lgy.smile.dao.NotificationMapperInterface;
 import com.lgy.smile.dto.NotificationDto;
 
@@ -41,6 +40,7 @@ public class NotificationService implements NotificationMapperInterface {
 	
 	
 	/* ★ 알람 목록 가져오기 @Override */
+	@Override
 	public ArrayList<NotificationDto> list(HashMap<String, String> params, HttpSession session) {		
 		
 		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
@@ -52,6 +52,7 @@ public class NotificationService implements NotificationMapperInterface {
 	
 	
 	/* ★ 알람 만들기 @Override */
+	@Override
 	public void create(HashMap<String, String> params) {
 		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
 		
@@ -61,6 +62,7 @@ public class NotificationService implements NotificationMapperInterface {
 	
 	
 	/* ★ 알람 삭제하기 @Override */
+	@Override
 	public void delete(HashMap<String, String> params) {
 		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
 		dao.delete(params);

@@ -4,10 +4,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lgy.smile.dto.MainBoardDto;
-import com.lgy.smile.dto.UserDto;
 
 public interface MainBoardMapperInterface {
 	

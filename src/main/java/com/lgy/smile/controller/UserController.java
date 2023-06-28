@@ -389,9 +389,9 @@ public class UserController {
 		log.info("UserController ===> uploadProfile ===> end");
 		
 		UserDto user = devUtils.getUserInfo(session);
-		File deleteFile = new File(user.getImgPath()); // 기존 프로필이미지 경로+파일명을 기준으로 새로운 파일 생성해서
-		deleteFile.delete();						   // 삭제
 		
+		File deleteFile = new File(user.getImgPath()); // 기존 프로필이미지 경로+파일명을 기준으로 새로운 파일 생성해서		
+		if ( deleteFile.exists() == true ) { deleteFile.delete();	} // 기존 이미지 파일이 존재하면 삭제
 		user.setImgPath(newProfilePath);				// 새 프로필이미지 경로+파일명을 setter 로 DTO에 설정하고
 		session.setAttribute("userInfo", user);			// 그걸 다시 session 에 넣어주기
 		

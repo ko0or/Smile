@@ -168,6 +168,7 @@ public class EmailSender {
 
 		// 메일 발송자 계정 로그인
 		auth = new Authenticator() {
+			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(loginId, loginPw);
 			}

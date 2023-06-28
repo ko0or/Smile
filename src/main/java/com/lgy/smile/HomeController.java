@@ -8,32 +8,15 @@ public class HomeController {
 	
 	★ AWS 배포시  수정해야할 사항 
 	
-	 [1] views/common/navbar.jsp 파일에 있는 a href 속성 값(경로) 변경
-	    .. 배포시엔 /smile 패키지 경로가 포함되면 페이지를 못찾는 에러(HTTP 404) 발생하니,  /smile 내용을 뺴줘야함
-	  
-	[2] views/trade/write.jsp
-	[3] views/trade/list.jsp
-      .. <script> 부분에 REST API KEY 를 변경해줘야함
-      .. 개발 테스트 단계에서 사용하는 IP, PORT에 맞는 REST API 키 ->  배포시 사용하는 IP, PORT에 맞는 REST API 키
-
-    [4] webapp/resources/js/api/kakaoLogin.js
-      .. aws 배포용 REST API KEY 로 변경해줘야함 ★
-      
-    
-    [5] login.jsp 파일에도 내용 변경 필요 
-    location.href = "/smile/main/list";
-    
-    
-    [@] 경로들
+	[1] devUtils 에서 저장경로 변경해야함
+    [2] aws 배포용 REST API KEY 로 변경해줘야함 ★
     webapp/resources/js/api/kakaoLogin.js
-
-	WEB-INF/views/common/navbar.jsp
-
 	WEB-INF/views/trade/write.jsp
 	WEB-INF/views/trade/edit.jsp
 	WEB-INF/views/trade/list.jsp
 
-	WEB-INF/views/user/login.jsp
+	(x) WEB-INF/views/common/navbar.jsp
+	(x) WEB-INF/views/user/login.jsp
 
 << ============================================================================================================ */
 	
