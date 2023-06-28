@@ -129,10 +129,12 @@ public class NoticeService implements NoticeMapperinterface {
 		
 	}
 	@Override
-	public int getCount() {
+	public int getCount(HashMap<String, String> param) {
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
-		return dao.getCount();
+		return dao.getCount(param);
 	}
+	
+	@Override public int getCount() { return -1; }
 
 
 	@Override
