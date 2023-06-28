@@ -52,6 +52,12 @@ public class TradeController {
 		//☆=> 해당 닉네임으로 작성된 게시글 번호에 대한 검색 결과 출력하기 
 		if ( params.get("searchByBoardIdentity") == null ) { params.put("searchByBoardIdentity", "\"\""); }
 		model.addAttribute("searchByBoardIdentity", params.get("searchByBoardIdentity"));  
+		
+		//☆=> 좋아요된 게시글 검색 결과 출력하기 
+		if ( params.get("searchByLikeUser") == null ) { params.put("searchByLikeUser", "\"\""); }
+		model.addAttribute("searchByLikeUser", params.get("searchByLikeUser"));  
+		
+		log.info("@@# params => " + params.toString() );
 		//ArrayList<TradeDto> list = tradeService.list();
 		//model.addAttribute("list", list);
 		//
@@ -233,5 +239,14 @@ public class TradeController {
 			}
 			
 			return ResponseEntity.status(HttpStatus.OK).body( true );
+		}
+		
+		
+		@PostMapping("/like_toggle")
+		public ResponseEntity<Void> likeToggle(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+			tradeService.like_toggle(params, session);
+			return ResponseEntity.status(HttpStatus.OK).build();
+			
 		}
 }

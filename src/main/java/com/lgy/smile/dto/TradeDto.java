@@ -21,6 +21,8 @@ public class TradeDto {
 	private int user;
 	private String nickname;
 	private String tel;
+	private String likes;
+	
 	
 }
 

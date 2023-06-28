@@ -268,9 +268,14 @@ public class TradeService implements TradeMapperInterface {
 		}		
 	}
 
-	
-	
-	
+	/* ★ trade(중고 거래) 좋아요 @Override */
+	public void like_toggle(@RequestParam HashMap<String, String> params, HttpSession session) {
+		if ( devUtils.isLogin(session) == true ) {	
+			params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
+			TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+			dao.like_toggle(params);
+		}
+	}
 	
 	
 	
@@ -313,4 +318,6 @@ public class TradeService implements TradeMapperInterface {
 	}
 	
 	@Override public void telUpdate(@RequestParam HashMap<String, String> params) {}
+	
+	@Override public void like_toggle(@RequestParam HashMap<String, String> params) {}
 }

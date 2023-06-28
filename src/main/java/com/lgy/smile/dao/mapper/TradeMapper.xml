@@ -7,7 +7,7 @@
 <!-- insert into smile.board_trade values(null, 'teng', 'teng1234', sysdate(), 'contacted' , 'c:/dev/', 'wait', 5000, '부산광역시 진구 무슨무슨대로 342번길 32길', 3);  	 -->
   	<insert id="write" parameterType="hashmap">
 	    INSERT INTO board_trade VALUES (
-	    	null , #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, 'wait', #{price} , #{address} , #{user}
+	    	null , #{title} , #{content} , #{created} , #{contacted} , #{imgPath}, 'wait', #{price} , #{address} , #{user} , 0
 	    )
   	</insert>
 
@@ -19,7 +19,7 @@
 			smile.board_trade board,
 			smile.user user
 		WHERE 
-			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%')
+			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%' AND board.likes LIKE '%${searchByLikeUser}%')
 			AND board.user = user.identity
 		ORDER BY 
 			identity DESC
@@ -30,7 +30,7 @@
 <!-- 	select이고 한줄 보여줄거라서 ArrayList로 안하고 TradeDto로-->
   	<select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.TradeDto">
 		SELECT 
-			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user, user.nickname
+			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user, user.nickname, board.likes
 		FROM
 			smile.board_trade board,
 		    smile.user user
@@ -64,7 +64,7 @@
 		    AND identity = ${user}
     </select>
     
-    
+    <!-- 게시글 문자 인증 -->
   	<update id="telUpdate" parameterType="hashmap">
 		UPDATE 
 			smile.user
@@ -73,5 +73,16 @@
 		WHERE
 			identity = #{user}
     </update>
+    
+    <!-- 게시글 좋아요(토글) -->
+  	<update id="like_toggle" parameterType="hashmap">
+  	<![CDATA[
+		UPDATE smile.board_trade
+		SET likes = CASE WHEN likes LIKE '%, ${user}%' THEN REPLACE(likes, ', ${user}', '')
+		    ELSE CONCAT(likes, ', ', ${user})
+		    END
+		WHERE identity = ${identity};
+		]]>  		
+  	</update>
         
 </mapper>

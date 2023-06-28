@@ -41,4 +41,9 @@ public interface TradeMapperInterface {
 	// ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록
 	public void telUpdate(@RequestParam HashMap<String, String> params);
 	public void telUpdate(@RequestParam HashMap<String, String> params, HttpSession session);
+	
+	// ★ trade(중고 거래) 좋아요 등록
+	public void like_toggle(@RequestParam HashMap<String, String> params);
+	public void like_toggle(@RequestParam HashMap<String, String> params, HttpSession session);
+	
 }
