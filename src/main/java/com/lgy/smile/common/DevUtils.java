@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lgy.smile.common.EmailSender.sendType;
-import com.lgy.smile.controller.NotificationController;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.NotificationService;
 
@@ -60,6 +59,7 @@ public class DevUtils  {
             void         | createNotification(String userIdentity, String message, String urlPath)
             
  */	
+
 	
 	// [★] 입력받은 문자열을 암호화
 	public String StringToPassword(String strFromInput) {		
@@ -181,7 +181,30 @@ public class DevUtils  {
 	// ========================================================================================================= ☆
 	
 	
-	//★=> 알람 만들기(받을유저identity번호, 메시지내용, 클릭시 이동할 url주소)
-	public void createNotification(int userIdentity, String message, String urlPath) 	  {	notificationService.create(userIdentity, message, urlPath); }
-	public void createNotification(String userIdentity, String message, String urlPath) {	notificationService.create(userIdentity, message, urlPath); }
+/*
+
+	#. 알람 생성 메소드 사용 예시
+		
+		★=> 알람 만들기(받을유저identity번호, 메시지내용)
+		 devUtils.createNotification(53, "타겟없는 테스트");
+		 
+		 ★=> 알람 만들기(받을유저identity번호, 메시지내용, 게시판타입, 해당타입의아덴티티, 클릭시 이동할 url주소)
+		 devUtils.createNotificationMainComment(53, "타겠있음", devUtils.getNotificationTypeCommentMain() , 67, "main/list?searchByNickname='민우'&searchByBoardIdentity=54");
+
+ */
+	
+	
+	//
+	//=> 메시지 유형 enum 으로 설정 ( none: 대상 게시판 없음,     comment_main : 메인 게시판의 댓글 알람,      comment_notice : 공지 게시판의 댓글 알람 ) 
+	private enum notificationType {
+		none, comment_main , comment_notice 
+	}
+	 public Enum getNotificationTypeCommentMain() { return notificationType.comment_main; }
+	 public Enum getNotificationTypeCommentNotice() { return notificationType.comment_notice; }
+	 public Enum getNnotificationTypeNone() { return notificationType.none; }
+	
+	public void createNotification(int userIdentity, String message) 	  {	notificationService.createSet(userIdentity, message); }
+	public void createNotification(String userIdentity, String message) {	notificationService.createSet(userIdentity, message); }
+	public void createNotificationMainComment(int userIdentity, String message, Enum type , int target_identity, String urlPath) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath); }
+	public void createNotificationNoticeComment(int userIdentity, String message, Enum type , int target_identity, String urlPath) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath); }
 }

@@ -3,6 +3,11 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lgy.smile.dao.NotificationMapperInterface">
 
+
+
+
+
+	<!-- 알람 갯수를 숫자로 반환  -->
 	<select id="count" resultType="int" parameterType="hashmap">
 				SELECT 
 					COUNT(identity)
@@ -11,6 +16,8 @@
 				WHERE user = #{user};	
 	</select>
 
+
+	<!-- 알람 내용들을 반환 (dtos) -->
   	<select id="list" resultType="com.lgy.smile.dto.NotificationDto" parameterType="hashmap">
 				SELECT 
 					notification.*,
@@ -21,16 +28,22 @@
 				WHERE 
 					notification.user = #{user}
 					AND notification.user = user.identity
+				ORDER BY 
+					identity DESC
   	</select>  	
 
+
+	<!-- 새로운 알람을 생성 -->
 	<insert id="create" parameterType="hashmap">
 				INSERT INTO 
-					smile.notification(identity, msg, created, url_path, user) 
+					smile.notification(identity, msg, created, url_path, user, comment_main_identity, comment_notice_identity) 
 				VALUES(
-					null, #{msg} ,#{created} , #{url_path}, #{user}
+					null, #{msg} ,#{created} , #{url_path}, #{user} , #{comment_main_identity}, #{comment_notice_identity}
 				)
 	</insert>  	
 
+
+	<!--  알람 삭제 -->
 	<delete id="delete" parameterType="hashmap">
 				DELETE FROM smile.notification 
 				WHERE identity = #{identity}
