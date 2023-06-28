@@ -39,6 +39,14 @@ public class NoticeController {
 	@GetMapping("/list")
 	public String noticeList(Model model,@RequestParam HashMap<String,String> params, NoticeCriteria cri,HttpSession session) {
 		
+		String searchKeyword = ""; 
+		if ( params.get("searchKeyword") != null ) {
+			searchKeyword = params.get("searchKeyword"); 
+		}
+		model.addAttribute("searchKeyword", searchKeyword);
+		params.put("searchKeyword", searchKeyword);
+		
+		
 		log.info("@# list");
 //		list로 service단에 list메소드를 params값으로 담는다
 		ArrayList<NoticeDto> list = service.list(params);
@@ -48,7 +56,8 @@ public class NoticeController {
 		log.info( "list 갯수 => " + list.size() );
 		
 //		model에 담아서  service단에 getCount메소드와 NoticeCriteria에 있는 값을 pageMaker이름으로 가져간다(페이징 처리를 위해)
-		model.addAttribute("pageMaker", new NoticePageDTO( service.getCount() , cri));
+		model.addAttribute("pageMaker", new NoticePageDTO( service.getCount(params) , cri));
+		log.info("@@# service.getCount() 갯수 => " + service.getCount(params));
 		
 //		(댓글 갯수 확인)
 		model.addAttribute("commnetCount", commentService.getCount() );

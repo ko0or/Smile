@@ -15,6 +15,9 @@
 			smile.board_notice board
 		LEFT JOIN 
 		    smile.comment_notice comment ON board.identity = comment.board
+		WHERE
+			board.title like '%${searchKeyword}%'
+		    OR board.content like '%${searchKeyword}%'
 		GROUP BY 
 		    smile.board.identity
 		ORDER BY 
@@ -44,7 +47,13 @@
     </delete>
     
       <select id="getCount" resultType="int">
-      	SELECT COUNT(identity) FROM smile.board_notice
+		SELECT
+			COUNT(*)
+		FROM
+			smile.board_notice board
+		WHERE
+			board.title like '%${searchKeyword}%'
+			OR board.content like '%${searchKeyword}%'
     </select>
     
     <update id="viewUp" parameterType="hashmap">

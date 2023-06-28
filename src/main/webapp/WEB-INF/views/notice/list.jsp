@@ -24,6 +24,16 @@
 	<div class="write" onclick="location.href='write'">+ </div>
 </c:if>
 
+<div style="text-align: right; margin-bottom: 30px;">
+	<form action="list"> 
+		<input name="pageNum" value="1" type="hidden">
+		<input name="searchKeyword"  value="${searchKeyword}" class="form-control" type="text" placeholder="제목 또는 내용으로 검색 가능합니다" aria-label="default input example" style="width: 300px; display: inline; margin-right: 10px;">
+		<button type="submit" class="btn btn-primary">검색</button>
+		
+		
+	</form>
+</div>
+
 <table class="table table-responsive table-borderless">
 	<thead>
 		<tr>
@@ -57,7 +67,7 @@
 <!-- 이전 버튼 -->
          <c:if test="${pageMaker.prev}">
 	    	<li class="page-item">
-             	<a class="page-link" href="list?pageNum=${pageMaker.startPage - 1}">
+             	<a class="page-link" href="list?pageNum=${pageMaker.startPage - 1}&searchKeyword=${searchKeyword}">
       				<i class="fa-solid fa-circle-left" style="padding: 4px;"></i>
     			</a>          
             </li>
@@ -67,7 +77,7 @@
     <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
     
     <li class="page-item" ${pageMaker.cri.pageNum == num ? "style='border-bottom: 2px solid blue;'" :""}>
-    <a class="page-link" href="list?pageNum=${num}">
+    <a class="page-link" href="list?pageNum=${num}&searchKeyword=${searchKeyword}">
     ${num}
     </a></li>
 	</c:forEach>
@@ -77,17 +87,20 @@
     <!-- 다음 버튼 -->
    <c:if test="${pageMaker.next}">
     <li class="page-item">
-     <a class="page-link" href="list?pageNum=${pageMaker.endPage + 1}">
+     <a class="page-link" href="list?pageNum=${pageMaker.endPage + 1}&searchKeyword=${searchKeyword}">
      <i class="fa-solid fa-circle-right" style="padding: 4px;"></i></a>
          </li>
          </c:if> 
   </ul>
 </nav>
+
+
 <!-- -------------------------------------------------------------------------- -->
 </section>
 <%@ include file="../common/footer.jsp"%>
 </body>
 <script>
+
 $(document).ready(function() {
 
    window.onpageshow = function(event){
