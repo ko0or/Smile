@@ -15,6 +15,9 @@ public class UserDto {
 	private String nickname;
 	private String point;
 	private String role;
+	
+	// 프로필 사진이 저장된 경로
+	private String imgPath;
 }
 
 

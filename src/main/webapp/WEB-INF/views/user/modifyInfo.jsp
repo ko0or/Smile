@@ -22,9 +22,8 @@
 	</div>
 		
 	<!-- 아디, 비밀번호 수정 화면 -->
-	<div class="form-wrapper">	
+	<div class="form-wrapper">
 		<form id="modifyForm" action="modify" method="POST">
-		
 			<div class="form-floating mb-3">
 				<input name="nickname" type="text" class="form-control" id="floatingNickname" value="${ user.nickname }" placeholder="번쩍점프 장인"> 
 				<label for="floatingNickname"><i>*</i>

@@ -2,6 +2,11 @@ package com.lgy.smile.dao;
 
 import java.util.HashMap;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.lgy.smile.dto.UserDto;
 
 public interface UserMapperInterface {
@@ -32,6 +37,14 @@ public interface UserMapperInterface {
 	// 회원정보 삭제 처리 (id 기준으로 해당 행 삭제)
 	public void delete(HashMap<String, String> params);
 	public void delete(HashMap<String, String> params, HttpSession session);
+	
+	// 프로필 사진 업로드 처리 (id 기준으로 이미지 업로드)
+	public boolean write(@RequestParam HashMap<String, String> params);
+	public boolean write(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session);
+	
+	// 프로필 업로드 후 프로필 이미지 경로 가져오기
+	public String getProfilePath(HashMap<String, String> params);
+	public String getProfilePath(HashMap<String, String> params, HttpSession session);
 }
 
 

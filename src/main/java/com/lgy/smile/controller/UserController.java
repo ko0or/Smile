@@ -1,18 +1,25 @@
 package com.lgy.smile.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.UserDto;
@@ -24,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
-	//zhtester
 	@Autowired private UserService userService;
 	@Autowired private DevUtils devUtils;
 
@@ -233,6 +239,7 @@ public class UserController {
 		// userInfo 세션이 null 이 아니면 회원정보 화면으로 이동
 		}else {
 			UserDto user = (UserDto) session.getAttribute("userInfo");
+			log.info("회원정보 조회화면에서 user 가진 정보 확인해보기(imgPath 추가) ===> "+user);
 			model.addAttribute("user", user);
 			return "user/info";
 		}
@@ -364,6 +371,60 @@ public class UserController {
 		log.info("UserController ===> delete ===> end");
 		
 		return "redirect:/user/logOut";
+	}
+	
+//========================= 회원정보 보기 화면에서 프로필 사진 업로드 처리 ================================================== >
+	
+	// 프로필 사진 업로드 처리
+	@PostMapping("/uploadProfile")
+	public ResponseEntity<String> uploadProfile(@RequestParam HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
+		log.info("UserController ===> uploadProfile ===> start");
+		
+		log.info("uploadFile ===> "+uploadFile);
+		userService.write(params, uploadFile, session);
+		
+		String newProfilePath = userService.getProfilePath(params, session);
+		log.info("newProfilePath ===> " +newProfilePath);
+		
+		log.info("UserController ===> uploadProfile ===> end");
+		
+		UserDto user = devUtils.getUserInfo(session);
+		File deleteFile = new File(user.getImgPath()); // 기존 프로필이미지 경로+파일명을 기준으로 새로운 파일 생성해서
+		deleteFile.delete();						   // 삭제
+		
+		user.setImgPath(newProfilePath);				// 새 프로필이미지 경로+파일명을 setter 로 DTO에 설정하고
+		session.setAttribute("userInfo", user);			// 그걸 다시 session 에 넣어주기
+		
+		return ResponseEntity.ok().body(newProfilePath);
+	}
+	
+	
+	@ResponseBody
+	@GetMapping("/display")
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		
+		// 리턴용 객체
+		ResponseEntity<byte[]> result = null;
+		// 매개변수로 받은 파일 경로로 파일 객체 생성
+		File file = new File(fileName);
+		
+		try {
+			
+			// 파일을 HTTP 응답으로 전송하기 위해 필요한 헤더와 데이터를 설정 (헤더 객체 생성)
+			HttpHeaders header = new HttpHeaders();
+			
+			// Content-Type 헤더 설정(파일의 MIME 타입을 가져와서 Content-Type 헤더에 추가)
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			
+			// FileCopyUtils.copyToByteArray(file)를 사용하여 파일의 내용을 byte[]로 복사하여 응답 데이터로 설정
+			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+			
+		} catch (NoSuchFileException ne) {
+			ne.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
 

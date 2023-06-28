@@ -1,5 +1,10 @@
 $(document).ready(function() {
 	
+	//  
+	
+	
+	
+	
 	// 회원정보 수정 버튼 눌렀을 때 회원정보 수정 화면으로 이동
     $("#modifyInfo").click(function(){
     	location.href = "modify";

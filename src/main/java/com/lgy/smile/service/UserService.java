@@ -1,6 +1,8 @@
 package com.lgy.smile.service;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dao.UserMapperInterface;
@@ -159,4 +162,93 @@ public class UserService implements UserMapperInterface {
 		
 		log.info("UserService ===> delete ===> end");
 	}
+
+	
+//========================= 회원정보 보기 화면에서 프로필 사진 업로드 처리 ================================================== >
+
+	@Override
+	public boolean write(HashMap<String, String> params) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	// 프로필 사진 업로드 처리
+	@Override
+	public boolean write(HashMap<String, String> params, MultipartFile[] uploadFile, HttpSession session) {
+		log.info("UserService ===> write ===> start");
+		
+		log.info("지금 서비스단 이야");
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		UserDto user = (UserDto) session.getAttribute("userInfo");
+		log.info("@# id ===> " +user.getId());
+		
+		// 파라미터에 세션값으로 받은 id 추가
+		params.put("id", user.getId());
+		log.info("uploadFile ===> "+uploadFile);
+		
+		String profileIdentity = UUID.randomUUID().toString() + "_";
+		
+		// 파일 업로드
+		for(MultipartFile multipartFile : uploadFile) {
+			log.info("서비스단에서 파일 업로드 시작");
+			log.info("업로드 되는 파일 이름 ===> " +multipartFile.getOriginalFilename());
+			log.info("업로드 되는 파일 크기 ===> " +multipartFile.getSize());
+			log.info("===========================================");
+			
+			try {
+				//getSavePath() : "C:/upload/temp3/" 사진 업로드 경로
+				File uploadFolder = new File(devUtils.getSavePath());
+				// => 해당 경로가 없다면 하위폴더 생성
+				if(uploadFolder.exists() == false) { 
+					uploadFolder.mkdirs(); 
+				}
+				
+				// new File (업로드 경로, 파일명)
+				File saveFile = new File(devUtils.getSavePath(), profileIdentity + multipartFile.getOriginalFilename());
+				
+				// 파라미터에 imgPath 이름으로 파일 경로 추가
+				params.put("imgPath", devUtils.getSavePath() + profileIdentity + multipartFile.getOriginalFilename());
+				
+				try {
+					log.info("파라미터에 뭐가 있지? " +params.toString());
+					log.info("saveFile ===>" + saveFile);
+					multipartFile.transferTo(saveFile);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		} // for 반복문 종료
+		
+		// 쿼리 실행
+		userDao.write(params);
+		
+		log.info("UserService ===> write ===> end");
+		return false;
+	}
+
+	@Override
+	public String getProfilePath(HashMap<String, String> params) {
+		return null;
+	}
+
+	// identity 기준으로 현재 프로필 경로 가져오기
+	@Override
+	public String getProfilePath(HashMap<String, String> params, HttpSession session) {
+		log.info("UserService ===> getProfilePath ===> start");
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		params.put("identity", devUtils.getUserIdentityToString(session));
+		String newProfilePath = userDao.getProfilePath(params);
+		
+		log.info("UserService ===> getProfilePath ===> end");
+		return newProfilePath;
+	}
+	
+	
+	
 }
