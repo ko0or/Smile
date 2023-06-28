@@ -37,7 +37,6 @@ public class MainController {
 	@GetMapping("/list")
 	public String mainList(@RequestParam HashMap<String, String> params, Model model, HttpSession session) {
 		
-		
 		UserDto dto = devUtils.getUserInfo(session);
 		if ( dto == null ) { model.addAttribute("userIdentity", -1  );			
 		} else {  model.addAttribute("userIdentity", dto.getIdentity()  ); }
@@ -101,9 +100,6 @@ public class MainController {
 	public String mainWrite(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
 		mainService.write(params, session);
-		int num = devUtils.smsSender("010-8621-4360");
-		log.info("발송된 인증번호 ==>> " + num);
-		
 		return "redirect:list";
 		
 	}

@@ -50,6 +50,29 @@ public class NotificationService implements NotificationMapperInterface {
 	}
 	
 	
+	//★=> 알람 만들기(메시지내용, 받을유저identity번호)
+	public void create(String userIdentity, String message, String urlPath) {
+		HashMap<String, String> params = new HashMap<>();
+		params.put("msg", message);
+		params.put("user", userIdentity );
+		params.put("url_path", urlPath );
+		params.put("created", devUtils.getDateCustom("yyyy년 MM월 dd일(E요일) a hh:mm"));
+		
+		create(params);		
+	}
+	public void create(int userIdentity, String message, String urlPath) {
+		log.info("@## String user => " + userIdentity );
+		log.info("@## String message => " + message );
+		log.info("@## int userIdentity => " + userIdentity );
+		HashMap<String, String> params = new HashMap<>();
+		params.put("msg", message);
+		params.put("user", String.valueOf(userIdentity) );
+		params.put("url_path", urlPath );
+		params.put("created", devUtils.getDateCustom("yyyy년 MM월 dd일(E요일) a hh:mm"));
+		
+		create(params);
+	}
+	
 	
 	/* ★ 알람 만들기 @Override */
 	public void create(HashMap<String, String> params) {

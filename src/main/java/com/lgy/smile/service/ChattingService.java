@@ -38,7 +38,7 @@ public class ChattingService implements ChattingInterface{
 	@Override
 	public void write(HashMap<String, String> params) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
-		params.put("sendtime", devUtils.getDate());
+		params.put("sendtime", devUtils.getDateCustom("yyyy년 MM월 dd일(E요일) a hh:mm"));
 	
 		log.info(""+params);
 		dao.write(params);

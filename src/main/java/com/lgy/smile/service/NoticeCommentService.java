@@ -55,10 +55,17 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	}
 
 	@Override
-	public void deletecomment(HashMap<String, String> param, HttpSession session) {
+	public void deletecommentByIdentity(HashMap<String, String> param, HttpSession session) {
 			
 		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
-		dao.deletecomment(param);
+		dao.deletecommentByIdentity(param);
+		
+	}
+	@Override
+	public void deletecommentByGroup(HashMap<String, String> param, HttpSession session) {
+		
+		NoticeCommentMapperinterface dao = sqlSession.getMapper(NoticeCommentMapperinterface.class);
+		dao.deletecommentByGroup(param);
 		
 	}
 	@Override
@@ -125,7 +132,12 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	}
 
 	@Override
-	public void deletecomment(HashMap<String, String> param) {
+	public void deletecommentByIdentity(HashMap<String, String> param) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deletecommentByGroup(HashMap<String, String> param) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -62,6 +62,12 @@
 	    content: "◀";
 	    color: #ddd;
 	}
+		
+	.sendtime1 {
+		margin-left: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+	}
 	
 	.wrap .ch2 {
 	    flex-direction: row-reverse;
@@ -77,6 +83,13 @@
 	    content: "▶";
 	    color: #F9EB54;
 	}
+	
+	.sendtime2 {
+		margin-right: 5px;
+		margin-top: 30px;
+		font-size: xx-small; 
+	}
+	
 </style>
 </head>
 <body>
@@ -93,20 +106,22 @@
 				<c:choose>
 					<c:when test="${dto.sender == list[0].sender}">
 						<div class="chat ch1">
-						<div>
-							<div class="icon"><i class="fa-solid fa-user"></i></div>
-							<div style="margin-left: 3px ">${dto.sender}</div>
-						</div>				     
-				            <div class="textbox">${dto.msg}</div>
+							<div>
+								<div class="icon"><i class="fa-solid fa-user"></i></div>
+								<div style="margin-left: 3px ">${dto.sender}</div>
+							</div>
+					            <div class="textbox">${dto.msg}</div>
+				   		  		<div class="sendtime1">${dto.sendtime}</div>
 			   		  	</div>
 					</c:when>
 					<c:otherwise>
 						<div class="chat ch2">							
-			            <div>
-							<div class="icon"><i class="fa-solid fa-user"></i></div>
-							<div style="margin-left: 3px ">${dto.sender}</div>
-						</div>	
-				            <div class="textbox">${dto.msg}</div>
+				            <div>
+								<div class="icon"><i class="fa-solid fa-user"></i></div>
+								<div style="margin-left: 3px ">${dto.sender}</div>
+							</div>	
+					            <div class="textbox">${dto.msg}</div>
+					            <div class="sendtime2">${dto.sendtime}</div>
 			       		</div>
 					</c:otherwise>
 				</c:choose>
@@ -187,20 +202,20 @@ $(document).ready(function() {
 		$('.wrap').scrollTop($('.wrap')[0].scrollHeight);
 		
 		$(document).ready(function(){
-			setInterval(function() {
-				const $el = document.querySelector(".wrap");
-				const eh = $el.clientHeight + $el.scrollTop;
-			    const isScroll = $el.scrollHeight <= eh+150;
-			    $("#chattest").load(window.location + ' #chattest');
-			    if (isScroll) {
-			      $el.scrollTop = $el.scrollHeight;				
-				}
-			}, 300);
-			$("#text1").keyup(function(event) {
-		        if (event.which === 13) {
-		        	fn_submit();
-		        }
-		    });
+// 			setInterval(function() {
+// 				const $el = document.querySelector(".wrap");
+// 				const eh = $el.clientHeight + $el.scrollTop;
+// 			    const isScroll = $el.scrollHeight <= eh+150;
+// 			    $("#chattest").load(window.location + ' #chattest');
+// 			    if (isScroll) {
+// 			      $el.scrollTop = $el.scrollHeight;				
+// 				}
+// 			}, 300);
+// 			$("#text1").keyup(function(event) {
+// 		        if (event.which === 13) {
+// 		        	fn_submit();
+// 		        }
+// 		    });
 		})
 		
 </script>

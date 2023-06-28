@@ -123,7 +123,13 @@ $(document).ready(function() {
 				} else { 
 					$("#swal2-title").html("댓글 " + dataLength + "개");
 				}
+                        
 
+                        //=> 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
+                        var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
+                        var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
+                        var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 "+dataLength+"개");
+                        $(".content-wrapper" + boardIdentity + " sub").text( replacedText );
 
 
 				//=> 위에서 만들어진 내용을 SweetAlert2 모달화면에 보여주기 @
@@ -155,16 +161,9 @@ $(document).ready(function() {
 							"board" : boardIdentity ,
 							"content" : $("#InputComment").val()
 						} 
-						, success : function() { 
-						
-						// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
-						var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
-						var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
-						var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount + 1) + "개");
-                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
-						
-						// 병경된 내용을 (댓글)을 화면에 표시
-						callComments(boardIdentity); 					
+						, success : function() { 					
+						      // 변경된 내용을 (댓글)을 화면에 표시
+						      callComments(boardIdentity); 					
 							
 						}
 					})
@@ -223,16 +222,9 @@ $(document).ready(function() {
                             url : "comment/delete" ,
                             method : "GET" ,
                             data : { "identity" : $(this).attr("id")  } ,
-                            success : function() { 
-                            	 
-								// 게시글 하단에 좋아요 n개 댓글 n개 의 내용 바꿔주기 위해 사용
-								var originalText = $(".content-wrapper" + boardIdentity + " sub").text();
-								var myCommentCount = parseInt( originalText.split("댓글 ")[1].split("개")[0] );	
-								var replacedText = originalText.replace(/댓글 [0-9]+개/g, "댓글 " + (myCommentCount - 1) + "개");
-		                    	$(".content-wrapper" + boardIdentity + " sub").text( replacedText );
-								
-								// 변경된 내용을 (댓글)을 화면에 표시
-								callComments(boardIdentity); 					
+                            success : function() { 								
+                              // 변경된 내용을 (댓글)을 화면에 표시
+                              callComments(boardIdentity); 					
                             	
                             }
                         })
@@ -248,13 +240,13 @@ $(document).ready(function() {
                 //=> 답글 버튼 이벤트 등록 (답글 작성 폼 보여주기)
 				$(".comment-reply").off("click");
 				$(".comment-reply").click(function() {
-                    
+                    var replyTargetIdentity = $(this).attr("id");
                     $(".reply-wrapper").remove();
                     $(this).parent().append(`
                     
                         <div class="reply-wrapper">
                             <textarea name="reply" class="form form-control" style="    margin-top: 30px; margin-bottom: 15px;"></textarea>
-                            <button class="reply-write" style="border: none; background: white; color: gray;">
+                            <button id="${replyTargetIdentity}" class="reply-write" style="border: none; background: white; color: gray;">
                                 완료</button>
                             <button class="reply-cancel" style="border: none; background: white; color: gray;">
                                 취소</button>
@@ -268,8 +260,23 @@ $(document).ready(function() {
                     //=> 이벤트 등록 (답글 작성)
                     $(".reply-write").off("click");
                     $(".reply-write").click(function() {
-                        alert("글 쓰기");
-                    })
+
+						$.ajax({
+							url : "comment/write" ,
+							method : "POST" , 
+							data : { 
+								"board" : boardIdentity ,
+								"content" : $(this).prev().val() ,
+								"replyTargetIdentity" : replyTargetIdentity
+							} 
+							, success : function() { 
+                                                // 변경된 내용을 (댓글)을 화면에 표시
+                                                callComments(boardIdentity); 					
+								
+							}
+						}) // ~~ ajax 끝
+                    }) // ~~ 답글 작성 완료 버튼 이벤트 끝
+
 
                     //=> 이벤트 등록 (답글 취소)
                     $(".reply-cancel").off("click");
@@ -449,13 +456,16 @@ $(document).ready(function() {
 	function getComponentByComment( commentData ) {
 
         var row =  ``;
+		var marginLeftSet = (commentData.index == 0) ? "0px" : "70px";
+		var targetUserNickname = (commentData.index == 0) ? "" : commentData.target_user_nickname + "님에게 답글";
         // 댓글 작성자 본인일경우 (수정, 삭제 표시)
 		if (  userIdentity == commentData.user  ) {
 						row += `					
-							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
+							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
 								<div class="profileImageIcon"></div>
 										<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 										<sub style="color:grey">${commentData.created}</sub>	
+										<small style="color: silver; display: block;">${targetUserNickname}</small>
 										<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>
 										
 										<button id="${commentData.identity}" class="comment-edit" style="border:none;background:white;color:grey;">
@@ -471,10 +481,11 @@ $(document).ready(function() {
         // 댓글 작성자 본인이 아닐경우
         } else {
 						row += `										
-							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left;">
+							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
 								<div class="profileImageIcon"></div>
 								<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 								<sub style="color:grey">${commentData.created}</sub>	
+								<small style="color: silver; display: block;">${targetUserNickname}</small>
 								<textarea style="margin: 20px 0; border:none; outline:none; display: block; cursor: default; width: 100%" class="" readOnly>${commentData.content}</textarea>`
                         
                         // 로그인 상태일경우, 답글 버튼을 표시

@@ -8,7 +8,7 @@
 	    padding: 10px 0;
 	    background-color: #A8C0D6;
 	    overflow-y: scroll;
-	    height: 600px
+	    height: 600px;
 	}
 	
 	.wrap .chat {
@@ -63,6 +63,12 @@
 	    color: #ddd;
 	}
 	
+	.sendtime1 {
+		margin-left: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+	}
+	
 	.wrap .ch2 {
 	    flex-direction: row-reverse;
 	}
@@ -77,6 +83,13 @@
 	    content: "▶";
 	    color: #F9EB54;
 	}
+	
+	.sendtime2 {
+		margin-right: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+	}
+	
 </style>
 </head>
 <body>
@@ -86,7 +99,7 @@
 <section>
 <h1 align="center">1:1 대화</h1>
 	<div class="wrap">
-		<div id="chattest">
+		<div id="chat">
 			<c:forEach items="${list}" var = "dto">
 				<c:choose>
 					<c:when test="${user.identity == dto.receiver}">
@@ -96,6 +109,7 @@
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>				     
 				            <div class="textbox">${dto.msg}</div>
+				            <div class="sendtime1">${dto.sendtime}</div>
 			   		  	</div>
 					</c:when>
 					<c:otherwise>
@@ -105,6 +119,7 @@
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>	
 				            <div class="textbox">${dto.msg}</div>
+				            <div class="sendtime2">${dto.sendtime}</div>
 			       		</div>
 					</c:otherwise>
 				</c:choose>
@@ -163,14 +178,6 @@ $(document).ready(function() {
 	        }
 	    });
 		
-		$("#text2").keyup(function(event) {
-	        if (event.which === 13) {
-	        	fn_submit2();
-	        	$("#text2").val("");
-	        	$("#frm2").reset();
-	        }
-	    });
-		
 		$('.wrap').scrollTop($('.wrap')[0].scrollHeight);
 		
 		$(document).ready(function(){
@@ -178,7 +185,7 @@ $(document).ready(function() {
 				const $el = document.querySelector(".wrap");
 				const eh = $el.clientHeight + $el.scrollTop;
 			    const isScroll = $el.scrollHeight <= eh+150;
-			    $("#chattest").load(window.location + ' #chattest');
+			    $("#chat").load(window.location + ' #chat');
 			    if (isScroll) {
 			      $el.scrollTop = $el.scrollHeight;				
 				}

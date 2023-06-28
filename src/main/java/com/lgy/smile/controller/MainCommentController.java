@@ -51,8 +51,19 @@ public class MainCommentController {
 	//=> ★ 댓글 새로 작성하기
 	@PostMapping("/write") @ResponseBody
 	public ResponseEntity<Void> write(@RequestParam HashMap<String, String> params, HttpSession session) {
+	
+		log.info("@@ 대댓글 테스트중 params => " + params.toString() );
 		
-		commentService.write(params, session);
+		if ( params.get("replyTargetIdentity") == null ) {
+			//=> ☆ 대댓글 대상이 없다면,  일반 댓글 생성
+			commentService.write(params, session);
+			
+		} else {
+			//=> ☆ 대댓글 대상이 있다면, 대댓글로 생성
+			commentService.replyWrite(params, session);
+			
+		}
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
@@ -70,12 +81,20 @@ public class MainCommentController {
 	
 	//=> ★ 등록된 댓글 삭제하기
 	@GetMapping("/delete") @ResponseBody
-	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {
+	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {		
+		MainCommentDto dto = commentService.commentInfo(params, session);
 		
-		log.info("@# delete Controller start()");
-		log.info("@# modify Controller params => " + params.toString());
-		commentService.delete(params, session);
-		log.info("@# delete Controller end()");
+		if ( dto.getIndex() == 0 ) {
+			//=> ☆ 댓글 삭제시엔 해당 대댓글들도 삭제,
+			params.put("group", devUtils.intToString(dto.getGroup()));
+			commentService.deleteByGroup(params, session);
+			
+		} else {
+			//=> ☆ 대댓글 삭제시엔, 해당 대댓글만 삭제
+			commentService.deleteByIdentity(params, session);
+		}
+		
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

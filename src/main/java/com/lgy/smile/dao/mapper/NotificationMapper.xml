@@ -24,9 +24,11 @@
   	</select>  	
 
 	<insert id="create" parameterType="hashmap">
-				INSERT INTO smile.notification VALUES(
-					null, #{msg} ,#{created} , #{user}
-				);
+				INSERT INTO 
+					smile.notification(identity, msg, created, url_path, user) 
+				VALUES(
+					null, #{msg} ,#{created} , #{url_path}, #{user}
+				)
 	</insert>  	
 
 	<delete id="delete" parameterType="hashmap">
