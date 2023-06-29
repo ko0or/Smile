@@ -1,6 +1,17 @@
 $(document).ready(function() {
+      
+    // user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면  기본 프로필 사진을 보여주고,  null 이 아니라면 등록된 사진을 보여줌
+    function myProfile(imgPath) {
+        if ( imgPath == null || imgPath == "") {
+            return '../resources/imgs/userDefaultIcon.png';
+        } else {
+            return urlConverter('user/display?fileName='+imgPath);
+        }
+    }
+
+      
+      
    // ======================================================================================================================= >
-   
    // callComments 함수에
          function callComments() {
          
@@ -189,7 +200,6 @@ $(document).ready(function() {
                         $(".reply-write").off("click");
                         //완료버튼을 눌럿을때
                         $(".reply-write").click(function() {
-                           alert("글 쓰기");
                            
                            $.ajax({
                            //이 identity는 완료버튼의 id 값임
@@ -242,6 +252,9 @@ $(document).ready(function() {
          function getComponent( data, show ) {
             
             var row = ``;
+            // 프로필 이미지 (아이콘)
+            var setProfileImg = myProfile(data.imgPath);
+            
             
             //data.index == 0 는 대댓글이 없는거임 그래서 삼항연산자를 사용하여 참(대댓글이 없는)일경우 0px 거짓(대댓글이 있는)일 경우 50px로 들여쓰기
             var marginLeftSet = ( data.index == 0 ) ? "0px" : "50px"; 
@@ -256,9 +269,12 @@ $(document).ready(function() {
             row +=  `
             <div id="commentIdentity${data.identity}" style="margin-left: ${marginLeftSet}" class="comment-wrapper mt-5">
             <div class="comment">
-               <div class="comment-header">
-                  <h4 style="display: inline;">${data.nickname}</h4>
-                  <sub style="display: inline; color: grey;">${data.created}</sub>
+               <div class="comment-header" style="display: flex;">
+                  <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; position: relative; bottom: 9px;"></div>
+                  <div class="profileInfo">
+                        <h4 style="display: inline;">${data.nickname}</h4>
+                        <sub style="display: inline; color: grey;">${data.created}</sub>
+                  </div>
                </div>
                
                <small style="color: silver;">${targetUserNickname}</small>

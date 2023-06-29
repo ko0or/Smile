@@ -25,7 +25,8 @@
 		SELECT 
 			user.nickname ,
 		    comment.* ,
-		    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname"
+		    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname",
+		    user.imgPath 
 		FROM 
 			smile.board_notice board ,
 		    smile.comment_notice comment , 

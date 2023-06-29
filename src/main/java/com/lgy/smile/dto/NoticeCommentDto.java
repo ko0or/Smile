@@ -19,4 +19,5 @@ public class NoticeCommentDto {
 	private int group;//댓글
 	private int index;//대댓글
 	private int target_user;//대댓글을쓸 대상
+	private String imgPath;
 }
