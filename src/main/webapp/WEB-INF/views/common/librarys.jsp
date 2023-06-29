@@ -57,6 +57,10 @@ table, th, td, a, p, div, span, li, button, input, textarea, select, option, h1,
 	font-family: 'Jal_Onuel'
 }
 
+.content-wrapper iframe {
+	width: 100%;
+	min-height: 500px;	
+}
 .profileImageIcon {
 	
     width: 35px;
