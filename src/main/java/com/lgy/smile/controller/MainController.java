@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lgy.smile.common.DevUtils;
-import com.lgy.smile.common.EmailSender;
 import com.lgy.smile.dto.MainBoardDto;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.MainService;

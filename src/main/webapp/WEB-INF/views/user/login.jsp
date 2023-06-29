@@ -84,8 +84,7 @@ $(document).ready(function() {
 			   
 			    if (data === 200) {
 			    	console.log("로그인 성공")
-				    location.href = "/smile/main/list";
-// 				★ aws 배포시 => location.href = "/main/list";
+				    location.href = urlConverter('main/list');
 			    	
 			    }else if(data === 404) {
 			    	console.log("로그인 실패 => 비밀번호 불일치");

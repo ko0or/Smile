@@ -1,18 +1,17 @@
-$(document).ready(function(){
-//=============================================================================================================>
+//=> ★ URL 자동 변환기	
+function urlConverter(mappingURL) {
 
-	//=> ★ URL 자동 변환기	
-    function urlConverter(mappingURL) {
-    
-    var urlCheck = window.location.href;
-	    if ( urlCheck.indexOf("smile") >= 0 ) {
-	    	return "http://" + window.location.host + "/smile/" + mappingURL;
-	    }
-	    return window.location.host + "/" + mappingURL;
+var urlCheck = window.location.href;
+    if ( urlCheck.indexOf("smile") >= 0 ) {
+    	return "http://" + window.location.host + "/smile/" + mappingURL;
     }
-    
-    
+    return "http://" + window.location.host + "/" + mappingURL;
+}
 //=============================================================================================================>
+    
+    
+    
+$(document).ready(function(){
 	
 	
 	//=> ★ 실시간 알람갯수 체크	

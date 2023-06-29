@@ -4,7 +4,7 @@
 <mapper namespace="com.lgy.smile.dao.UserMapperInterface">
 
   	<select id="login" resultType="com.lgy.smile.dto.UserDto" parameterType="hashmap">
-	    SELECT identity, id, pwd, nickname, FORMAT(point, 0) "point", role FROM user WHERE id = #{id}
+	    SELECT identity, id, pwd, nickname, FORMAT(point, 0) "point", role, imgPath FROM user WHERE id = #{id}
   	</select>
 
   	<insert id="register" parameterType="hashmap">
@@ -34,6 +34,14 @@
   	<delete id="delete" parameterType="hashmap">
   		DELETE FROM user WHERE id=#{id}
   	</delete>
+  	
+  	<update id="write" parameterType="hashmap">
+  		UPDATE user SET imgPath=#{imgPath} where id= #{id}
+  	</update>
+  	
+  	<select id="getProfilePath" resultType="String" parameterType="hashmap">
+		SELECT imgPath from user WHERE identity = #{identity}
+	</select>
   	
 </mapper>
 

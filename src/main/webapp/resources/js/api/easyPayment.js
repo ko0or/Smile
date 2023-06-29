@@ -46,8 +46,8 @@ function requestPay(orderId, payType, pgValue, buyerEmailAddr, amount) {
 							  // 요청 성공 시 수행할 동작
 							  console.log('요청 성공:', response);
 							  // 일단 바로 보이는 화면에서도 수정사항 반영되게 => 그 이후 새로고침(F5) 해도 세션으로 반영되어 있음!
-							  $("#floatingPoint").text(response);
-							  
+							  $("#floatingPoint").html(`<i class="fa-solid fa-circle-dollar-to-slot"></i> 거래 관련 ( 보유 포인트 <b>${response}원</b> ) `);
+							   
 							},
 							error: function(xhr, status, error) {
 							  // 요청 실패 시 수행할 동작

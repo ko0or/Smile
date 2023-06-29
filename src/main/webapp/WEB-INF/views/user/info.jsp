@@ -11,56 +11,62 @@
 <style>@import '../resources/css/user/info.css'</style>
 <section>
 <!-- -------------------------------------------------------------------------- -->
-
+		<!-- 프로필 사진 업로드 -->
+		<div style="display: none">
+    		<input name="imgPath"  id="fileInputTag" type="file" class="form-control" aria-label="file example" required accept="image/*">
+	  		<button id="writeBtn" type="button" class="btn btn-primary" style="padding: 20px;"><i class="fa-solid fa-check"></i>
+			프로필 사진 업로드</button>
+  		</div>
+  		
 <div class="info-wrapper">
 	
-	<div class="logo">
-		<h1>회원 정보</h1>
-		<p>회원정보 화면입니다! </p>
-	</div>
+	<!-- 아디, 비밀번호 표시 화면 -->
+	<div class="form-wrapper">
+	
+		<!-- 프로필 사진 표시 -->
+		<div class="profile-wrapper ">
+			<div class="profile-img "></div>
+			<div class="profile-info ">
+				<h1>${user.nickname}</h1>
+				<p>${user.id}</p>
+				<label for="fileInputTag" class="btn btn-primary"><i class="fa-solid fa-camera"></i> 
+				프로필 사진 변경</label>
+				<button id="modifyInfo" class="btn btn-primary"><i class="fa-solid fa-user-pen"></i> 
+				내 정보 변경</button>
+				<button id="logOut" class="btn btn-primary"><i class="fa-solid fa-right-from-bracket"></i> 
+				로그아웃</button>
+			</div>
+		</div>
 		
-	<!-- 아디, 비밀번호 수정 화면 -->
-	<div class="form-wrapper">	
-		<form id="modifyForm" action="modify" method="POST">
 		
-			<div class="form-floating mb-3">
-				<div name="nickname" type="text" class="form-control" id="floatingNickname">
-				${ user.nickname }</div> 
-				<label for="floatingNickname"><i>*</i>
-				닉네임</label>
-			</div>
-							
-			<div class="form-floating mb-3">
-				<div name="id" type="email" class="form-control" id="floatingEmail">
-				${ user.id }</div> 
-				<label for="floatingEmail"><i>*</i>
-				이메일 계정</label>
-			</div>
-			
-			<div class="form-floating mb-3">
-				<div name="role" type="text" class="form-control" id="floatingRole">
-				${ user.role }</div>
-				<label for="floatingPassword2"><i>*</i>
-				회원구분</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
-				<div name="point" type="text" class="form-control" id="floatingPoint">
-				${ user.point }</div>
-				<label for="floatingPassword2"><i>*</i>
-				포인트</label>
-				<button id="pointUp" type="button" class="btn btn-primary">
-				포인트 충전
-				</button>		
-			</div>
-		</form>
-	</div>
+		
+		<div class="btn-group-board">
+		<br><hr><p id="floatingPoint"><i class="fa-solid fa-circle-dollar-to-slot"></i> 
+		거래 관련 ( <b>보유 포인트 ${user.point}원</b> ) </p>
 
-	<div class="btns">
-		<button id="modifyInfo" type="button" class="btn btn-primary">회원정보 수정으로 가기</button>
-		<button id="logOut" type="button" class="btn btn-warning"><i class="fa-solid fa-comment"></i>
-		로그아웃</button>
-	</div>
+			<button id="pointUp" class="mb-3">
+			포인트 충전</button><br>
+			<button class="goChattingRoom mb-5">
+			대화방 보기</button><br>
+					
+		
+		<br><hr><p><i class="fa-regular fa-keyboard"></i> 
+		내가 작성한</p>
+		
+			<button class="goMyFeeds mb-3">
+			내가 작성한 피드 보기</button><br>
+			<button class="goMyTrades mb-5">
+			내가 판매중인 물건들</button><br>
+		
+		<br><hr><p><i class="fa-regular fa-heart"></i>
+		관심/좋아요</p>
+		
+			<button class="goMyLikeFeeds mb-3">
+			내가 좋아요 누른 피드만 보기</button><br>
+			<button class="goMyLikeTrades mb-3">
+			내가 관심있는 물건들만 보기</button><br>
+		</div>
+
 
 </div>
 
@@ -69,8 +75,10 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 <script>
+	var imgPath = "${ user.imgPath }";
 	var user_id = "${ user.id }"
-	var user_identity = ${ user.identity }
+	var user_identity = ${ user.identity }; // 숫자는 "" 안붙여도 잘 작동되서 생략
+	var user_nickname = "${ user.nickname }";
 </script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="../resources/js/api/easyPayment.js"></script>

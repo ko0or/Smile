@@ -1,6 +1,5 @@
 package com.lgy.smile.service;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,20 +9,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.lgy.smile.service.CommentService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.lgy.smile.common.DevUtils;
-import com.lgy.smile.dao.MainBoardMapperInterface;
 import com.lgy.smile.dao.TradeMapperInterface;
-import com.lgy.smile.dto.MainBoardDto;
 import com.lgy.smile.dto.TradeDto;
 import com.lgy.smile.dto.UserDto;
 
@@ -260,6 +253,7 @@ public class TradeService implements TradeMapperInterface {
 	
 	
 	/* ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 @Override */ 
+	@Override
 	public void telUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
 		if ( devUtils.isLogin(session) == true ) {			
 			params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));			
@@ -269,6 +263,7 @@ public class TradeService implements TradeMapperInterface {
 	}
 
 	/* ★ trade(중고 거래) 좋아요 @Override */
+	@Override
 	public void like_toggle(@RequestParam HashMap<String, String> params, HttpSession session) {
 		if ( devUtils.isLogin(session) == true ) {	
 			params.put("user", String.valueOf( devUtils.getUserInfo(session).getIdentity() ));
@@ -281,6 +276,7 @@ public class TradeService implements TradeMapperInterface {
 	
 	
 	
+	@Override
 	public int telCheck(@RequestParam HashMap<String, String> params) { return -1; }
 	
 	@Override

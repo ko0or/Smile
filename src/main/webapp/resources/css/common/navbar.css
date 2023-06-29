@@ -6,7 +6,9 @@
     justify-content: center;
     text-align: center;
   }
-
+nav .nav-btn {
+	cursor: pointer;
+}
   .title-banner {
     width: 100%;
     max-width: 900px;

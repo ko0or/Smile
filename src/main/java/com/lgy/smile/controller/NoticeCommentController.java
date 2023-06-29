@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.NoticeCommentDto;
-import com.lgy.smile.dto.NoticeDto;
 import com.lgy.smile.service.NoticeCommentService;
 
 import lombok.extern.slf4j.Slf4j;

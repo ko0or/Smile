@@ -212,8 +212,6 @@ $(document).ready(function() {
 			data : { "tel" : $("input[name='tel']").val() },
 			success : function( data ) {
 				
-				alert("존재유무 => " + data );
-				
 				if ( data == true ) {
 					Swal.fire({
 						  title : '인증된 회원',
