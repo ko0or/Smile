@@ -159,10 +159,10 @@ public class EmailSender {
 //		properties.setProperty("mail.smtp.ssl.enable", mailConfig.getSsl());
 
 		// 메일 발송자 세팅 ( 아이디 + @ + smtp. 뒤에있는 값 )
-	      String from = "imbirimbir@naver.com"; //보내는 사람의 이메일 주소
+	      String from = "czescimbir@naver.com"; //보내는 사람의 이메일 주소
 	      String host = "smtp.naver.com"; //SMTP 서버 호스트명
-	      String loginId = "imbirimbir"; //네이버 계정 아이디
-	      String loginPw = "teamProject2023"; //네이버 계정 비밀번호
+	      String loginId = "czescimbir"; //네이버 계정 아이디
+	      String loginPw = "D8EXJTQ7BKX2"; //네이버 계정 비밀번호
 	      
 	      
 
