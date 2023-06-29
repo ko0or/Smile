@@ -92,6 +92,16 @@
 
 
 /* 회원정보 수정 화면 */
+
+.my-pwd-input { display: flex; }
+.my-pwd-input > .form-floating { flex: 3;  }
+.new-password-input-area { border: 1px solid white; }    
+.my-pwd-input > #passwordChange {
+    height: 57px;
+    margin-left: 10px;
+}
+
+
 .modify-footer {
 	text-align: center;
 	margin-top: 70px;

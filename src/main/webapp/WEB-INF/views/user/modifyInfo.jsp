@@ -37,46 +37,41 @@
 				이메일 계정</label>
 			</div>
 			
-			<div class="form-floating mb-3">
-				<input name="password" type="password" class="form-control" id="floatingPassword_origin" placeholder="Password"> 
-				<label for="floatingPassword"><i>*</i>
-				현재 비밀번호</label>				
+			<div class="my-pwd-input">
+				<div class="form-floating mb-3">
+					<input name="password" type="password" class="form-control" id="floatingPassword_origin" placeholder="Password"> 
+					<label for="floatingPassword"><i>*</i>
+					현재 비밀번호</label>				
+				</div>
+				<button id="passwordChange" type="button" class="btn btn-primary"><i class="fa-solid fa-user-lock"></i> 
+					변경하기</button>
 			</div>
 			
-			<div class="form-floating mb-3">
-				<input name="newPassword" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
-				<label for="floatingPassword"><i>*</i>
-				새 비밀번호</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
-				<input name="newPassword2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
-				<label for="floatingPassword2"><i>*</i>
-				새 비밀번호 확인</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
-				<div name="role" type="text" class="form-control" id="floatingRole" placeholder="role" style="color:grey">
-				${ user.role }</div>
-				<label for="floatingPassword2"><i>*</i>
-				회원구분</label>				
-			</div>
-			
-			<div class="form-floating mb-3">
-				<div name="point" type="text" class="form-control" id="floatingPoint" placeholder="point" style="color:grey">
-				${ user.point }</div>
-				<label for="floatingPassword2"><i>*</i>
-				포인트</label>				
-			</div>
+			<div class="new-password-input-area" style="display: none;">
+				<input type="hidden" name="pwdChanged" value="false">
+				<!-- 변경하기 버튼 눌렀을때만 보이는 영역 -->			
+				<div class="form-floating mb-3">
+					<input name="newPassword" type="password" class="form-control" id="floatingPassword" placeholder="Password"> 
+					<label for="floatingPassword"><i>*</i>
+					새 비밀번호</label>				
+				</div>
+				
+				<div class="form-floating mb-3">
+					<input name="newPassword2" type="password" class="form-control" id="floatingPassword2" placeholder="Password">
+					<label for="floatingPassword2"><i>*</i>
+					새 비밀번호 확인</label>				
+				</div>
+			</div>		
+
 		</form>
 	</div>
 
 	<div class="modify-footer">
-		<br><hr><p>회원정보 수정을 저장하시겠습니까? </p>
+		<br><hr><p>작성해주신 내용을 저장하시겠습니까? </p>
 	
 		<div class="btns">
 			<button id="modifyInfo" type="button" class="btn btn-primary"><i class="fa-solid fa-user-check"></i> 
-			회원정보 수정 저장</button>
+			저장하기</button>
 			<button id="goBack" type="button" class="btn btn-warning"><i class="fa-solid fa-rotate-left"></i> 
 			뒤로가기</button>
 		</div>
@@ -95,6 +90,20 @@
 <script>
 $(document).ready(function() {
 	
+// ====================== 비밀번호 변경 버튼 눌렀을 때 처리 ===========================================
+	$("#passwordChange").click(function(){
+		const target = $(".new-password-input-area");
+		if ( target.css("display") == "none" ) { 
+			$("input[name='pwdChanged']").val("true");
+			$(this).html('<i class="fa-solid fa-user-lock"></i> 변경취소');
+			target.slideDown();
+		} else {
+			$("input[name='pwdChanged']").val("false");
+			$(this).html('<i class="fa-solid fa-user-lock"></i> 변경하기');
+			target.slideUp();
+		}
+	})
+	
 // ====================== 회원정보 수정 버튼 눌렀을 때 처리 ===========================================
     $("#modifyInfo").click(function(){
 
@@ -105,7 +114,6 @@ $(document).ready(function() {
 		   ,data: formData
 		   ,url: "modify"
 		   ,success: function(data, status){
-// 			   alert("회원정보 수정을 완료했습니다!");
 
 			   Swal.fire({
 				    icon: 'success',
@@ -172,6 +180,41 @@ $(document).ready(function() {
 		})
 	});
 
+
+	// ★ 입력된 비밀번호와  재확인에 입력된 내용이 서로 같은지 확인하는 내용들 ==================== >>
+	const newPassword1 = $("input[name='newPassword']");
+	const newPassword2 = $("input[name='newPassword2']");
+	
+	$(newPassword1).on("keyup" ,function() {
+		if ($(newPassword1).val().length > 0 ) {
+			if ($(this).val() == newPassword2.val() ) {
+				$(newPassword1).css("backgroundColor", "white");
+				$(newPassword1).next().html("<i>*</i> 새 비밀번호");
+				$(newPassword2).css("backgroundColor", "white");
+				$(newPassword2).next().html("<i>*</i> 새 비밀번호 확인");
+			} else {
+				$(newPassword1).css("backgroundColor", "yellow");
+				$(newPassword1).next().html("<i>*</i> 새 비밀번호와 입력된 내용이 다릅니다.");
+			}
+		}
+	})
+	
+	$(newPassword2).on("keyup" ,function() {
+		if ($(newPassword2).val().length > 0 ) {
+			if ($(this).val() == newPassword1.val() ) {
+				$(newPassword1).css("backgroundColor", "white");
+				$(newPassword1).next().html("<i>*</i> 새 비밀번호");
+				$(newPassword2).css("backgroundColor", "white");
+				$(newPassword2).next().html("<i>*</i> 새 비밀번호 확인");
+			} else {
+				$(newPassword2).css("backgroundColor", "yellow");
+				$(newPassword2).next().html("<i>*</i> 새 비밀번호에 입력된 내용과 다릅니다.");
+			}
+		}
+	})
+	
+
+	
 })// ~~ end
 </script>
 </html>
