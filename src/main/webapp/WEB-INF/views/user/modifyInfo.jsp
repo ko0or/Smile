@@ -67,7 +67,7 @@
 	</div>
 
 	<div class="modify-footer">
-		<br><hr><p>작성해주신 내용을 저장하시겠습니까? </p>
+		<br><hr><p>입력하신 내용으로 저장하시겠습니까? </p>
 	
 		<div class="btns">
 			<button id="modifyInfo" type="button" class="btn btn-primary"><i class="fa-solid fa-user-check"></i> 
@@ -194,7 +194,7 @@ $(document).ready(function() {
 				$(newPassword2).next().html("<i>*</i> 새 비밀번호 확인");
 			} else {
 				$(newPassword1).css("backgroundColor", "yellow");
-				$(newPassword1).next().html("<i>*</i> 새 비밀번호와 입력된 내용이 다릅니다.");
+				$(newPassword1).next().html('<i class="fa-solid fa-triangle-exclamation" style="color: #6f8ab8;"></i> 새 비밀번호 확인란에 입력된 내용과 다릅니다.');
 			}
 		}
 	})
@@ -208,7 +208,7 @@ $(document).ready(function() {
 				$(newPassword2).next().html("<i>*</i> 새 비밀번호 확인");
 			} else {
 				$(newPassword2).css("backgroundColor", "yellow");
-				$(newPassword2).next().html("<i>*</i> 새 비밀번호에 입력된 내용과 다릅니다.");
+				$(newPassword2).next().html('<i class="fa-solid fa-triangle-exclamation" style="color: #6f8ab8;"></i> 새 비밀번호란에 입력된 내용과 다릅니다.');
 			}
 		}
 	})

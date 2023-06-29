@@ -270,7 +270,7 @@ $(document).ready(function() {
             <div id="commentIdentity${data.identity}" style="margin-left: ${marginLeftSet}" class="comment-wrapper mt-5">
             <div class="comment">
                <div class="comment-header" style="display: flex;">
-                  <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; position: relative; bottom: 9px;"></div>
+                  <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; position: relative; bottom: 9px; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
                   <div class="profileInfo">
                         <h4 style="display: inline;">${data.nickname}</h4>
                         <sub style="display: inline; color: grey;">${data.created}</sub>

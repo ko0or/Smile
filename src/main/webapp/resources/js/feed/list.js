@@ -40,7 +40,8 @@ $(document).ready(function() {
 			data : { 
 				"start" : start,
 				"searchByNickname" : searchByNickname,
-				"searchByBoardIdentity" : searchByBoardIdentity 
+				"searchByBoardIdentity" : searchByBoardIdentity, 
+				"searchByLikeUser" : searchByLikeUser 
 			} ,
 			success : function( data ) {	
 			
@@ -404,7 +405,7 @@ $(document).ready(function() {
 		var row = `
 			<div class="content-wrapper content-wrapper${boardData.identity}">	
 			<div class="content-header">
-				<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center;"></div>
+				<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
 				<p><b>${boardData.nickname} </b></p>
 				<p><font color="grey">${boardData.created}</font> </p>
 				
@@ -473,7 +474,7 @@ $(document).ready(function() {
 		if (  userIdentity == commentData.user  ) {
 						row += `					
 							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
-								<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); "></div>
+								<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
 										<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 										<sub style="color:grey">${commentData.created}</sub>	
 										<small style="color: silver; display: block;">${targetUserNickname}</small>

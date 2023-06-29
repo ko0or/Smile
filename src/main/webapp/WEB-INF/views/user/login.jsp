@@ -124,6 +124,7 @@ $(document).ready(function() {
 			  },
 			  showCancelButton: true,
 			  confirmButtonText: '전송',
+			  cancelButtonText: '취소',
 			  showLoaderOnConfirm: true,
 			  preConfirm: (login) => {
 			    return $.ajax({

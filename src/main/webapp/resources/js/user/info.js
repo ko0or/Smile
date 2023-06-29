@@ -17,8 +17,7 @@ $(document).ready(function() {
 	})
 	$(".goMyLikeFeeds").click(function(){
 	   //=> 내가 좋아요 누른 피드만 보기 눌렀을때
-		alert("준비중..ㅎㅎ"); // window.open( urlConverter('리퀘스트매핑/겟or포스트매핑한이름') );		
-	   
+	   window.open( urlConverter(`main/list?searchByLikeUser=${user_identity}`) );
 	})
 	$(".goMyLikeTrades").click(function(){
 	   //=> 내가 관심있는 물건들만 보기 눌렀을때

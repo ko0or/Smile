@@ -34,7 +34,7 @@
 		    smile.board_main board
 		
 		WHERE 
-			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%')
+			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%' AND board.likes LIKE '%${searchByLikeUser}%')
 		    AND board.user = user.identity
 		ORDER BY
 			board.identity DESC

@@ -35,6 +35,7 @@
 var userIdentity = ${userIdentity};
 var searchByNickname = ${searchByNickname};
 var searchByBoardIdentity = ${searchByBoardIdentity};
+var searchByLikeUser = ${searchByLikeUser};
 var imgPath = "${ user.imgPath }";
 </script>
 <script src="../resources/js/feed/list.js"></script>

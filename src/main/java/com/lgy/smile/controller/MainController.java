@@ -48,6 +48,10 @@ public class MainController {
 		if ( params.get("searchByBoardIdentity") == null ) { params.put("searchByBoardIdentity", "\"\""); }
 		model.addAttribute("searchByBoardIdentity", params.get("searchByBoardIdentity"));  
 		
+		//☆=> 해당 유저가 누른 좋아요된 글들만 보기 
+		if ( params.get("searchByLikeUser") == null ) { params.put("searchByLikeUser", "\"\""); }
+		model.addAttribute("searchByLikeUser", params.get("searchByLikeUser"));  
+		
 		
 		return "feed/list";
 	}	

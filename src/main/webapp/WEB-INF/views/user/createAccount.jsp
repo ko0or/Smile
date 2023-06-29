@@ -174,13 +174,25 @@ $(document).ready(function() {
 									}).then(function(){
 											$("#floatingEmail").prop("readonly", true);
 											$("#floatingEmail").css("color", "grey");
+											$("input[name='nickname']").prop("disabled", true);
+											$("input[name='id']").prop("disabled", true);
+											$("input[name='code']").prop("disabled", true);
+											
+											$("#isDuplicated").removeClass("btn-primary");
+											$("#isDuplicated").addClass("btn-secondary");
+											$("#isDuplicated").prop("disabled", true);
+											
+											$("#checkCode").removeClass("btn-primary");
+											$("#checkCode").addClass("btn-secondary");
+											$("#checkCode").prop("disabled", true);
 
+											$("#register").addClass("btn btn-primary")
 									});
 									
 									// 비밀번호까지 모두 입력되면 회원가입 버튼 활성화
 				    				function activeEvent() {
 				    					switch(!(formNickname.value && formEmail.value && formPassword.value && formPassword2.value)){
-					    					case true : registerButton.disabled = true; break;
+					    					case true :  registerButton.disabled = true; break;
 					    					case false : registerButton.disabled = false; break;
 				    					}
 				    				}
