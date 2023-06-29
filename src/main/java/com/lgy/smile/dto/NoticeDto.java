@@ -14,11 +14,10 @@ public class NoticeDto {
 	private String created;
 	private String view;
 	private String author;
-	private int user;
+	private String user;
 	
 	private String nickname;
-	private int board;
-	
-	
+	private int board;	
+	private int confirmed;	
 	private int comments;
 }

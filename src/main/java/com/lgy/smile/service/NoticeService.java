@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,12 +94,18 @@ public class NoticeService implements NoticeMapperinterface {
 	
 
 	@Override
-	public NoticeDto contentView(@RequestParam HashMap<String, String> params) {
+	public NoticeDto contentView(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# NoticeService.contentView() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		log.info("@# NoticeService.contentView() end");
+		
+		if ( devUtils.isLogin(session) == true ) {
+			params.put("user", devUtils.getUserIdentityToString(session));
+			dao.confirmedUpdate(params);
+		}
 		return dao.contentView(params);
 	}
+	@Override public NoticeDto contentView(@RequestParam HashMap<String, String> params) { return null; }
 
 
 	@Override
@@ -149,7 +157,17 @@ public class NoticeService implements NoticeMapperinterface {
 	}
 
 
-
-
+	@Override
+	public int confirmedCheck(@RequestParam HashMap<String, String> param) {
+		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+		return dao.confirmedCheck(param);
+	}
+	
+	
+	@Override
+	public void confirmedUpdate(@RequestParam HashMap<String, String> param) {
+		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
+		dao.confirmedUpdate(param);
+	}
 	
 }

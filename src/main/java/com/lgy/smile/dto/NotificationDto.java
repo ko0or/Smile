@@ -10,5 +10,7 @@ public class NotificationDto {
 	private int user;
 	private String nickname;
 	private String url_path;
+	private int sender;
+	private String senderNickname;
 }
 

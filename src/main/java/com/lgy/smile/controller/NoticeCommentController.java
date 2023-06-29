@@ -72,9 +72,6 @@ public class NoticeCommentController {
 	public ResponseEntity<String> noticeEdit(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# edit");
 			commentService.modifycomment(params, session);
-//			model.addAttribute("loginuser", devutils.getUserInfo(session));
-//			model.addAttribute("commentuser", NoticeCommentDto.ge)
-		log.info("edit 들어오니?");
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
@@ -83,9 +80,11 @@ public class NoticeCommentController {
 	public ResponseEntity<String> noticeDelete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		NoticeCommentDto dto = commentService.commentInfo(params);
 		
+//		대댓글이 없다면
 		if ( dto.getIndex() == 0 ) {
 			//=> ☆ 댓글 삭제시엔 해당 대댓글들도 삭제,
 			params.put("group", devutils.intToString(dto.getGroup()));
+//			삭제
 			commentService.deletecommentByGroup(params, session);
 			
 		} else {

@@ -96,23 +96,23 @@ public class NotificationService implements NotificationMapperInterface {
 	//=> (타겟 : x) 단순히 해당 유저에게 메시지만 보내고 싶을때 ( 오버로딩 적용, 유저 아이덴티티를 int 혹은 String 으로 받을 수 있게함 )
 	public void createSet(String userIdentity, String message) {
 		 int intUserIdentity =  Integer.parseInt(userIdentity);
-		HashMap<String, String> params = createHashMapSet(intUserIdentity , message, notificationType.none, -1, "");		
+		HashMap<String, String> params = createHashMapSet(intUserIdentity , message, notificationType.none, -1, "", -1);		
 		create(params);		
 	}
 	public void createSet(int userIdentity, String message) {		 
-		HashMap<String, String> params = createHashMapSet(userIdentity , message, notificationType.none, -1, "");		
+		HashMap<String, String> params = createHashMapSet(userIdentity , message, notificationType.none, -1, "", -1);		
 		create(params);
 	}
 	
 		
 	//=> (타겟 : 메인게시판의 댓글) 게시판에 누군가 댓글 달았을때 알람 띄우기 ( 오버로딩 적용, 유저 아이덴티티를 int 혹은 String 으로 받을 수 있게함 )
-	public void createSet(int userIdentity, String message, Enum type, int target_identity, String urlPath) {
-		HashMap<String, String> params = createHashMapSet(userIdentity , message, type, target_identity, urlPath);
+	public void createSet(int userIdentity, String message, Enum type, int target_identity, String urlPath, int targetUserIdentity) {
+		HashMap<String, String> params = createHashMapSet(userIdentity , message, type, target_identity, urlPath, targetUserIdentity);
 		create(params);
 	}
-	public void createSet(String userIdentity, String message, Enum type, int target_identity, String urlPath) {
+	public void createSet(String userIdentity, String message, Enum type, int target_identity, String urlPath, int targetUserIdentity) {
 		int intUserIdentity =  Integer.parseInt(userIdentity);
-		HashMap<String, String> params = createHashMapSet(intUserIdentity , message, type, target_identity, urlPath);
+		HashMap<String, String> params = createHashMapSet(intUserIdentity , message, type, target_identity, urlPath, targetUserIdentity);
 		create(params);
 	}
 	
@@ -121,31 +121,36 @@ public class NotificationService implements NotificationMapperInterface {
 
 	
 	//=> ☆ 위에서 createSet 을 사용하기위한 메소드
-	private HashMap<String, String> createHashMapSet(int userIdentity, String message, Enum type , int target_identity, String urlPath ) {
+	private HashMap<String, String> createHashMapSet(int userIdentity, String message, Enum type , int target_identity, String urlPath, int targetUserIdentity ) {
 		
 		//=> 공통
 		HashMap<String, String> params = new HashMap<>();
 		params.put("msg", message);
 		params.put("user", devUtils.intToString(userIdentity) );
 		params.put("created", devUtils.getDateCustom("yyyy년 MM월 dd일(E요일) a hh:mm"));
+		params.put("sender", devUtils.intToString(targetUserIdentity));
+		
 		
 		//=> 매개변수로 받은 URL 주소가 없을경우 or 있을경우
 		if (urlPath.isEmpty() == true )  { params.put("url_path", "" ); } else { params.put("url_path", urlPath ); } 
 		
+		  
 		//=> 알람 종류에 따라 매개변수로 받은 identity (외래키) 를 어느 값에 넣어줄지 결정하기
-		if (type.equals(notificationType.none)) {
-			params.put("comment_main_identity", null );
-			params.put("comment_notice_identity", null );
-			
-		} else if (type.equals(notificationType.comment_main)) {
-			params.put("comment_main_identity", devUtils.intToString(target_identity) );
-			params.put("comment_notice_identity", null );			
-			
-		} else if (type.equals(notificationType.comment_notice)) {
-			params.put("comment_main_identity", null );
-			params.put("comment_notice_identity", devUtils.intToString(target_identity) );
-			
-		}
+	    switch ((com.lgy.smile.common.DevUtils.notificationType) type) {
+        case none:
+            params.put("comment_main_identity", null);
+            params.put("comment_notice_identity", null);
+            break;
+        case comment_main:
+            params.put("comment_main_identity", devUtils.intToString(target_identity));
+            params.put("comment_notice_identity", null);
+            break;
+        case comment_notice:
+            params.put("comment_main_identity", null);
+            params.put("comment_notice_identity", devUtils.intToString(target_identity));
+            break;
+	    }
+	    
 		return params;
 	}
 }

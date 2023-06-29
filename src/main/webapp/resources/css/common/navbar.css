@@ -87,3 +87,16 @@ nav .nav-btn {
     padding: 10px;
     border-radius: 5px;
 }
+
+
+
+
+
+
+/* 공지사항 알람 */
+nav #newNoticeCheck {
+	display: none;
+    position: relative;
+    left: 2px;
+    bottom: 2px;
+}

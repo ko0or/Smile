@@ -21,11 +21,12 @@
 <!-- role이 컨트롤러 단에서 조건문안에 model에 담았던 아이가 admin(관리자)이면 -->
 <c:if test="${role == 'admin'}">
 <!--  +모양을 보여주고 그걸 클릭하면 write로 가라 -->
-	<div class="write" onclick="location.href='write'">+ </div>
+	<div class="write" onclick="location.href='write'" style="margin-bottom: 50px;">+ </div>
 </c:if>
 
 <div style="text-align: right; margin-bottom: 30px;">
 	<form action="list"> 
+<!-- 	pageNum의 기본값을 1로 준 이유는 다른 페이지에서 검색하면 그 검색한걸로 기본으로 1페이지 부터 보여주기 위해 -->
 		<input name="pageNum" value="1" type="hidden">
 		<input name="searchKeyword"  value="${searchKeyword}" class="form-control" type="text" placeholder="제목 또는 내용으로 검색 가능합니다" aria-label="default input example" style="width: 300px; display: inline; margin-right: 10px;">
 		<button type="submit" class="btn btn-primary">검색</button>
@@ -67,6 +68,7 @@
 <!-- 이전 버튼 -->
          <c:if test="${pageMaker.prev}">
 	    	<li class="page-item">
+<%--     searchKeyword=${searchKeyword} 이걸 추가한 이유는 검색 결과를 가지고 같이 이동해야하기 떄문 --%>
              	<a class="page-link" href="list?pageNum=${pageMaker.startPage - 1}&searchKeyword=${searchKeyword}">
       				<i class="fa-solid fa-circle-left" style="padding: 4px;"></i>
     			</a>          
@@ -77,6 +79,7 @@
     <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
     
     <li class="page-item" ${pageMaker.cri.pageNum == num ? "style='border-bottom: 2px solid blue;'" :""}>
+<%--     searchKeyword=${searchKeyword} 이걸 추가한 이유는 검색 결과를 가지고 같이 이동해야하기 떄문 --%>
     <a class="page-link" href="list?pageNum=${num}&searchKeyword=${searchKeyword}">
     ${num}
     </a></li>
@@ -87,6 +90,7 @@
     <!-- 다음 버튼 -->
    <c:if test="${pageMaker.next}">
     <li class="page-item">
+<%--     searchKeyword=${searchKeyword} 이걸 추가한 이유는 검색 결과를 가지고 같이 이동해야하기 떄문 --%>
      <a class="page-link" href="list?pageNum=${pageMaker.endPage + 1}&searchKeyword=${searchKeyword}">
      <i class="fa-solid fa-circle-right" style="padding: 4px;"></i></a>
          </li>

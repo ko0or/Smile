@@ -35,12 +35,7 @@ $(document).ready(function() {
                      //아니면 없에라
                         row += getComponent(data[i], "none");
                      }
-               
-                     
-                     
                   }
-      
-                  
                   
                   // 밑에 댓글 작성란 row에 넣어준다 왜 냐하면 row에 data의 값을 하나씩 넣어 주기 때문에 댓글도 하나씩 넣어 줘야 한다.
                   row += `
@@ -58,10 +53,6 @@ $(document).ready(function() {
                
                   //html==append랑 같은건데 밑에 getComponent 함수의 모든 div값을 넣은 것 이다
                   $(".content-footer").html( row );
-   
-   
-   
-   
    
                   
                   // 댓글 수정버튼 눌렀을때 작동할 내용

@@ -280,40 +280,56 @@ public class UserController {
 		// 비교하여 리턴값이 true 인 경우 사용자 입력 비밀번호가 데이터베이스에 암호화되어 저장된 비밀번호와 일치
 		boolean passwordMatches = devUtils.passwordMatches(strFromInput, strFromDatabase);
 
-		// 새 비밀번호와 새 비밀번호 확인
-		String password = params.get("newPassword");
-		String password2 = params.get("newPassword2");
-
-		// 현재 비밀번호와 데이터베이스 조회 비밀번호가 일치하면
+		log.info("@@# params => " + params.toString() );
+		
+		// 현재 비밀번호와 데이터베이스 조회 비밀번호가 일치하고
 		if (passwordMatches) {
 			
-			// 새 비밀번호와 새 비밀번호 확인이 일치하고, 비밀번호 란이 공백이 아닌 경우
-			if(password.equals(password2) && (password.isEmpty() == false )) {
+			//★=> 만약, 비밀번호 변경에 체크되었다면 => 새 비밀번호와 새 비밀번호 확인
+			if ( params.get("pwdChanged").equals("true") ) {
+				String password = params.get("newPassword");
+				String password2 = params.get("newPassword2");
 				
+				// 새 비밀번호와 새 비밀번호 확인이 일치하고, 비밀번호 란이 공백이 아닌 경우
+				if(password.equals(password2) && (password.isEmpty() == false )) {
+					
+					// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
+					userService.modify(params, session);
+					user.setNickname(params.get("nickname"));
+					
+					// 입력받은 새 비밀번호를 암호화
+					password = devUtils.StringToPassword(params.get("newPassword"));
+					
+					// params 값을 replace 로 바꿔치기
+					params.replace("password", password);
+					
+					// 암호화된 비밀번호를 setter 로 세션값에 셋팅
+					userService.modify(params, session);
+					log.info("UserController ===> POST modify ===> if");
+					
+					return ResponseEntity.status(HttpStatus.OK).body("success");
+				} else {
+					// 비밀번호 변경하기 체크는 했지만,   새 비밀번호와  새 비밀번호 확인을 서로 다르게 입력한 경우
+					log.info("UserController ===> POST modify ===> else");
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+				}
+			
+				//★=> 만약, 비밀번호 변경에 체크가 안되었다면 ( 닉네임만 변경, 기존 비밀번호 사용한다는 뜻 )
+			} else if ( params.get("pwdChanged").equals("false") ) {
+				
+				// 비밀번호는 DB에서 가져온 암호화된 기존 비밀번호 그대로 쓰도록 함
+				params.replace("password", strFromDatabase);
 				userService.modify(params, session);
-				// 새로 설정한 닉네임과 비밀번호를 setter 로 세션 재설정
+				
+				// 변경된 닉네임 반영하기
 				user.setNickname(params.get("nickname"));
 				
-				// 입력받은 새 비밀번호를 암호화
-				password = devUtils.StringToPassword(params.get("newPassword"));
-				
-				// params 값을 replace 로 바꿔치기
-				params.replace("password", password);
-				
-				// 암호화된 비밀번호를 setter 로 세션값에 셋팅
-				userService.modify(params, session);
-				
-				log.info("UserController ===> POST modify ===> if");
-				
 				return ResponseEntity.status(HttpStatus.OK).body("success");
-			}else {
-				log.info("UserController ===> POST modify ===> else");
-				
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
 			}
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
-		}
+			
+			
+		}			
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
 	}
 	
 	
