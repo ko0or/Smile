@@ -15,4 +15,5 @@ public class MainBoardDto {
 	private int commentCount;
 	
 	private String nickname;
+	private String imgPath;
 }

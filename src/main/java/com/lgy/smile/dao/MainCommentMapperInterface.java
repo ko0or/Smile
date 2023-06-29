@@ -51,5 +51,12 @@ public interface MainCommentMapperInterface {
 	
 	//=> ★ 대댓글 관련 (lastIndex: 해당 그룹의 index 번호중 가장 마지막 번호 가져오기)	
 	public int replyLastIndex(HashMap<String, String> params);
+	
+	
+	
+	
+	//=> ★ INSERT된 댓글의 식별번호(PK) 가져오기	
+	public int getLastIdentity();
+	public int authorIdentityByBoard(HashMap<String, String> params);
 
 }

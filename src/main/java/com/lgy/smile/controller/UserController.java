@@ -436,7 +436,7 @@ public class UserController {
 			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
 			
 		} catch (NoSuchFileException ne) {
-			ne.printStackTrace();
+			log.info("★ 해당 경로에 프로필 사진이 없어서 에러 발생");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

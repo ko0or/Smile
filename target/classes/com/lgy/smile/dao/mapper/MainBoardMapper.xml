@@ -28,7 +28,7 @@
 		    , board.* 
 		    , LENGTH(board.likes) - LENGTH(REPLACE(board.likes, ',', '')) "likeCount"
 		    , (SELECT count(*) FROM smile.comment_main WHERE board = board.identity) "commentCount"
-		
+			, user.imgPath
 		FROM 
 			smile.user user,
 		    smile.board_main board

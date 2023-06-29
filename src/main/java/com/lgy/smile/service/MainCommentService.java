@@ -63,6 +63,17 @@ public class MainCommentService implements MainCommentMapperInterface {
 		if ( devUtils.isLogin(session) == true) {
 			//=> ★ 로그인상태일때만 동작
 			dao.write(params);
+			
+			//=> (알람 생성) 만약, 다른 사람에게 댓글을 달아주는거라면
+			int boardIdentity = Integer.parseInt(params.get("board"));
+			int authorUserIdentity  = dao.authorIdentityByBoard(params);
+			int LoginUserIdentity = devUtils.getUserInfo(session).getIdentity();
+			int commentIdentity = dao.getLastIdentity();
+			String message = params.get("content");
+			if ( authorUserIdentity != LoginUserIdentity ) {				
+				devUtils.createNotificationMainComment(authorUserIdentity, message, devUtils.getNotificationTypeCommentMain(), commentIdentity, "main/list?searchByBoardIdentity="+boardIdentity, LoginUserIdentity);
+			}
+			
 		}
 	}
 
@@ -80,10 +91,8 @@ public class MainCommentService implements MainCommentMapperInterface {
 		if ( userIdentity == commentAuthorUserIdentity ) {
 			
 			dao.modify(params);
-			log.info("@ => 로그인된 유저와 댓글 작성자가 일치하여 댓글을 수정했습니다.");
 			return;
 		}
-		log.info("@ => 수정 실패! 댓글 작성자 본인이 아닙니다.");
 	}
 
 	
@@ -177,6 +186,18 @@ public class MainCommentService implements MainCommentMapperInterface {
 				dao.replyPush(params);
 				dao.replyWrite(params);
 			}
+			
+			
+			//=> (알람 생성) 만약, 다른 사람에게 댓글을 달아주는거라면
+			int loginUserIdentity = devUtils.getUserInfo(session).getIdentity();
+			int targetUserIdentity = dto.getUser(); 
+			int replyCommemtIdentity = dao.getLastIdentity();
+			int boardIdentity = Integer.parseInt(params.get("board"));
+			String message = params.get("content");
+			if ( loginUserIdentity  != targetUserIdentity) {
+				devUtils.createNotificationMainComment(targetUserIdentity, message, devUtils.getNotificationTypeCommentMain(), replyCommemtIdentity, "main/list?searchByBoardIdentity="+boardIdentity, loginUserIdentity);
+			}
+			
 		}
 	}
 	
@@ -199,9 +220,11 @@ public class MainCommentService implements MainCommentMapperInterface {
 	@Override public void modify(HashMap<String, String> params) 	{	 	/* TODO Auto-generated method stub */		}
 	@Override public void deleteByIdentity(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
 	@Override public void deleteByGroup(HashMap<String, String> params) 	{ 		/* TODO Auto-generated method stub */		}
-	@Override public int authorIdentityCheck(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }
+	@Override public int authorIdentityCheck(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return 0; }
 	@Override public MainCommentDto commentInfo(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return null; }
 	@Override public void replyWrite(HashMap<String, String> params) { /* TODO Auto-generated method stub */ }	
 	@Override public void replyPush(HashMap<String, String> params) { /* TODO Auto-generated method stub */ }	
-	@Override public int replyLastIndex(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }	
+	@Override public int replyLastIndex(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return 0; }	
+	@Override public int getLastIdentity() { /* TODO Auto-generated method stub */ return 0; }	
+	@Override public int authorIdentityByBoard(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return 0; }	
 }

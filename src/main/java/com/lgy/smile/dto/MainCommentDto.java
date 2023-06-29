@@ -17,4 +17,5 @@ public class MainCommentDto {
 	private int target_user;
 	
 	private String target_user_nickname;
+	private String imgPath;
 }

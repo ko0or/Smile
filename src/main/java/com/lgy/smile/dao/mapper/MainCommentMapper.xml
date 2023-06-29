@@ -32,7 +32,9 @@
 				SELECT 
 					comment.* ,
 				    user.nickname ,
-				    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname"
+				    (SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname",
+                    user.imgPath
+                    
 				FROM 
 				    smile.comment_main comment,
 				    smile.user user
@@ -118,4 +120,27 @@
 				DELETE FROM smile.comment_main comment
 				WHERE comment.group = #{group}
 	</delete>  	  	
+	
+	
+	<!-- INSERT된 댓글의 식별번호(PK) 가져오기 -->
+    <select id="getLastIdentity" resultType="int">
+		    	SELECT 
+		    		identity 
+		   		FROM 
+		   			smile.comment_main comment 
+		   		ORDER BY 
+		   			identity DESC 
+		  		LIMIT 
+		  			0, 1
+    </select>
+	
+	<!-- 게시글 작성자의 식별번호(PK) 가져오기 -->
+    <select id="authorIdentityByBoard" resultType="int" parameterType="hashmap">
+				SELECT 
+					board.user 
+				FROM 
+					smile.board_main board 
+				WHERE 
+					board.identity = #{board};
+    </select>
 </mapper>

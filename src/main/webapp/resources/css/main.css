@@ -107,6 +107,8 @@
 	position: relative;;
 	top: 8px;
 	margin-right: 5px;
+	background-size: cover;
+	background-position: center;
 }
 
 .feed-comment-wrapper {
