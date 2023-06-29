@@ -28,7 +28,7 @@
     
     <insert id="write" parameterType="hashmap">
 		insert into board_notice(identity, title, content, created, view, user) values(
-			null , #{title} , #{content} , #{created} , 0 , #{user}
+			null , #{title} , #{content} , #{created} , 0 , 0
 		)
     </insert>
     
@@ -66,6 +66,43 @@
 			identity = ${identity}
 		    AND view NOT LIKE '%, ${ipaddr}%'
 	]]>
+    </update>
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 새로쓴 게시글 봤는지 확인하는 쿼리 -->
+    <select id="confirmedCheck" resultType="int" parameterType="hashmap">
+		SELECT 
+			CASE WHEN board.user LIKE '%${user}%' 
+				THEN 1 
+				ELSE -1 
+		    END "confirmed"
+		FROM 
+			smile.board_notice board
+		ORDER BY 
+			identity DESC LIMIT 0, 1
+    </select>
+    
+    <!-- 새로쓴 게시글 봤다고 등록하는 쿼리 -->
+    <update id="confirmedUpdate" parameterType="hashmap">
+		UPDATE 
+			smile.board_notice board
+		SET 
+			board.user = CONCAT(board.user, ', ', ${user})
+		WHERE 
+			board.user NOT LIKE '%, ${user}%'
+			AND board.identity = (
+						SELECT max_identity
+						FROM (
+							SELECT MAX(identity) AS max_identity
+							FROM smile.board_notice
+						) AS subquery
+			)
     </update>
 
 </mapper>

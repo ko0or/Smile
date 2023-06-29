@@ -6,6 +6,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.lgy.smile.common.DevUtils;
+import com.lgy.smile.dao.NoticeMapperinterface;
 import com.lgy.smile.dto.NoticeCriteria;
 import com.lgy.smile.dto.NoticeDto;
 import com.lgy.smile.dto.NoticePageDTO;
@@ -35,11 +38,16 @@ public class NoticeController {
 	@GetMapping("/list")
 	public String noticeList(Model model,@RequestParam HashMap<String,String> params, NoticeCriteria cri,HttpSession session) {
 		
+		
 		String searchKeyword = ""; 
+//		검색창에 값이 있으면(검색 햇으면)
 		if ( params.get("searchKeyword") != null ) {
+//			키워드를 가지고 와서
 			searchKeyword = params.get("searchKeyword"); 
 		}
+//		담는다.
 		model.addAttribute("searchKeyword", searchKeyword);
+//		params에 넣어서 jsp파일로 가져감
 		params.put("searchKeyword", searchKeyword);
 		
 		
@@ -94,14 +102,12 @@ public class NoticeController {
 	public String noticeRead(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# read");
 		
-//		게시글을 읽는 쿼리 실행 하는 contentView 메소드
-		service.contentView(params);
 		
 		// 조회수 증가시키는 쿼리 실행하기 => service.viewUp(params);
 		service.viewUp(params);
 		
 //		service단에 있는 contentView 메소드를 가지고 와서 board라는 이름으로 model에 넣어 준다.
-		model.addAttribute("board",service.contentView(params));
+		model.addAttribute("board",service.contentView(params, session));
 		
 //		UserDto에 로그인된 유저 정보
 		UserDto user = devUtils.getUserInfo(session);
@@ -176,4 +182,16 @@ public class NoticeController {
 	}
 	
 	
+	@GetMapping("/confirmedCheck")
+	public ResponseEntity<Integer> confirmedCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
+		
+		// 비로그인시 0, 로그인했고 공지도 봤었다면 1, 로그인했지만 공지안봤으면 -1
+		if ( devUtils.isLogin(session) == true ) {			
+			params.put("user", devUtils.getUserIdentityToString(session));
+			int checked = service.confirmedCheck(params);
+			return ResponseEntity.status(HttpStatus.OK).body( checked ); 
+		}
+		// HttpStatus.BAD_REQUEST 로 하는게 정석이긴한데.. 그럼 콘솔창에 빨간 글자가 새겨짐
+		return ResponseEntity.status(HttpStatus.OK).body( 0 );
+	}
 }

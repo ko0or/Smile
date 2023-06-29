@@ -75,6 +75,7 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		
 	}
 	
+//	대댓글
 	@Override
 	public void replaycomment(HashMap<String, String> param, HttpSession session) {
 		
@@ -96,7 +97,7 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		param.put("index", String.valueOf(dto.getIndex()) );
 		param.put("target_user", String.valueOf(dto.getUser()) );
 		
-//		인덱스가 대댓글임 그 대댓글이 0이라는건 대댓글이 없다는 거임
+//		index가 대댓글임 그 대댓글이 0이라는건 대댓글이 없다는 거임
 		if ( dto.getIndex() == 0 ) {
 			// 원본 댓글에 바로 댓글을 달고자 한다면
 //			인덱스를 바꾼다 
@@ -163,9 +164,3 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 
 
 }
-
-	
-
-	
-
-
