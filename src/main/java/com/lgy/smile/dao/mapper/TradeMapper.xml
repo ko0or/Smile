@@ -12,9 +12,23 @@
   	</insert>
 
 <!-- 	LIMIT ${start}, 5 : start 변수 + 5개씩 화면단에 보여줌 -->
+<!-- 		SELECT  -->
+<!-- 			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user  -->
+<!-- 		FROM  -->
+<!-- 			smile.board_trade board, -->
+<!-- 			smile.user user -->
+<!-- 		WHERE  -->
+<!-- 			(user.nickname LIKE '%${searchByNickname}%' AND board.identity LIKE '%${searchByBoardIdentity}%' AND board.likes LIKE '%${searchByLikeUser}%') -->
+<!-- 			AND board.user = user.identity -->
+<!-- 		ORDER BY  -->
+<!-- 			identity DESC -->
+<!-- 		LIMIT  -->
+<!-- 			${start}, 5 -->
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto" parameterType="hashmap">
-		SELECT 
-			board.identity, board.title, board.content, board.created, board.contacted, board.imgPath, board.status, FORMAT(board.price, 0) "price", board.address, board.user 
+		SELECT  
+			 board.*
+		    , FORMAT(board.price, 0) "price"
+		    , LENGTH(board.likes) - LENGTH(REPLACE(board.likes, ',', '')) "likeCount"
 		FROM 
 			smile.board_trade board,
 			smile.user user
