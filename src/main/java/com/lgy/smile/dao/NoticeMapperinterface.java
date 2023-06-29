@@ -21,7 +21,7 @@ public interface NoticeMapperinterface {
 	public int getCount();
 	public int getCount(HashMap<String, String> param);//검색기능 후 페이징처리를 하기위해
 	
-	public int confirmedCheck(@RequestParam HashMap<String, String> param);
-	public void confirmedUpdate(@RequestParam HashMap<String, String> param);
+	public int confirmedCheck(@RequestParam HashMap<String, String> param);//새 게시글 확인여부
+	public void confirmedUpdate(@RequestParam HashMap<String, String> param);//게시글 눌럿을때 유저 pk등록
 	
 }

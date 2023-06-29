@@ -11,6 +11,10 @@
 	             , 0 , 0
 	            
 		)
+		
+		<selectKey resultType="int" keyProperty="lastIdentity" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
     </insert>
     
 <!--     댓글을 보기 위해 쓰는 select문 =>(SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname" -->
@@ -102,4 +106,16 @@
 
     </select>
     
+    
+    
+    <select id="getLastIdentity" resultType="int">
+    	SELECT 
+    		identity 
+   		FROM 
+   			smile.comment_notice 
+   		ORDER BY 
+   			identity DESC 
+  		LIMIT 
+  			0, 1
+    </select>
 </mapper>

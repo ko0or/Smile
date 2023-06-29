@@ -181,17 +181,20 @@ public class NoticeController {
 		
 	}
 	
-	
+//	★ 새 게시글 확인여부
 	@GetMapping("/confirmedCheck")
 	public ResponseEntity<Integer> confirmedCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
-		// 비로그인시 0, 로그인했고 공지도 봤었다면 1, 로그인했지만 공지안봤으면 -1
-		if ( devUtils.isLogin(session) == true ) {			
+		// 비로그인시 0, 로그인했고 공지도 봤었다면 1(알람 안뜸), 로그인했지만 공지안봤으면 -1(알람뜸)
+		if ( devUtils.isLogin(session) == true ) {
+//			유저pk값을 user로 받아라
 			params.put("user", devUtils.getUserIdentityToString(session));
+//			서비스 단 연결
 			int checked = service.confirmedCheck(params);
 			return ResponseEntity.status(HttpStatus.OK).body( checked ); 
 		}
 		// HttpStatus.BAD_REQUEST 로 하는게 정석이긴한데.. 그럼 콘솔창에 빨간 글자가 새겨짐
+//		비로그인
 		return ResponseEntity.status(HttpStatus.OK).body( 0 );
 	}
 }

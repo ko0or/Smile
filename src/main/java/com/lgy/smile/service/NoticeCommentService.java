@@ -90,6 +90,8 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		
 //		dto에 commentInfo를 연결해준다 그래서 commentInfo도 dto로 받는 것이다.
 		NoticeCommentDto dto = dao.commentInfo(param);
+
+		
 		log.info("@@ " + dto.toString() );
 		
 //		param.put에 다 넣어줌 기본으로 가지고 오는 애들(identity,content,board) 제외하고 닉네임은 굳이 필요가 없음 ajax에서 설정 할것임
@@ -103,12 +105,21 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 //			인덱스를 바꾼다 
 //			다만 String.valueOf( dao.commentnew(param))를 사용한 이유는 commentnew메소드는 int타입이기때문에 String타입으로 강제로 변경해야index를 넣을 수 있음
 			param.replace("index", String.valueOf( dao.commentnew(param)) );  
-			dao.replaycomment(param); //넣기
 			
 		} else {
 			// 원본 댓글의 인덱스가 0이 아니라면 (= 대댓글에 대댓글을 달고자하면)
 			dao.orignalindexcomment(param);//공간을 비워주고
-			dao.replaycomment(param);//넣기
+		}
+		
+		
+		dao.replaycomment(param); //넣기
+		int loginUserIdentity = devUtils.getUserInfo(session).getIdentity();
+		int targetUserIdentity = dto.getUser();
+		int lastIdentity = dao.getLastIdentity(); // 위에서 넣은 값 받아오기
+		int boardIdentity = Integer.parseInt(param.get("board"));
+		if ( loginUserIdentity != targetUserIdentity ) {
+			devUtils.createNotificationNoticeComment(targetUserIdentity, param.get("content"), devUtils.getNotificationTypeCommentNotice(), lastIdentity , "notice/read?identity="+ boardIdentity , loginUserIdentity);
+			 
 		}
 	}
 
@@ -159,6 +170,12 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 	@Override
 	public void replaycomment(HashMap<String, String> param) {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public int getLastIdentity() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

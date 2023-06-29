@@ -39,7 +39,8 @@ public interface NoticeCommentMapperinterface {
 	public int commentnew(@RequestParam HashMap<String, String> param);
 	
 	
-	
+//	작성된 댓글의 identity 가져오기위한 매퍼
+	public int getLastIdentity();
 
 
 }

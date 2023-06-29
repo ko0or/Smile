@@ -196,7 +196,7 @@ public class DevUtils  {
 	
 	//
 	//=> 메시지 유형 enum 으로 설정 ( none: 대상 게시판 없음,     comment_main : 메인 게시판의 댓글 알람,      comment_notice : 공지 게시판의 댓글 알람 ) 
-	private enum notificationType {
+	public enum notificationType {
 		none, comment_main , comment_notice 
 	}
 	 public Enum getNotificationTypeCommentMain() { return notificationType.comment_main; }
@@ -205,6 +205,6 @@ public class DevUtils  {
 	
 	public void createNotification(int userIdentity, String message) 	  {	notificationService.createSet(userIdentity, message); }
 	public void createNotification(String userIdentity, String message) {	notificationService.createSet(userIdentity, message); }
-	public void createNotificationMainComment(int userIdentity, String message, Enum type , int target_identity, String urlPath) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath); }
-	public void createNotificationNoticeComment(int userIdentity, String message, Enum type , int target_identity, String urlPath) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath); }
+	public void createNotificationMainComment(int userIdentity, String message, Enum type , int target_identity, String urlPath, int targetUserIdentity) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath, targetUserIdentity); }
+	public void createNotificationNoticeComment(int userIdentity, String message, Enum type , int target_identity, String urlPath, int targetUserIdentity) {	notificationService.createSet(userIdentity, message, type, target_identity, urlPath, targetUserIdentity); }
 }
