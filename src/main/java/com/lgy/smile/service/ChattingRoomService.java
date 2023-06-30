@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lgy.smile.dao.ChattingRoomInterface;
 import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.MyChattingRoomDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +24,13 @@ public class ChattingRoomService implements ChattingRoomInterface{
 	public ArrayList<ChattingRoomDto> list() {
 		ChattingRoomInterface dao = sqlSession.getMapper(ChattingRoomInterface.class);
 		ArrayList<ChattingRoomDto> list = dao.list();
+		return list;
+	}
+	
+	@Override
+	public ArrayList<MyChattingRoomDto> myChatRoomList(HashMap<String, String> params) {
+		ChattingRoomInterface dao = sqlSession.getMapper(ChattingRoomInterface.class);
+		ArrayList<MyChattingRoomDto> list = dao.myChatRoomList(params);
 		return list;
 	}
 	
