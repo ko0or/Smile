@@ -1,4 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page session="false" pageEncoding="UTF-8" %>
 <html>
 <head>
@@ -98,9 +100,19 @@
 <!-- <style>@import 'resources/css/main.css'</style>  -->
 <section>
 <h1 align="center">1:1 대화</h1>
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<c:set var="nowDate"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></c:set>
 	<div class="wrap">
 		<div id="chat">
 			<c:forEach items="${list}" var = "dto">
+				<fmt:parseDate value="${dto.sendtime}" var="date" pattern="yyyy-MM-dd"/>
+				<c:set var="date2"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></c:set>
+				<c:choose>
+					<c:when test="${nowDate != date2}">
+						<c:set var="nowDate" value="${date2}"></c:set>
+							<h6 align="center">${fn:substring(dto.sendtime, 0, 13)}</h6>
+					</c:when>
+				</c:choose>
 				<c:choose>
 					<c:when test="${user.identity == dto.receiver}">
 						<div class="chat ch1">
@@ -109,7 +121,7 @@
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>				     
 				            <div class="textbox">${dto.msg}</div>
-				            <div class="sendtime1">${dto.sendtime}</div>
+				            <div class="sendtime1">${fn:substring(dto.sendtime, 14, 22)}</div>
 			   		  	</div>
 					</c:when>
 					<c:otherwise>
@@ -119,7 +131,7 @@
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>	
 				            <div class="textbox">${dto.msg}</div>
-				            <div class="sendtime2">${dto.sendtime}</div>
+				            <div class="sendtime2">${fn:substring(dto.sendtime, 14, 22)}</div>
 			       		</div>
 					</c:otherwise>
 				</c:choose>
