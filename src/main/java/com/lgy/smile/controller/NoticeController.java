@@ -50,27 +50,26 @@ public class NoticeController {
 //		params에 넣어서 jsp파일로 가져감
 		params.put("searchKeyword", searchKeyword);
 		
-		
-		log.info("@# list");
 //		list로 service단에 list메소드를 params값으로 담는다
 		ArrayList<NoticeDto> list = service.list(params);
 		
 //		model에 담아서 ArrayList의 메개변수 list를 list.jsp로가서 list이름을 사용한다
 		model.addAttribute("list", list);
-		log.info( "list 갯수 => " + list.size() );
 		
 //		model에 담아서  service단에 getCount메소드와 NoticeCriteria에 있는 값을 pageMaker이름으로 가져간다(페이징 처리를 위해)
 		model.addAttribute("pageMaker", new NoticePageDTO( service.getCount(params) , cri));
-		log.info("@@# service.getCount() 갯수 => " + service.getCount(params));
 		
 //		(댓글 갯수 확인)
 		model.addAttribute("commnetCount", commentService.getCount() );
 		
+//		관리자가 로그인 했다면
 		if ( devUtils.getUserRoleIsAdmin(session) == true ) {
+//			admin과 user중 admin이 관리자
+//			관리자를 role이라는 이름 으로 사용
 			model.addAttribute("role", "admin" );
 		}
 		
-		
+//		jsp파일로 가는 애
 		return "notice/list";
 	}
 	// ★ notice(공지) 글 쓰기 (화면)
@@ -82,6 +81,7 @@ public class NoticeController {
 			return "notice/write"; 
 		
 		} // 관리자가 아니라면  목록 화면으로 추방
+//		redirect: 주소로 가는애
 		return "redirect:/notice/list";
 		
 	}
@@ -90,7 +90,6 @@ public class NoticeController {
 	// ★ notice(공지) 글 쓰기(실행)
 	@PostMapping("/write")
 	public String noticeWrite(Model model, @RequestParam HashMap<String,String> params, HttpSession session) {
-		log.info("@# write");
 		service.write(params);	
 		return "redirect:list";
 		
@@ -112,12 +111,13 @@ public class NoticeController {
 //		UserDto에 로그인된 유저 정보
 		UserDto user = devUtils.getUserInfo(session);
 		
+//		로그인을 했다면
 		if (user != null) {
 //		그 유저 정보에 identity값을 model에 넣어서 userIdentity 값으로 가지고 간다
 			model.addAttribute("userIdentity", devUtils.getUserInfo(session).getIdentity());
 			
 		}else {
-//			로그인을 하지 않았다면(getUserInfo)메소드에  값이 null인 거임 그럼 -1(identity값이 음수일수없으니까)
+//			로그인을 하지 않았다면(getUserInfo)메소드에  값이 null인 거임 그럼 -1(identity값이 pk이라서 음수일수없으니까)
 			model.addAttribute("userIdentity",-1);
 			
 		}
@@ -176,7 +176,7 @@ public class NoticeController {
 //			삭제하고
 			service.delete(params);
 		}
-//		리스트로 다시 가라
+//		아니라면 리스트로 다시 가라
 		return "redirect:list";
 		
 	}
@@ -187,6 +187,8 @@ public class NoticeController {
 		
 		// 비로그인시 0, 로그인했고 공지도 봤었다면 1(알람 안뜸), 로그인했지만 공지안봤으면 -1(알람뜸)
 		if ( devUtils.isLogin(session) == true ) {
+			
+//			getUserIdentityToString :user->identity를 문자열로 반환하는 메소드
 //			유저pk값을 user로 받아라
 			params.put("user", devUtils.getUserIdentityToString(session));
 //			서비스 단 연결

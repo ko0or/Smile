@@ -46,10 +46,12 @@
 		 where identity=#{identity}
     </update>
     
+<!--     대댓글 삭제할때 해당 대댓글만 삭제 -->
     <delete id="deletecommentByIdentity" parameterType="hashmap">
 		delete from comment_notice where identity=#{identity}
     </delete>
     
+<!--     댓글을 삭제할때 해당 대댓글도 삭제 -->
     <delete id="deletecommentByGroup" parameterType="hashmap">
 		delete from comment_notice board where board.group = #{group}
     </delete>
@@ -108,7 +110,7 @@
     </select>
     
     
-    
+<!--     알림기능 -->
     <select id="getLastIdentity" resultType="int">
     	SELECT 
     		identity 

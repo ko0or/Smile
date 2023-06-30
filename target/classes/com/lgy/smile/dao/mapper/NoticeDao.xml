@@ -4,6 +4,7 @@
 
 <mapper namespace="com.lgy.smile.dao.NoticeMapperinterface">
 
+	
     <select id="list" resultType="com.lgy.smile.dto.NoticeDto" parameterType="int">
         <![CDATA[
 		SELECT

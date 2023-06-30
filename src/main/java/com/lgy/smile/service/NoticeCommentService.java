@@ -113,11 +113,14 @@ public class NoticeCommentService implements NoticeCommentMapperinterface {
 		
 		
 		dao.replaycomment(param); //넣기
-		int loginUserIdentity = devUtils.getUserInfo(session).getIdentity();
-		int targetUserIdentity = dto.getUser();
+		
+//		★ 알림기능
+		int loginUserIdentity = devUtils.getUserInfo(session).getIdentity();//현재 로그인한 유저
+		int targetUserIdentity = dto.getUser();//대댓글을 남길 댓글의 유저
 		int lastIdentity = dao.getLastIdentity(); // 위에서 넣은 값 받아오기
-		int boardIdentity = Integer.parseInt(param.get("board"));
-		if ( loginUserIdentity != targetUserIdentity ) {
+		int boardIdentity = Integer.parseInt(param.get("board"));//댓글
+		if ( loginUserIdentity != targetUserIdentity ) {//로그인한 유저와 대댓글 남길 댓글이 같지않을때
+			
 			devUtils.createNotificationNoticeComment(targetUserIdentity, param.get("content"), devUtils.getNotificationTypeCommentNotice(), lastIdentity , "notice/read?identity="+ boardIdentity , loginUserIdentity);
 			 
 		}

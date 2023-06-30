@@ -82,11 +82,8 @@ public class NoticeService implements NoticeMapperinterface {
 		log.info("@# NoticeService.write() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		
-//		created애는 devUtils에 있는 getDate메소드를 사용할 것 이다.
+//		created로 devUtils에 있는 getDate메소드를 사용할 것 이다.
 		params.put("created", devUtils.getDate() );
-//		user에는 8번을 사용할것이다(관리자 인덱스)
-//		params.put("user",  );
-		
 		log.info("@# NoticeService.write() end");
 		dao.write(params);
 				
@@ -98,9 +95,12 @@ public class NoticeService implements NoticeMapperinterface {
 		log.info("@# NoticeService.contentView() start");
 		NoticeMapperinterface dao = sqlSession.getMapper(NoticeMapperinterface.class);
 		log.info("@# NoticeService.contentView() end");
-		
+
+		//		현재 로그인이 되어있으면
 		if ( devUtils.isLogin(session) == true ) {
+//			그 로그인 유저의 identity값을 user로 사용
 			params.put("user", devUtils.getUserIdentityToString(session));
+//			confirmedUpdate:게시글을 본 메소드
 			dao.confirmedUpdate(params);
 		}
 		return dao.contentView(params);
