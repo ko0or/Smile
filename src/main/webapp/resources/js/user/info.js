@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 	$(".goChattingRoom").click(function(){
    		//=> 대화방 보기 눌렀을때 
-		window.open( urlConverter(`chatroom/chatRoomListTest`) );
+		window.open( urlConverter(`chatroom/myChatRoomList?userId=${user_identity}`) );
 	   
 	})
 	$(".goMyFeeds").click(function(){

@@ -139,7 +139,7 @@ $(document).ready(function() {
                row += `
                <div class="footer-btns" style="display: flex; justify-content: space-around;">
                ${insertBtnSet}                  
-               <div class="contact-btn"><i class="fa-regular fa-message"></i>
+               <div class="contact-btn" id="go-chat"><i class="fa-regular fa-message"></i>
                문의하기</div>
                </div>`        
             }
@@ -200,7 +200,9 @@ $(document).ready(function() {
                 window.open( newURL );  
              })
  
- 
+ 			$("#go-chat").click(function () {
+	        window.open('../chatroom/write?board='+data.identity+'&seller='+data.user)
+	    	 })
  
  
     

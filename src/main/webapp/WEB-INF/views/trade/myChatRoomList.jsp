@@ -15,15 +15,17 @@
 		<h3 align="center">구매품 문의 목록</h3>
 		<table class="table table-striped">
 				<tr>
-					<td>제목</td>
-					<td>판매자 닉네임</td>
+					<td width="300" align="center">제목</td>
+					<td width="200" align="center">판매자 닉네임</td>
+					<td width="50"></td>
 				</tr>
 				
 				<c:forEach items="${list}" var = "dto">
 					<c:if test="${dto.buyer == user.identity and dto.userId != user.identity}">
 						<tr>
-							<td><a href="../chat/chatContent?board=${dto.board}&buyer=${dto.buyer}" style="background-color: aqua;">${dto.title}</a></td>
-							<td>${dto.nickname}</td>
+							<td align="center"><a href="../chat/chatContent?board=${dto.board}&buyer=${dto.buyer}">${dto.title}</a></td>
+							<td align="center">${dto.nickname}</td>
+							<td><input type="button" id="${dto.board}" class="goBoard" value="게시글"/></td>
 						</tr>
 					</c:if>
 				</c:forEach>
@@ -33,15 +35,17 @@
 		<h3 align="center">판매품 문의 목록</h3>
 		<table class="table table-striped">
 				<tr>
-					<td>제목</td>
-					<td>구매자 닉네임</td>
+					<td width="300" align="center">제목</td>
+					<td width="200" align="center">구매자 닉네임</td>
+					<td width="50"></td>
 				</tr>
 				
 				<c:forEach items="${list}" var = "dto">
 					<c:if test="${dto.seller == user.identity and dto.userId != user.identity}">
 						<tr>
-							<td><a href="../chat/chatContent?board=${dto.board}&buyer=${dto.buyer}" style="background-color: aqua;">${dto.title}</a></td>
-							<td>${dto.nickname}</td>
+							<td align="center"><a href="../chat/chatContent?board=${dto.board}&buyer=${dto.buyer}">${dto.title}</a></td>
+							<td align="center">${dto.nickname}</td>
+							<td><input type="button" id="${dto.board}" class="goBoard" value="게시글"/></td>
 						</tr>
 					</c:if>
 				</c:forEach>
@@ -80,9 +84,22 @@
 </section>
 <%@ include file="../common/footer.jsp" %>
 </body>
+<!-- 
+================== 카카오 맵 API 사용  appkey  =============================================== >>
+
+	★ AWS 배포시 => c2d1ab04a5b02c1ca16e392b9c82fd66
+	
+											or
+	
+	☆ 테스트할때 =>   149a80c17154419aa57d2cfae9d6a80d
+
+<< ============================================================================================= 
+-->
 <script>
-$(document).ready(function() {
-	autosize($('textarea'));
-})// ~~ end
+	var loginUserIdentity = ${user.identity};
 </script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=149a80c17154419aa57d2cfae9d6a80d&libraries=services"></script>
+<script src="../resources/js/api/kakaoMap.js"></script>
+<script src="../resources/js/trade/myChatRoomList.js"></script>
+<style>@import '../resources/css/trade/list.css'</style>
 </html>
