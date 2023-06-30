@@ -76,7 +76,6 @@ public class TradeService implements TradeMapperInterface {
 			params.put("contacted", "만나요");
 		}
 		
-
 		//=> ☆ 파일 업로드
 		for (MultipartFile multipartFile : uploadFile) {
 			log.info("========================================================");
@@ -114,7 +113,6 @@ public class TradeService implements TradeMapperInterface {
 		log.info("@# TradeService.write() end");
 		
 		return true;
-		
 	}
 
 	//=> ☆ trade(중고 거래) 글 내용 보기
@@ -185,26 +183,23 @@ public class TradeService implements TradeMapperInterface {
 					dao.modify(params);				
 					log.info("변경할 파일 없음");
 				}
-				
-				
+								
 				multipartFile.transferTo( saveFile );
 				// => 위에있는 for-each 구문에서 받았던 객체의 transferTo() 메소드 사용하면 파일저장 가능
 				// => 근데 저장할때 어디 경로에, 무슨 이름으로 저장할지 정보가 필요하니, 위에서 만든 File 객체를 매개변수로 사용 ★
 				log.info("파일 존재");
-
 				
 			} catch (NoSuchFileException e) { log.info("파일 없음");
-			} catch (Exception e) {  e.printStackTrace(); 
+			} catch (Exception e) { e.printStackTrace(); 
 			}
 			
 		} // ~ for 반복문 종료
 		
 		log.info("@# TradeService.modify() end");
 		return true;
-		
 	}
 
-	// ★ trade(중고 거래) 글 삭제
+	//=> ★ trade(중고 거래) 글 삭제
 	@Override
 	public boolean delete(@RequestParam HashMap<String, String> params, HttpSession session) {
 		log.info("@# TradeService.delete() start");
@@ -228,13 +223,10 @@ public class TradeService implements TradeMapperInterface {
 			return true;
 		}
 		
-		return false;
-		
-	}	
+		return false;		
+	}		
 	
-	
-	
-	
+	//=> ★ trade(중고 거래) 문자 인증
 	@Override
 	public int telCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
@@ -250,9 +242,7 @@ public class TradeService implements TradeMapperInterface {
 		return 0;
 	}
 	
-	
-	
-	/* ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 @Override */ 
+	//=> ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 
 	@Override
 	public void telUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
 		if ( devUtils.isLogin(session) == true ) {			
@@ -262,7 +252,7 @@ public class TradeService implements TradeMapperInterface {
 		}		
 	}
 
-	/* ★ trade(중고 거래) 좋아요 @Override */
+	//=> ★ trade(중고 거래) 좋아요 등록
 	@Override
 	public void like_toggle(@RequestParam HashMap<String, String> params, HttpSession session) {
 		if ( devUtils.isLogin(session) == true ) {	
@@ -270,48 +260,21 @@ public class TradeService implements TradeMapperInterface {
 			TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
 			dao.like_toggle(params);
 		}
-	}
-	
-	
-	
-	
-	
-	@Override
-	public int telCheck(@RequestParam HashMap<String, String> params) { return -1; }
-	
-	@Override
-	public boolean write(HashMap<String, String> param) {
-		// TODO Auto-generated method stub	
-		return false;
-	}
+	}	
 
-	@Override
-	public boolean delete(HashMap<String, String> param) {
-		// TODO Auto-generated method stub	
-		return false;
-	}
+	@Override public int telCheck(@RequestParam HashMap<String, String> params) { return -1; }
+	
+	@Override public boolean write(HashMap<String, String> param) { return false;	}
 
-	@Override
-	public boolean modify(HashMap<String, String> param) {
-		// TODO Auto-generated method stub	
-		return false;
-	}
+	@Override public boolean delete(HashMap<String, String> param) { return false; }
 
-	@Override
-	public void modifyWithImgPath(HashMap<String, String> param) {
-		// TODO Auto-generated method stub		
-	}
+	@Override public boolean modify(HashMap<String, String> param) { return false; }
 
-	@Override
-	public void modifyWithImgPath(HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
-		// TODO Auto-generated method stub
-	}
+	@Override public void modifyWithImgPath(HashMap<String, String> param) {}
 
-	@Override
-	public ArrayList<TradeDto> list() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	@Override public void modifyWithImgPath(HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {}
+
+	@Override public ArrayList<TradeDto> list() { return null;}
 	
 	@Override public void telUpdate(@RequestParam HashMap<String, String> params) {}
 	

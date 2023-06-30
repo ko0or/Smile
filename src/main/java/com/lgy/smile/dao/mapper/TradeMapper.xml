@@ -26,8 +26,8 @@
 <!-- 			${start}, 5 -->
   	<select id="list" resultType="com.lgy.smile.dto.TradeDto" parameterType="hashmap">
 		SELECT  
-			 board.*
-		    , FORMAT(board.price, 0) "price"
+			 FORMAT(board.price, 0) "price"
+		    , board.*
 		    , LENGTH(board.likes) - LENGTH(REPLACE(board.likes, ',', '')) "likeCount"
 		FROM 
 			smile.board_trade board,

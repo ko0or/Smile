@@ -17,171 +17,146 @@ import com.lgy.smile.dto.UserDto;
 @Service
 public class MainService implements MainBoardMapperInterface {
 	
-	/* ☆ 마이바티스 ☆ */
 	@Autowired private SqlSession sqlSession;
-	
-	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
-
+	
+//========================================================================================
 	
 	
-	@Override
+	/* ★ 게시글 작성  */ @Override
 	public boolean write(HashMap<String, String> params, HttpSession session) {
 
+		//=> ☆ 객체 생성 (유저 정보 포함해서)
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);		
 		UserDto user = devUtils.getUserInfo(session);
 		
-		if ( user == null ) {
-			log.info("☆ 글 작성 실패 => 비로그인상태");
-			return false;
-		}
+		//=> ☆ 로그인 아닐경우 진행 x
+		if ( user == null ) { return false; }
 		
-		// 로그인상태라면 ..  세션으로부터 받은 정보를 추가해서 DB에 저장 -☆
+		//=> ☆로그인된 상태라면, 현재 날짜와 로그인된 유저 정보를 저장하고 
 		params.put("date",  devUtils.getDate() );
 		params.put("userPK", String.valueOf( user.getIdentity() ) );
 		
+		//=> ☆ 저장된 정보로 게시글 작성
 		dao.write(params);
 		return true;
 	}
 
 
-	@Override
-	public MainBoardDto content_view(HashMap<String, String> params, HttpSession session) {
-		
-		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
-		UserDto user = devUtils.getUserInfo(session);
-		MainBoardDto dto = dao.content_view(params);
-		
-		if ( user.getIdentity() == dto.getUser() ) {
-			return dto;	
-		}
-		
-		return null;
-	}
-	
-
-	@Override
+	/* ★ 게시글 목록  */ @Override
 	public ArrayList<MainBoardDto> list(HashMap<String, String> params) {
 		
-		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
-		
+		//=> ☆ 게시글 목록 가져오기 
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);		
 		return dao.list(params);
 		
 	}
 
 
-
-	@Override
-	public boolean delete(HashMap<String, String> params, HttpSession session) {
-
+	/* ★ 게시글 화면 보여주기 (기존 작성된 내용) */ @Override
+	public MainBoardDto content_view(HashMap<String, String> params, HttpSession session) {
+		
+		//=> ☆ 객체 생성 (유저 정보, 게시글 정보) 포함해서
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
 		UserDto user = devUtils.getUserInfo(session);
-
-		if ( user == null ) {
-			return false;
-		}
-		
-		// 1. 게시글 번호로 SELECT 조회
 		MainBoardDto dto = dao.content_view(params);
-		// 2. 조회된 결과의 user 값을 확인
-		int userPK = dto.getUser();
 		
-		// 3. 현재 로그인중인 회원의 식별번호 (유저테이블의 pk번호) 확인
-		user.getIdentity();
+		//=> ☆ 게시글 작성자와,  현재 로그인된 유저가 일치할때만 보여주고
+		if ( user.getIdentity() == dto.getUser() ) { return dto;	 }
 		
-		// 4. 현재 로그인중인 회원 식별번호가 게시글 조회시 나온 user 외래키와 서로 일치하는지 확인
-		if ( user.getIdentity() == userPK) { 		
-			// 현재 로그인중인 회원번호가,  삭제하고자하는 게시글 테이블의 pk 번호와 일치하다면 삭제
+		//=> ☆ 서로 다를경우엔 안보여줌
+		return null;
+	}
+	
+	/* ★ 게시글 수정  */ @Override
+	public boolean modify(HashMap<String, String> params, HttpSession session) {
+		
+		//=> ☆ 객체 생성 (유저 정보, 게시글 정보) 포함해서
+		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
+		UserDto user = devUtils.getUserInfo(session);
+		MainBoardDto dto = dao.content_view(params);
+		
+		//=> ☆ 로그인 상태라면,  로그인 유저 정보와  게시글 작성자 정보를 가져오고
+		int loginUserIdentity = user.getIdentity();
+		int authorUserIdentity = dto.getUser(); 
+		
+		//=> ☆ 가져온 정보가 서로 일치할때만 수정되도록 처리
+		if ( loginUserIdentity  == authorUserIdentity ) { 		
 			dao.delete(params);
 			return true;
 		}
 		
+		//=> ☆ 일치하지않다면, 수정 x
 		return false;
 	}
+	
+	
+	/* ★ 게시글 삭제  */ @Override
+	public boolean delete(HashMap<String, String> params, HttpSession session) {
 
-
-
-	@Override
-	public boolean modify(HashMap<String, String> params, HttpSession session) {
-		
+		//=> ☆ 객체 생성 (유저 정보, 게시글 정보) 포함해서
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
 		UserDto user = devUtils.getUserInfo(session);
+		MainBoardDto dto = dao.content_view(params);
+
+		//=> ☆ 비로그인상태라면 진행 x
+		if ( user == null ) { return false; }
 		
-		dao.modify(params);
-		return true;
+		//=> ☆ 로그인 상태라면,  로그인 유저 정보와  게시글 작성자 정보를 가져오고
+		int loginUserIdentity = user.getIdentity();
+		int authorUserIdentity = dto.getUser(); 
+		
+		//=> ☆ 가져온 정보가 서로 일치할때만 삭제되도록 처리
+		if ( loginUserIdentity  == authorUserIdentity ) { 		
+			dao.delete(params);
+			return true;
+		}
+
+		//=> ☆ 일치하지않다면, 삭제 x
+		return false;
 	}
 
 
-	@Override
+
+
+	
+	
+	
+	
+
+
+	/* ★ 게시글 좋아요 (토글)  */ @Override
 	public void like_toggle(HashMap<String, String> params, HttpSession session) {
 		
+		//=> ☆ 객체 생성 (유저 정보) 포함해서
 		MainBoardMapperInterface dao = sqlSession.getMapper(MainBoardMapperInterface.class);
 		params.put("user", devUtils.getUserIdentityToString(session));
-		log.info("@@@좋아요 토글 테스트 시작 ==> " + params.toString());
-		dao.like_toggle(params);
+
+		//=> ☆ 로그인 상태일때만 토글되도록 처리
+		if ( devUtils.isLogin(session) == true ) { dao.like_toggle(params); }
+	}
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+/* ======================================================================================== 
 		
-	}
-
-
-
-	
-	
-	
-	
-	
-
-	@Override
-	public boolean write(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-
-	@Override
-	public boolean modify(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-
-	@Override
-	public boolean delete(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-
-	@Override
-	public MainBoardDto content_view(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public void like_toggle(HashMap<String, String> params) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public ArrayList<MainBoardDto> list() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-	
-	
-
-	
-	
-	
-	
+	#. 메소드 오버로딩용 (매퍼 연동)
+		 
+======================================================================================== */
+@Override  public boolean write(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return false; }
+@Override public boolean modify(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return false; }
+@Override public boolean delete(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return false; }
+@Override public MainBoardDto content_view(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return null; }
+@Override public void like_toggle(HashMap<String, String> params) { /* TODO Auto-generated method stub */  }
+@Override public ArrayList<MainBoardDto> list() { /* TODO Auto-generated method stub */ return null; }	
 }

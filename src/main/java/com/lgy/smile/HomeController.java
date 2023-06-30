@@ -14,6 +14,8 @@ public class HomeController {
 	WEB-INF/views/trade/write.jsp
 	WEB-INF/views/trade/edit.jsp
 	WEB-INF/views/trade/list.jsp
+	WEB-INF/views/trade/myChatRoomList.jsp
+	
 
 	(x) WEB-INF/views/common/navbar.jsp
 	(x) WEB-INF/views/user/login.jsp
