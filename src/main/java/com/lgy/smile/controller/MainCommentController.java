@@ -29,24 +29,23 @@ public class MainCommentController {
 	@Autowired private MainCommentService commentService;
 	@Autowired private DevUtils devUtils;
 
+//========================================================================================	
 	
-	
-	//=> ★ 댓글 목록 보여주기
+	//=> ★ 댓글 목록 보여주기 (처리 + AJAX 응답)
 	@GetMapping("/getComments") @ResponseBody
 	public ResponseEntity<List<MainCommentDto>> getPosts(@RequestParam HashMap<String, String> params) {
 
+		//=> ☆ 해당 게시글의 댓글 목록을 화면으로 전달 
 		ArrayList<MainCommentDto> dtos = commentService.list(params);
 		return ResponseEntity.status(HttpStatus.OK).body(dtos);
 	}
 	
 	
 	
-	//=> ★ 댓글 새로 작성하기
+	//=> ★ 댓글 새로 작성하기 (처리 + AJAX 응답)
 	@PostMapping("/write") @ResponseBody
 	public ResponseEntity<Void> write(@RequestParam HashMap<String, String> params, HttpSession session) {
 	
-		log.info("@@ 대댓글 테스트중 params => " + params.toString() );
-		
 		if ( params.get("replyTargetIdentity") == null ) {
 			//=> ☆ 대댓글 대상이 없다면,  일반 댓글 생성
 			commentService.write(params, session);
@@ -62,17 +61,18 @@ public class MainCommentController {
 	
 	
 	
-	//=> ★ 댓글 내용 수정하기
+	//=> ★ 댓글 내용 수정하기 (처리 + AJAX 응답)
 	@PostMapping("/modify") @ResponseBody
 	public ResponseEntity<Void> modfiy(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
+		//=> ☆ 댓글 수정
 		commentService.modify(params, session);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	
 	
-	//=> ★ 등록된 댓글 삭제하기
+	//=> ★ 등록된 댓글 삭제하기 (처리 + AJAX 응답)
 	@GetMapping("/delete") @ResponseBody
 	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params, HttpSession session) {		
 		MainCommentDto dto = commentService.commentInfo(params, session);

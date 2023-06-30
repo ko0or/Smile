@@ -24,10 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notification")
 public class NotificationController {
 
-	/* ☆ 실제 처리를 담당하는 서비스 계층  ☆ */
+	/* ☆ 마이바티스 + 공용으로 사용가능한 메소드들을 모아놓은 devUtils */
 	@Autowired private NotificationService service;
-	
-	/* ☆ 공용으로 사용가능한 메소드들을 모아놓은 devUtils  ☆ */
 	@Autowired private DevUtils devUtils;
 	
 	
@@ -48,8 +46,8 @@ public class NotificationController {
 
 //============================================================================================================== >>
 	
-	
-	@GetMapping("/count")//★=> 알람 목록을 반환
+	//★=> 알람 갯수 알려주기 (AJAX 응답)
+	@GetMapping("/count")
 	public ResponseEntity< Integer > count(@RequestParam HashMap<String, String> params, HttpSession session) {		
 		if ( devUtils.isLogin(session) == true ) { 
 			//=> 만약, 로그인 상태라면 해당 회원의 알람들을 AJAX 응답으로 넘겨주고
@@ -60,8 +58,8 @@ public class NotificationController {
 	}
 	
 	
-	
-	@GetMapping("/list")//★=> 알람 목록을 반환
+	//★=> 알람 내용들 보여주기 (AJAX 응답)
+	@GetMapping("/list")
 	public ResponseEntity< ArrayList<NotificationDto> > list(@RequestParam HashMap<String, String> params, HttpSession session) {		
 		if ( devUtils.isLogin(session) == true ) { 
 			//=> 만약, 로그인 상태라면 해당 회원의 알람들을 AJAX 응답으로 넘겨주고
@@ -72,8 +70,8 @@ public class NotificationController {
 	}
 	
 
-	//★=> 알람 삭제하기
-	@PostMapping("/delete")//★=> 알람 삭제하기
+	//★=> 알람 삭제하기 (AJAX 응답)
+	@PostMapping("/delete")
 	public ResponseEntity<Void> delete(@RequestParam HashMap<String, String> params) {
 		service.delete(params);
 		return ResponseEntity.status(HttpStatus.OK).build();

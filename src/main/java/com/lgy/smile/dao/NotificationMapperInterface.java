@@ -8,13 +8,16 @@ import com.lgy.smile.dto.NotificationDto;
 
 public interface NotificationMapperInterface {
 	
-	public int count(HashMap<String, String> params);
-	
-	public ArrayList<NotificationDto> list(HashMap<String, String> params);
-	public ArrayList<NotificationDto> list(HashMap<String, String> params, HttpSession session);
-	
+	//=> ★ 알람 생성
 	public void create(HashMap<String, String> params);
+	
+	//=> ★ 알람 삭제
 	public void delete(HashMap<String, String> params);
 	
-	
+	//=> ★ 알람 갯수 
+	public int count(HashMap<String, String> params);
+
+	//=> ★ 알람 목록
+	public ArrayList<NotificationDto> list(HashMap<String, String> params);
+	public ArrayList<NotificationDto> list(HashMap<String, String> params, HttpSession session);
 }
