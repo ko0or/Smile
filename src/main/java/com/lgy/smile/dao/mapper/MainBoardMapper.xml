@@ -12,7 +12,7 @@
   	</insert>
 
 
-	<!-- 게시글 보기 -->
+	<!-- 기존 작성된 게시글 찾아서 보여주기 -->
   	<select id="content_view" resultType="com.lgy.smile.dto.MainBoardDto">
 	    SELECT * 
 	    FROM board_main

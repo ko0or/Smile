@@ -57,6 +57,8 @@ public interface MainCommentMapperInterface {
 	
 	//=> ★ INSERT된 댓글의 식별번호(PK) 가져오기	
 	public int getLastIdentity();
+	
+	//=> ★ 게시글 번호로 검색,   해당 게시글의 작성자의 유저 식별번호(PK) 가져오기	
 	public int authorIdentityByBoard(HashMap<String, String> params);
 
 }

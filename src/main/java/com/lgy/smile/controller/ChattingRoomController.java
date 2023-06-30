@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.ChattingDto;
 import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.MyChattingRoomDto;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
@@ -101,6 +102,16 @@ public class ChattingRoomController {
 	public String chatRoomCreateTest() {
 		
 		return "/trade/test/chatRoomCreateTest";
+	}
+	
+//	내 채팅방 리스트
+	@GetMapping("/myChatRoomList")
+	public String myChatRoomList(@RequestParam HashMap<String, String> params,HttpSession session, Model model) {
+		ArrayList<MyChattingRoomDto> list = chattingRoomService.myChatRoomList(params);
+		UserDto user = devUtils.getUserInfo(session);
+		model.addAttribute("user", user);
+		model.addAttribute("list", list);
+		return "/trade/myChatRoomList";
 	}
 	
 //	채팅방 리스트 테스트
