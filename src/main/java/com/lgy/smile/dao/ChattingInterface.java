@@ -10,5 +10,9 @@ import com.lgy.smile.dto.ChattingDto;
 public interface ChattingInterface {
 	public ArrayList<ChattingDto> list();
 	public ArrayList<ChattingDto> contentView(int chattingroom);
-	public void write(@RequestParam HashMap<String, String> params);
+	public int countCheck(int chattingroom);
+	public ChattingDto lastContent(int chattingroom);
+	public void write(HashMap<String, String> params);
+	
+	public String getImgPath(HashMap<String, String> params);
 }

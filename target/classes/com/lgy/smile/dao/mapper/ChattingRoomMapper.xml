@@ -23,7 +23,7 @@
   	</select>
   	
   	<select id="myChatRoomList" resultType="com.lgy.smile.dto.MyChattingRoomDto" parameterType="hashmap">
-	    SELECT room.identity roomId, room.board, room.seller, room.buyer, board.title title, user.identity userId, user.nickname
+	    SELECT room.identity roomId, room.board, room.seller, room.buyer, board.title title, user.identity userId, user.nickname, user.imgPath
 		FROM chattingroom room, user user, board_trade board
 		WHERE (seller = #{userId} or buyer = #{userId}) AND (room.buyer = user.identity or room.seller = user.identity) AND (room.board = board.identity)
   	</select>

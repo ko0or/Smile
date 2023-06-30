@@ -121,8 +121,8 @@ $(document).ready(function() {
 						row += `
 						<div class="footer-btns" style="display: flex; justify-content: space-around;">
 						${insertBtnSet}                  
-						<div class="contact-btn"><i class="fa-regular fa-message"></i>
-						문의하기</div>
+						<div class="contact-btn" id="go-chat"><i class="fa-regular fa-message"></i>
+        		       문의하기</div>
 						</div>`        
 					}
 
@@ -173,6 +173,11 @@ $(document).ready(function() {
 						// 새로운 URL로 이동
 						window.open( newURL );
 					})
+					
+					$("#go-chat").click(function () {
+	       				 window.open('../chatroom/write?board='+data.identity+'&seller='+data.user)
+	    			 })
+					
 				} // ~~ success 콜백 함수 끝
 			}) // ~~ ajax 종료 끝   
 		} // ~~ 이벤트 등록 함수 끝

@@ -128,4 +128,42 @@ public class ChattingRoomController {
 		model.addAttribute("list", list);
 		return "/trade/test/chatRoomListTest";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//============================================================================================== >>
+	
+	
+//	내 채팅방 리스트 (AJAX 응답)
+	@GetMapping("/myChatRoomListAJAX")
+	public ResponseEntity< ArrayList<MyChattingRoomDto> > myChatRoomListAJAX(@RequestParam HashMap<String, String> params,HttpSession session, Model model) {
+		
+		if ( devUtils.isLogin(session) == true ) { params.put("userId", devUtils.getUserIdentityToString(session)); }
+		ArrayList<MyChattingRoomDto> list = chattingRoomService.myChatRoomList(params);
+		return ResponseEntity.status(HttpStatus.OK).body( list );
+	}
+	
+
+//	
+//	@GetMapping("/myChatRoomList")
+//	public String myChatRoomList(@RequestParam HashMap<String, String> params,HttpSession session, Model model) {
+//		ArrayList<MyChattingRoomDto> list = chattingRoomService.myChatRoomList(params);
+//		UserDto user = devUtils.getUserInfo(session);
+//		model.addAttribute("user", user);
+//		model.addAttribute("list", list);
+//		return "/trade/myChatRoomList";
+//	}
+	
+	
+	
+	
 }

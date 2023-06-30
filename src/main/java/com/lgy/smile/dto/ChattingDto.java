@@ -12,6 +12,7 @@ public class ChattingDto {
 	private int board;
 	private int seller;
 	private int chattingroom;
+	private int count;
 	private String sender;
 	private String sendtime;
 	private String msg;

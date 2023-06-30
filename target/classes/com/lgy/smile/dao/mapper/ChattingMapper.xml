@@ -20,5 +20,39 @@
 	    FROM chatting
 	    WHERE chattingroom = #{chattingroom}
   	</select>
+  	
+  	<select id="countCheck" resultType="int" parameterType="int">
+	    SELECT 
+			COUNT(identity) "count"
+		FROM 
+			smile.chatting
+		WHERE 
+			chattingroom = #{chattingroom}
+  	</select>
+  	
+  	<select id="lastContent" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
+		SELECT 
+			*
+		    , (SELECT COUNT(*) FROM smile.chatting WHERE chattingroom = chat.chattingroom) "count"
+		FROM 
+			smile.chatting chat
+		WHERE 
+			chattingroom = 51
+		ORDER BY
+			identity DESC
+		LIMIT 
+			0, 1
+  	</select>
+  	
+  	<select id="getImgPath" resultType="String" parameterType="hashmap">
+		SELECT 
+			imgPath
+		FROM 
+			smile.user
+		WHERE
+			identity = ${userIdentity}
+  	</select>
+  	
+  	
 
 </mapper>

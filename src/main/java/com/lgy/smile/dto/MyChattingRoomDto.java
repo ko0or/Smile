@@ -15,4 +15,5 @@ public class MyChattingRoomDto {
 	private String title;
 	private int userId;
 	private String nickname;
+	private String imgPath;
 }

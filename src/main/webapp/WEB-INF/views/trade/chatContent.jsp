@@ -92,6 +92,18 @@
 		font-size: xx-small;
 	}
 	
+	
+	.opponent-profile ,
+	.me-profile
+	 {
+	    width: 50px;
+    	height: 50px;
+    	background-size: cover;
+	    background-position: center;
+	    border-radius: 100%;
+	}
+	
+	
 </style>
 </head>
 <body>
@@ -114,10 +126,10 @@
 					</c:when>
 				</c:choose>
 				<c:choose>
-					<c:when test="${user.identity == dto.receiver}">
+					<c:when test="${user.identity == dto.receiver}">   
 						<div class="chat ch1">
 						<div>
-							<div class="icon"><i class="fa-solid fa-user"></i></div>
+							<div class="opponent-profile"></div>
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>				     
 				            <div class="textbox">${dto.msg}</div>
@@ -127,7 +139,7 @@
 					<c:otherwise>
 						<div class="chat ch2">							
 			            <div>
-							<div class="icon"><i class="fa-solid fa-user"></i></div>
+							<div class="me-profile"></div>
 							<div style="margin-left: 3px ">${dto.sender}</div>
 						</div>	
 				            <div class="textbox">${dto.msg}</div>
@@ -165,50 +177,23 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 <script>
-$(document).ready(function() {
-	autosize($('textarea'));
-})// ~~ end
+
+	var count = ${count};
+	var roomNum = ${room.identity};
+	
+	var userIdentity = ${user.identity};
+	var receiverIdentity; 
+	if(userIdentity == ${room.buyer}) {
+		receiverIdentity = ${room.seller};
+	} else {		
+		receiverIdentity = ${room.buyer};
+	}
+	
+	var buyerImgPath = "${buyerImgPath}";
+	var sellerImgPath = "${sellerImgPath}";
+	
+
+
 </script>
-
-<script type="text/javascript">
-
-		function fn_submit() {
-			var formData = $("#frm").serialize();
-			
-			$.ajax({
-				type:"post"
-				,data:formData
-				,url:"../chat/write"
-			});
-		}
-		
-		$("#text1").keyup(function(event) {
-	        if (event.which === 13) {
-	        	fn_submit();
-	        	$("#text1").val("");
-	        	$("#frm").reset();
-	        }
-	    });
-		
-		$('.wrap').scrollTop($('.wrap')[0].scrollHeight);
-		
-		$(document).ready(function(){
-			setInterval(function() {
-				const $el = document.querySelector(".wrap");
-				const eh = $el.clientHeight + $el.scrollTop;
-			    const isScroll = $el.scrollHeight <= eh+150;
-			    $("#chat").load(window.location + ' #chat');
-			    if (isScroll) {
-			      $el.scrollTop = $el.scrollHeight;				
-				}
-			}, 300);
-			$("#text1").keyup(function(event) {
-		        if (event.which === 13) {
-		        	fn_submit();
-		        }
-		    });
-		})
-		
-</script>
-
+<script src="../resources/js/trade/chatContent.js"></script>
 </html>

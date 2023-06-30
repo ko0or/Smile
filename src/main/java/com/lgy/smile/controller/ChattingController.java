@@ -23,6 +23,9 @@ import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/chat")
 public class ChattingController {
@@ -85,12 +88,47 @@ public class ChattingController {
 	@GetMapping("/chatContent")
 	public String chatContent(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
 		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
-		ArrayList<ChattingDto> list = chattingService.contentView(roomDto.getIdentity());
+		int roomNum = roomDto.getIdentity();
+		ArrayList<ChattingDto> list = chattingService.contentView(roomNum);
 		UserDto user = devUtils.getUserInfo(session);
+		int count = chattingService.countCheck(roomNum);
+		
 		model.addAttribute("user", user);
 		model.addAttribute("room", roomDto);
 		model.addAttribute("list", list);
+		model.addAttribute("count", count);
+		
+		// 프로필 이미지 가져오기 (구매자, 판매자)
+		params.put("userIdentity", String.valueOf(roomDto.getBuyer()));
+		model.addAttribute("buyerImgPath", chattingService.getImgPath(params));		
+		params.replace("userIdentity", String.valueOf(roomDto.getSeller()));
+		model.addAttribute("sellerImgPath", chattingService.getImgPath(params));
+		
 		return "/trade/chatContent";
 	}
 	
+	
+	
+	
+	@GetMapping("/newCheck")
+	public ResponseEntity< ChattingDto > newCheck(@RequestParam HashMap<String, String> params) {
+		
+		// 게시글 번호를 받고
+		int roomNum = Integer.parseInt(params.get("roomNum"));
+		
+		// 그 게시글에 있는 채팅 갯수를 확인한다 (현재 기준)
+		int newCount = chattingService.countCheck(roomNum);
+		
+		// 그리고, 기존 갯수와 비교 (기존)
+		int oldCount = Integer.parseInt(params.get("count"));
+
+		// 서로 다를때만 ( 업데이트 )
+		if ( newCount != oldCount ) {			
+			ChattingDto lastChat = chattingService.lastContent(roomNum);
+			return ResponseEntity.status(HttpStatus.OK).body( lastChat );			
+		}
+		
+		// 새로운 소식이 없을때는 아무것도 안보냄
+		 return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dao.ChattingInterface;
@@ -35,7 +36,6 @@ public class ChattingService implements ChattingInterface{
 		return dao.contentView(chattingroom);
 	}
 
-	@Override
 	public void write(HashMap<String, String> params) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
 		params.put("sendtime", devUtils.getDateCustom("yyyy-MM-dd(E) a hh:mm"));
@@ -44,4 +44,22 @@ public class ChattingService implements ChattingInterface{
 		dao.write(params);
 	}
 
+	
+	@Override
+	public String getImgPath(HashMap<String, String> params) {
+		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
+		return dao.getImgPath(params);
+	}
+
+	@Override
+	public int countCheck(int chattingroom) {
+		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
+		return dao.countCheck(chattingroom);
+	}
+
+	@Override
+	public ChattingDto lastContent(int chattingroom) {
+		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
+		return dao.lastContent(chattingroom);
+	}
 }
