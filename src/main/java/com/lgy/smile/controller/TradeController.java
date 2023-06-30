@@ -73,8 +73,7 @@ public class TradeController {
 	public ResponseEntity< ArrayList<TradeDto> > getPosts(@RequestParam HashMap<String, String> params) {
 		log.info("ajax로부터 전달받은 값 => " + params.toString() );
 		return ResponseEntity.status(HttpStatus.OK).body( tradeService.list(params) );
-	}
-	
+	}	
 		
 	// ★ trade(중고 거래) 글 쓰기(get방식/화면)
 	@GetMapping("/write")
@@ -87,8 +86,7 @@ public class TradeController {
 			
 		return "trade/write";
 	}
-	
-	
+		
 	// ★ trade(중고 거래) 글 쓰기(post방식/처리)
 	@PostMapping("/write")
 	public String tradeWrite(@RequestParam HashMap<String, String> params, MultipartFile[] imgPath, HttpSession session) {
@@ -96,12 +94,7 @@ public class TradeController {
 
 		tradeService.write(params, imgPath, session);
 		return "redirect:list";
-	}
-	
-	
-	
-	
-	
+	}		
 
 	// ★ trade(중고 거래) 글 읽기
 	@RequestMapping("/write_view")
@@ -125,7 +118,6 @@ public class TradeController {
 		model.addAttribute("userIdentity", devUtils.getUserIdentityToString(session) );
 		
 		return "trade/edit";
-		
 	}
 	
 	// ★ trade(중고 거래) 글 수정 (★ 처리)
@@ -139,7 +131,6 @@ public class TradeController {
 			tradeService.modify(params, imgPath, session);							
 		}
 		return "redirect:list";		
-		
 	}
 
 	// ★ trade(중고 거래) 글 삭제
@@ -176,22 +167,17 @@ public class TradeController {
 			} catch (Exception e) { e.printStackTrace();}		
 			return result;
 		}
+						
 		
-		
-		
-		
-		
-		
+		// ★ trade(중고 거래) 내용 보기
 		@GetMapping("/content_view")
 		public ResponseEntity<TradeDto> content_view(@RequestParam HashMap<String, String> params) {
-			//=> 중고거래 게시글눌렀을때 모달에 보여질 정보를 보여주기 위한 역할 ★ 
+			//=> 중고거래 게시글 눌렀을때 모달에 보여질 정보를 보여주기 위한 역할 ★ 
 			return ResponseEntity.status(HttpStatus.OK).body( tradeService.contentView(params) ); 
 		}
+					
 		
-		
-		
-		
-		
+		// ★ trade(중고 거래) 문자 인증
 		@GetMapping("/telCheck")
 		public ResponseEntity<Boolean> telCheck(@RequestParam HashMap<String, String> params, HttpSession session) {
 
@@ -200,7 +186,6 @@ public class TradeController {
 			
 			if ( result == 1 ) {
 				//=> 입력된 전화번호가 DB에 등록된 번호라면 ? (인증 성공)
-				
 				return ResponseEntity.status(HttpStatus.OK).body( true );
 			} else {
 				//=> 입력된 전화번호가 DB에 등록되지않았다면 ? (인증 실패)
@@ -208,14 +193,15 @@ public class TradeController {
 			}			
 		}
 		
+		// ★ trade(중고 거래) 문자 인증 (위에서 인증 실패라면)
 		@PostMapping("/telUpdate") 
 		public ResponseEntity<Boolean> telUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
 			
 			/* ★ trade(중고 거래) 인증된 휴대폰 번호 (or 회원에게 발송된 인증번호) 등록 */
 			params.replace("tel", params.get("tel").replaceAll("-", "") );
 			
+			//=> 휴대폰 인증 요청이라면
 			if ( params.get("telAuthentication") != null ) {
-				//=> 휴대폰 인증 요청이라면
 				
 				// (1) devUtils 이용해서 인증번호를 보내고 + 보낸 인증번호를 변수로 받음
 				int certificationNumber = devUtils.smsSender(params.get("tel"));
@@ -224,26 +210,23 @@ public class TradeController {
 				// 그래서, String.valueOf() 메소드를 이용해서 숫자 -> 문자열로 변경
 				String stringTel = String.valueOf(certificationNumber);
 				
-				// (3) 위에 2번 덕분에 문자여롤 바뀐걸 tel 에 집어넣고
+				// (3) 위에 2번 덕분에 문자열 바뀐걸 tel 에 집어넣고
 				params.replace("tel", stringTel);			
 				
-				// (4) 메소드 실행하면,  마이바티스에 #{tel} 이  인증번호로 업데이트 되버림 
-				tradeService.telUpdate(params, session);
-				
-			} else {
-				//=> 인증 요청이 아니라면
-				tradeService.telUpdate(params, session);
-			}
+			} 
+			// (4) 메소드 실행하면,  마이바티스에 #{tel} 이  인증번호로 업데이트 되버림 
+			tradeService.telUpdate(params, session);
 			
 			return ResponseEntity.status(HttpStatus.OK).body( true );
 		}
 		
-		
+		// ★ trade(중고 거래) 좋아요 등록
 		@PostMapping("/like_toggle")
 		public ResponseEntity<Void> likeToggle(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
 			tradeService.like_toggle(params, session);
-			return ResponseEntity.status(HttpStatus.OK).build();
-			
+			//리턴할 값이 없을때 </Void> , .build()
+			//리턴할 값이 있을땐 <Boolean> , .body( true ) 또는 ( false )			
+			return ResponseEntity.status(HttpStatus.OK).build();	
 		}
 }
