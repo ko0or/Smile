@@ -1,123 +1,100 @@
 $(document).ready(function() {
 
-// user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면 기본 프로필 사진을 보여주고, null 이 아니라면 등록된 사진을 보여줌
-function myProfile(imgPath) {
-if ( imgPath == null || imgPath == "") {
-return '../resources/imgs/userDefaultIcon.png';
-} else {
-return urlConverter('user/display?fileName='+imgPath);
-}
-}
+    $("section").html(`
+        <div>
+            <div style="width: 450px; float: left;">
+                <h3 align="center">구매품 문의 목록</h3>
+                <table id="buyList" class="table table-striped">
+                    <tr>
+                        <td width="300" align="center">제목</td>
+                        <td width="200" align="center">판매자 닉네임</td>
+                        <td width="50"></td>
+                    </tr>
 
-// var setProfileImg = myProfile(data.imgPath);
-// <div class="profileImageIcon" style="background-image: url('${setProfileImg}');"></div>
+                    <!-- ajax 랜더링 공간 ( 내가 사고자하는거 )  -->
+                </table>
+            </div>
+            <div style="width: 450px; float: right;">
+                <h3 align="center">판매품 문의 목록</h3>
+                <table id="sellList" class="table table-striped">
+                    <tr>
+                        <td width="300" align="center">제목</td>
+                        <td width="200" align="center">구매자 닉네임</td>
+                        <td width="50"></td>
+                    </tr>
 
-$("section").html(`
-<div>
-    <div style="width: 450px; float: left;">
-        <h3 align="center">구매품 문의 목록</h3>
-        <table id="buyList" class="table table-striped">
-            <tr>
-                <td width="300" align="center">제목</td>
-                <td width="200" align="center">판매자 닉네임</td>
-                <td width="50"></td>
-            </tr>
-
-            <!-- 				
-                                    ajax 랜더링 공간 ( 내가 사고자하는거 )
-                -->
-        </table>
-    </div>
-    <div style="width: 450px; float: right;">
-        <h3 align="center">판매품 문의 목록</h3>
-        <table id="sellList" class="table table-striped">
-            <tr>
-                <td width="300" align="center">제목</td>
-                <td width="200" align="center">구매자 닉네임</td>
-                <td width="50"></td>
-            </tr>
-
-            <!-- 				
-                        ajax 랜더링 공간 ( 내가 팔고있는거 )
-                -->
-        </table>
-    </div>
-</div>
-`);
+                    <!-- ajax 랜더링 공간 ( 내가 사고자하는거 )  -->
+                </table>
+            </div>
+        </div>
+    `);
 
 
-autosize($('textarea'));
 
-// user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면 기본 프로필 사진을 보여주고, null 이 아니라면 등록된 사진을 보여줌
-function myProfile(imgPath) {
-if ( imgPath == null || imgPath == "") {
-return '../resources/imgs/userDefaultIcon.png';
-} else {
-return urlConverter('user/display?fileName='+imgPath);
-}
-}
-
-
-// <div class="profileImageIcon" style="background-image: url('${setProfileImg}');"></div>
-
-//===================================================================================================== >
-
-$.ajax({
-url : "myChatRoomListAJAX" ,
-method : "GET" ,
-success : function( dto ) {
-//=> ☆ 컨트롤러가 리턴한 ArrayList<MyChattingRoomDto> 크기만큼 반복
-    for(var i = 0; i < dto.length; i++) { var setProfileImg=myProfile(dto[i].imgPath); if (
-        dto[i].buyer==loginUserIdentity && dto[i].userId !=loginUserIdentity ) { $("#buyList").append(` <tr>
-        <td align="center"><a href="../chat/chatContent?board=${dto[i].board}&buyer=${dto[i].buyer}">${dto[i].title}</a>
-        </td>
-        <td align="center" style="display: flex;">
-            <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); background-size: cover; background-position: center;"></div>
-            <div>${dto[i].nickname}</div>
-        </td>
-        <td><input type="button" id="${dto[i].board}" class="goBoard btn btn-primary" value="게시글" /></td>
-        </tr>
-        `); // ~ append
+    //===================================================================================================== >
+    $.ajax({
+        url : "myChatRoomListAJAX" ,
+        success : function( dto ) {
+        //=> ☆ 컨트롤러가 리턴한 ArrayList<MyChattingRoomDto> 크기만큼 반복
+            for(var i = 0; i < dto.length; i++) { 
+                if (dto[i].buyer==loginUserIdentity && dto[i].userId !=loginUserIdentity ) { 
+                    $("#buyList").append(` 
+                        <tr>
+                            <td align="center"><a href="../chat/chatContent?board=${dto[i].board}&buyer=${dto[i].buyer}">${dto[i].title}</a></td>
+                            <td align="center" style="display: flex;">
+                                <div class="profileImageIcon profileImg${i}" style="background-size: cover; background-position: center;"></div>
+                                <div>${dto[i].nickname}</div>
+                            </td>
+                            <td><input type="button" id="${dto[i].board}" class="goBoard btn btn-primary" value="게시글" /></td>
+                        </tr>
+                    `); // ~ append
 
 
-        } else if (dto[i].seller == loginUserIdentity && dto[i].userId != loginUserIdentity) {
-        $("#sellList").append(`
-        <tr>
-            <td align="center"><a
-                    href="../chat/chatContent?board=${dto[i].board}&buyer=${dto[i].buyer}">${dto[i].title}</a></td>
-            <td align="center" style="display: flex;">
-                <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); background-size: cover; background-position: center;"></div>
-                <div>${dto[i].nickname}</div>
-            </td>
-            <td><input type="button" id="${dto[i].board}" class="goBoard btn btn-primary" value="게시글" /></td>
-        </tr>
-        `); // ~ append
-        }; // ~ if
-        } // ~ for 반복문 끝 !
+                } else if (dto[i].seller == loginUserIdentity && dto[i].userId != loginUserIdentity) {
+                    $("#sellList").append(`
+                            <tr>
+                                <td align="center"><a href="../chat/chatContent?board=${dto[i].board}&buyer=${dto[i].buyer}">${dto[i].title}</a></td>
+                                <td align="center" style="display: flex;">
+                                    <div class="profileImageIcon profileImg${i}" style="background-size: cover; background-position: center;"></div>
+                                    <div>${dto[i].nickname}</div>
+                                </td>
+                                <td><input type="button" id="${dto[i].board}" class="goBoard btn btn-primary" value="게시글" /></td>
+                            </tr>
+                    `); // ~ append
+                }; // ~ if
+
+                
+                // 분기처리 상관없이 프로필 이미지 적용
+                var profileSetPath = getProfilePath(dto[i].imgPath); 
+                var profileSetTarget = ".profileImg" + i;
+                getProfileImage(profileSetPath, profileSetTarget);
 
 
-        //=> 위에서 반복문으로 생성된 객체들에게 클릭 이벤트 넣어주기 !
-        $(".goBoard").click(function(){
-        // (1) 게시판 버튼 누르면 모달창 하나 띄우고
-        Swal.fire({
-        title : '상세 정보'
-        , width : 900
-        , showConfirmButton : false
-        , html: `<div class="trade-info-wrapper"></div>`
-        })
+                } // ~ for 반복문 끝 !
 
-        // (2) 띄워진 모달창에 내용 채워넣어주는 함수 실행
-        callContent( $(this).attr("id") );
-        }) // ~ click event
 
-        } // ~ (ajax, success)
+                //=> 위에서 반복문으로 생성된 객체들에게 클릭 이벤트 넣어주기 !
+                $(".goBoard").click(function(){
+                // (1) 게시판 버튼 누르면 모달창 하나 띄우고
+                Swal.fire({
+                    title : '상세 정보'
+                    , width : 900
+                    , showConfirmButton : false
+                    , html: `<div class="trade-info-wrapper"></div>`
+                })
+
+                // (2) 띄워진 모달창에 내용 채워넣어주는 함수 실행
+                callContent( $(this).attr("id") );
+                }) // ~ click event
+
+            } // ~ (ajax, success)
         }) // ~ ajax
 
 
 
 
 
-
+    //===================================================================================================== >
         function callContent(boardIdentity) {
 
         var row = ``;
@@ -175,12 +152,12 @@ success : function( dto ) {
 
 
 
-            row += `
-            <h4 style="display: inline-block;"><i class="fa-solid fa-camera"> 미리보기</i></h4>
-            <div class="picture"
-                style="background-image: url('../trade/display?fileName=${data.imgPath}'); width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: cover; background-position: center; ">
-            </div>
-            <hr><br>
+			row += `
+			<h4 style="display: inline-block;"><i class="fa-solid fa-camera"> 미리보기</i></h4>
+				<div class="picture" 
+						 style=" width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: contain; background-position: center; ">
+				</div>
+			<hr><br>
 
 
 
@@ -220,8 +197,11 @@ success : function( dto ) {
             }
 
 
-            //=> 위에서 적어놨던 태그들이 화면에 표시되는 순간
-            $(".trade-info-wrapper").html(row);
+			//=> 위에서 적어놨던 태그들이 화면에 표시되는 순간
+			$(".trade-info-wrapper").html(row);
+            var setComtentProfilePath = getProfilePath( data.imgPath );   
+            var setComtentProfileTargetClass = ".picture";
+            setContentImage(setComtentProfilePath, setComtentProfileTargetClass);
 
             //=> 표시된 태그들중에서, 관심목록 버튼에 대한 클릭시 효과 넣어주기
             $(".insert-btn").off("click");
@@ -290,4 +270,4 @@ success : function( dto ) {
 
 
 
-            })// ~~ end
+})// ~~ end

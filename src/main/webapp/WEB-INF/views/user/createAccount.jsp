@@ -174,9 +174,9 @@ $(document).ready(function() {
 									}).then(function(){
 											$("#floatingEmail").prop("readonly", true);
 											$("#floatingEmail").css("color", "grey");
-											$("input[name='nickname']").prop("disabled", true);
-											$("input[name='id']").prop("disabled", true);
-											$("input[name='code']").prop("disabled", true);
+											$("input[name='nickname']").prop("readonly", true);
+											$("input[name='id']").prop("readonly", true);
+											$("input[name='code']").prop("readonly", true);
 											
 											$("#isDuplicated").removeClass("btn-primary");
 											$("#isDuplicated").addClass("btn-secondary");

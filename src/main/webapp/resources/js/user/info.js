@@ -26,16 +26,11 @@ $(document).ready(function() {
 	})
 	
 	
-	
-	
+	    
 	// user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면  기본 프로필 사진을 보여주고,  null 이 아니라면 등록된 사진을 보여줌
-	if ( imgPath !== "") {
-		//아래와 같이 2줄만 쓰면 사진 불러오기 가능
-		var getImage = urlConverter('user/display?fileName='+imgPath);
-		$(".profile-img").css("background-image", `url('${getImage}')`);
-	} else {
-		$(".profile-img").css("background-image", `url('../resources/imgs/userDefaultIcon.png')`);		
-	}
+    var setProfilePath = getProfilePath( imgPath );   
+    getProfileImage(setProfilePath, ".profile-img");
+
 	
 	// 프로필 이미지 눌렀을때, 새 창으로 열기  
 	$(".profile-img").click(function() {

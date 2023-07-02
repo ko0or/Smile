@@ -2,6 +2,7 @@ package com.lgy.smile.controller;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 
@@ -406,8 +407,12 @@ public class UserController {
 		
 		UserDto user = devUtils.getUserInfo(session);
 		
-		File deleteFile = new File(user.getImgPath()); // 기존 프로필이미지 경로+파일명을 기준으로 새로운 파일 생성해서		
-		if ( deleteFile.exists() == true ) { deleteFile.delete();	} // 기존 이미지 파일이 존재하면 삭제
+		// 기존 이미지가 존재한다면, 해당 파일을 찾아서 삭제한다
+		if ( user.getImgPath() != null ) {
+			File deleteFile = new File(user.getImgPath()); // 삭제할 파일의 위치로 이동해서		
+			if ( deleteFile.exists() == true ) { deleteFile.delete();	} // 삭제할 파일이 존재한다면 삭 -제 해버림			
+		}
+		
 		user.setImgPath(newProfilePath);				// 새 프로필이미지 경로+파일명을 setter 로 DTO에 설정하고
 		session.setAttribute("userInfo", user);			// 그걸 다시 session 에 넣어주기
 		
@@ -437,6 +442,8 @@ public class UserController {
 			
 		} catch (NoSuchFileException ne) {
 			log.info("★ 해당 경로에 프로필 사진이 없어서 에러 발생");
+		} catch (InvalidPathException ipe) {
+			log.info("★ 프로필 사진 요청하는 경로 상태가 ..? ");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

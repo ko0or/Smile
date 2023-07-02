@@ -56,5 +56,6 @@
 	
 </script>
 <!-- 경로를 만들어줌 -->
+<script src="../resources/js/common/profileImg.js"></script>
 <script src="../resources/js/notice/comment/list.js"></script>
 </html>

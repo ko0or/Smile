@@ -87,18 +87,30 @@ public class ChattingController {
 
 	@GetMapping("/chatContent")
 	public String chatContent(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
+		
+		//=> 페이지 표시에 필요한 정보들 조회
 		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
 		int roomNum = roomDto.getIdentity();
 		ArrayList<ChattingDto> list = chattingService.contentView(roomNum);
 		UserDto user = devUtils.getUserInfo(session);
-		int count = chattingService.countCheck(roomNum);
+
+		//=> 비 로그인 상태에서 접근 요청시 로그인 화면으로 보내기
+		if ( devUtils.isLogin(session) == false ) {
+			return "redirect:/user/login";
+		}
 		
+		//=> 로그인은했지만, 구매자 or 판매자에 해당되지않는다면  메인 화면으로 보내기
+		if ( user.getIdentity() != roomDto.getBuyer() && user.getIdentity() != roomDto.getSeller() ) {
+			return "redirect:/main/list";
+		}
+		
+		//=> 정상접근이라면, JSP 페이지에 필요한 정보를 넘겨준다
 		model.addAttribute("user", user);
 		model.addAttribute("room", roomDto);
 		model.addAttribute("list", list);
-		model.addAttribute("count", count);
+		model.addAttribute("count", list.size());
 		
-		// 프로필 이미지 가져오기 (구매자, 판매자)
+		//=> 그리고 프로필 이미지도 넘겨주기 (구매자, 판매자)
 		params.put("userIdentity", String.valueOf(roomDto.getBuyer()));
 		model.addAttribute("buyerImgPath", chattingService.getImgPath(params));		
 		params.replace("userIdentity", String.valueOf(roomDto.getSeller()));

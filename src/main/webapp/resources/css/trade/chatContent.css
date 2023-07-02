@@ -1,0 +1,137 @@
+	.wrap {
+	    padding: 10px 0;
+	    background-color: #A8C0D6;
+	    overflow-y: scroll;
+	    height: 600px;
+	}
+	
+	.wrap .chat {
+	    display: flex;
+	    align-items: flex-start;
+	    padding: 10px;
+	}
+	
+	.wrap .chat .icon {
+	    position: relative;
+	    overflow: hidden;
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	    background-color: #eee;
+	}
+	
+	.wrap .chat .icon i {
+	    position: absolute;
+	    top: 10px;
+	    left: 50%;
+	    font-size: 2.5rem;
+	    color: #aaa;
+	    transform: translateX(-50%);
+	}
+	
+	.wrap .chat .textbox {
+	    position: relative;
+	    display: inline-block;
+	    max-width: calc(100% - 70px);
+	    padding: 10px;
+	    margin-top: 7px;
+	    font-size: 13px;
+	    border-radius: 10px;
+	   white-space: pre-line;
+	}
+	
+	.wrap .chat .textbox::before {
+	    position: absolute;
+	    display: block;
+	    top: 0;
+	    font-size: 1.5rem;
+	}
+	
+	.wrap .ch1 {
+	    position: relative;
+	}
+	
+	.wrap .ch1 .textbox {
+	    margin-left: 20px;
+	    background-color: #ddd;
+	}
+	
+	.wrap .ch1 .textbox::before {
+	    left: -15px;
+	    content: "◀";
+	    color: #ddd;
+	}
+	
+	.sendtime1 {
+		margin-left: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+		position: absolute;
+		bottom: 15px;
+		left: 80px;
+	}
+	.sendtime1.tall {
+		margin-left: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+		position: absolute;
+		bottom: -10px;
+		left: 80px;
+	}	
+
+	.wrap .ch2 {
+	    flex-direction: row-reverse;
+	    position: relative;
+	}
+	
+	.wrap .ch2 .textbox {
+	    margin-right: 20px;
+	    background-color: #F9EB54;
+	}
+	
+	.wrap .ch2 .textbox::before {
+	    right: -15px;
+	    content: "▶";
+	    color: #F9EB54;
+	}
+	
+	.sendtime2 {
+		margin-right: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+		position: absolute;
+		bottom: 15px;
+		right: 80px;
+	}
+	.sendtime2.tall{
+		margin-right: 5px;
+		margin-top: 30px;
+		font-size: xx-small;
+		position: absolute;
+		bottom: -10px;
+		right: 80px;
+	}
+	
+	
+	.opponent-profile ,
+	.me-profile
+	 {
+	    width: 50px;
+    	height: 50px;
+    	background-size: cover;
+	    background-position: center;
+	    border-radius: 100%;
+	}
+	
+	form {
+		width: 100%
+	}
+	
+	.input-area { display: flex; }
+	.input-area > #text1 {
+		flex: 11;
+		margin-right: 10px
+	}
+	.input-area > #submitBtn {
+		flex: 1;
+	}

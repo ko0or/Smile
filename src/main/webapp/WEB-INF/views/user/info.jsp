@@ -82,5 +82,6 @@
 </script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="../resources/js/api/easyPayment.js"></script>
+<script src="../resources/js/common/profileImg.js"></script>
 <script src="../resources/js/user/info.js"></script>
 </html>

@@ -1,13 +1,4 @@
 $(document).ready(function() {
-      
-    // user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면  기본 프로필 사진을 보여주고,  null 이 아니라면 등록된 사진을 보여줌
-    function myProfile(imgPath) {
-        if ( imgPath == null || imgPath == "") {
-            return '../resources/imgs/userDefaultIcon.png';
-        } else {
-            return urlConverter('user/display?fileName='+imgPath);
-        }
-    }
 
       
       
@@ -64,6 +55,15 @@ $(document).ready(function() {
                
                   //html==append랑 같은건데 밑에 getComponent 함수의 모든 div값을 넣은 것 이다
                   $(".content-footer").html( row );
+
+
+                  // 댓글 프로필 사진 표시
+                  for (var c = 0; c < data.length; c ++) {
+                    var setProfileTargetClass = ".profileImg" + data[c].identity;
+                    var setProfilePath = getProfilePath( data[c].imgPath );   
+                    getProfileImage(setProfilePath, setProfileTargetClass);
+                  }
+
    
                   
                   // 댓글 수정버튼 눌렀을때 작동할 내용
@@ -252,8 +252,6 @@ $(document).ready(function() {
          function getComponent( data, show ) {
             
             var row = ``;
-            // 프로필 이미지 (아이콘)
-            var setProfileImg = myProfile(data.imgPath);
             
             
             //data.index == 0 는 대댓글이 없는거임 그래서 삼항연산자를 사용하여 참(대댓글이 없는)일경우 0px 거짓(대댓글이 있는)일 경우 50px로 들여쓰기
@@ -270,7 +268,7 @@ $(document).ready(function() {
             <div id="commentIdentity${data.identity}" style="margin-left: ${marginLeftSet}" class="comment-wrapper mt-5">
             <div class="comment">
                <div class="comment-header" style="display: flex;">
-                  <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; position: relative; bottom: 9px; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
+                  <div class="profileImageIcon profileImg${data.identity}" style="	background-size: cover; background-position: center; position: relative; bottom: 9px; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
                   <div class="profileInfo">
                         <h4 style="display: inline;">${data.nickname}</h4>
                         <sub style="display: inline; color: grey;">${data.created}</sub>

@@ -99,6 +99,7 @@ $(document).ready(function() {
 	
 })
 </script>
+<script src="../resources/js/common/tradeImg.js"></script>
 <script src="../resources/js/trade/edit.js"></script>
 </body>
 </html>

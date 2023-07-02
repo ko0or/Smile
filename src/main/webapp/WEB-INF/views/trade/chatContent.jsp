@@ -5,111 +5,11 @@
 <html>
 <head>
 	<%@ include file="../common/librarys.jsp" %>
-<style>
-	.wrap {
-	    padding: 10px 0;
-	    background-color: #A8C0D6;
-	    overflow-y: scroll;
-	    height: 600px;
-	}
-	
-	.wrap .chat {
-	    display: flex;
-	    align-items: flex-start;
-	    padding: 10px;
-	}
-	
-	.wrap .chat .icon {
-	    position: relative;
-	    overflow: hidden;
-	    width: 50px;
-	    height: 50px;
-	    border-radius: 50%;
-	    background-color: #eee;
-	}
-	
-	.wrap .chat .icon i {
-	    position: absolute;
-	    top: 10px;
-	    left: 50%;
-	    font-size: 2.5rem;
-	    color: #aaa;
-	    transform: translateX(-50%);
-	}
-	
-	.wrap .chat .textbox {
-	    position: relative;
-	    display: inline-block;
-	    max-width: calc(100% - 70px);
-	    padding: 10px;
-	    margin-top: 7px;
-	    font-size: 13px;
-	    border-radius: 10px;
-	}
-	
-	.wrap .chat .textbox::before {
-	    position: absolute;
-	    display: block;
-	    top: 0;
-	    font-size: 1.5rem;
-	}
-	
-	.wrap .ch1 .textbox {
-	    margin-left: 20px;
-	    background-color: #ddd;
-	}
-	
-	.wrap .ch1 .textbox::before {
-	    left: -15px;
-	    content: "◀";
-	    color: #ddd;
-	}
-	
-	.sendtime1 {
-		margin-left: 5px;
-		margin-top: 30px;
-		font-size: xx-small;
-	}
-	
-	.wrap .ch2 {
-	    flex-direction: row-reverse;
-	}
-	
-	.wrap .ch2 .textbox {
-	    margin-right: 20px;
-	    background-color: #F9EB54;
-	}
-	
-	.wrap .ch2 .textbox::before {
-	    right: -15px;
-	    content: "▶";
-	    color: #F9EB54;
-	}
-	
-	.sendtime2 {
-		margin-right: 5px;
-		margin-top: 30px;
-		font-size: xx-small;
-	}
-	
-	
-	.opponent-profile ,
-	.me-profile
-	 {
-	    width: 50px;
-    	height: 50px;
-    	background-size: cover;
-	    background-position: center;
-	    border-radius: 100%;
-	}
-	
-	
-</style>
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
 <!-- -------------------------------------------------------------------------- -->
-<!-- <style>@import 'resources/css/main.css'</style>  -->
+<style>@import '../resources/css/trade/chatContent.css'</style> 
 <section>
 <h1 align="center">1:1 대화</h1>
 <c:set var="now" value="<%=new java.util.Date()%>" />
@@ -151,12 +51,13 @@
 		</div>
 	</div>
 	
-	<div style="display: flex; justify-content: space-around; margin: 10px">
+	<div style="display: flex; justify-content: space-around; margin: 10px 0; width: 100%;">
 		<form id="frm" method="post" action="#" onsubmit="return false;">
 			<input type="hidden" name="board" value="${room.board}">
 			<input type="hidden" name="seller" value="${room.seller}">
 			<input type="hidden" name="chattingroom" value="${room.identity}">
 			<input type="hidden" name="sender" value="${user.nickname}">
+			<input type="hidden" name="senderIdentity" value="${user.identity}">
 			<c:choose>
 				<c:when test="${user.identity == room.seller}">
 					<input type="hidden" name="receiver" value="${room.buyer}">
@@ -165,7 +66,13 @@
 					<input type="hidden" name="receiver" value="${room.seller}">
 				</c:otherwise>
 			</c:choose>
-			<p>메세지&nbsp;<input id="text1" type="text" name="msg"> <input type="reset" onclick="fn_submit()" value="입력"></p>
+			
+			<div class="input-area">
+				<textarea id="text1" name="msg" class="form form-control" placeholder="전송: Enter &#13;&#10;줄바꿈: Shift + Enter"></textarea> 
+				<button id="submitBtn" class="btn btn-primary"><i class="fa-regular fa-message"></i> </button>
+				<button id="resetBtn" type="reset" style="display: none;"></button>
+			</div>
+<!-- 			<p>메세지&nbsp;<input id="text1" type="text" name="msg"> <input type="reset" id="submitBtn" value="입력"></p> -->
 		</form>
 	</div>
     
@@ -178,20 +85,26 @@
 </body>
 <script>
 
+	// 대화중인 채팅방 정보
 	var count = ${count};
 	var roomNum = ${room.identity};
 	
-	var userIdentity = ${user.identity};
-	var receiverIdentity; 
-	if(userIdentity == ${room.buyer}) {
-		receiverIdentity = ${room.seller};
-	} else {		
-		receiverIdentity = ${room.buyer};
+	// (우측)에는 로그인한 유저의 프로필을 보여주고
+	var myIdentity = ${user.identity};
+	var myImgPath = "${user.imgPath}";
+	
+	// (좌측)에는 내 정보와 다른 유저 프로필 보여주기
+	var opponentIdentity;
+	var opponentImgPath;
+	if ( myIdentity != ${room.buyer} ) { // 내가 구매자가 아니라면(판매자일땐),  왼쪽에 구매자 프로필 표시
+		opponentIdentity = ${room.buyer}; 
+		opponentImgPath = "${buyerImgPath}";
+	} else {
+		opponentIdentity = ${room.seller};// 내가 구매자라면, 왼쪽에 판매자 프로필 표시
+		opponentImgPath = "${sellerImgPath}";
 	}
-	
-	var buyerImgPath = "${buyerImgPath}";
-	var sellerImgPath = "${sellerImgPath}";
-	
+
+
 
 
 </script>

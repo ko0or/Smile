@@ -74,7 +74,8 @@ public class ChattingRoomController {
 			model.addAttribute("user", user);
 			model.addAttribute("room", roomDto);
 			model.addAttribute("list", list);
-			return "/trade/chatContent";
+			
+			return "redirect:/chat/chatContent?board="+ roomDto.getBoard()  +"&buyer="+roomDto.getBuyer();
 		} catch(Exception e) {
 //			roomDto가 없으면(채팅방이 없으면) board id, buyer id, seller id로 채팅방 생성하는 서비스 호출해서 생성
 			chattingRoomService.write(params);

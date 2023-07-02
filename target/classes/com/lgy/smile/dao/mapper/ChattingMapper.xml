@@ -37,7 +37,7 @@
 		FROM 
 			smile.chatting chat
 		WHERE 
-			chattingroom = 51
+			chattingroom = #{chattingroom}
 		ORDER BY
 			identity DESC
 		LIMIT 

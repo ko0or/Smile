@@ -61,6 +61,8 @@ public class UserService implements UserMapperInterface {
 	@Override
 	public void register(HashMap<String, String> params) {
 		log.info("UserService ===> register ===> start");
+		log.info("UserService ===> params ==> " + params.toString());
+		
 		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
 		userDao.register(params);
 		log.info("UserService ===> register ===> end");

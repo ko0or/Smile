@@ -20,14 +20,7 @@ $(document).ready(function() {
 	*/
 	
 
-    // user 테이블의 imgPath 컬럼 값이 null (기본값) 이라면  기본 프로필 사진을 보여주고,  null 이 아니라면 등록된 사진을 보여줌
-	function myProfile(imgPath) {
-        if ( imgPath == null || imgPath == "") {
-            return '../resources/imgs/userDefaultIcon.png';
-        } else {
-            return urlConverter('user/display?fileName='+imgPath);
-        }
-    }
+
 
 // ========================================================================================================== >>
 
@@ -48,10 +41,16 @@ $(document).ready(function() {
 			start += 5;
 		
 			for( var i =0; i<data.length; i++ ) {
+				// 게시글 정보
 				$(".main-content").append( 
 					getComponentByBoard( data[i] )
 					 
-				);			
+				);										
+        
+				// 프로필 이미지 (아이콘)
+				var setProfileImg = getProfilePath(data[i].imgPath);   
+				var setTargetClass = ".profileImg" + data[i].identity;
+				getProfileImage(setProfileImg, setTargetClass);
 			}
 			
 			
@@ -141,6 +140,18 @@ $(document).ready(function() {
 				$(".feed-comment-wrapper").html(row);
 
 
+//================================================================================================================================================
+
+				// 프로필 이미지 (아이콘)
+				for ( var c=0; c < data.length; c++ ) {
+
+					var setCommentProfileImg = getProfilePath(data[c].imgPath);   
+					var setCommentTargetClass = ".comment_profileImg" + data[c].identity;
+					getProfileImage(setCommentProfileImg, setCommentTargetClass);
+
+				}
+
+//================================================================================================================================================
 
 				//=> 댓글 입력란 이벤트 등록(자동 높이 조절)
 				autosize($('textarea'));
@@ -397,15 +408,12 @@ $(document).ready(function() {
 
 		// userIdentity 로그인된 유저 pk.    identity db에 저장된 유저 pk
 		var show = userIdentity == boardData.user ? "block" : "none";
-			
-        
-        // 프로필 이미지 (아이콘)
-        var setProfileImg = myProfile(boardData.imgPath);
+
 
 		var row = `
 			<div class="content-wrapper content-wrapper${boardData.identity}">	
 			<div class="content-header">
-				<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); 	background-size: cover; background-position: center; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
+				<div class="profileImageIcon profileImg${boardData.identity}" style="	background-size: cover; background-position: center; box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
 				<p><b>${boardData.nickname} </b></p>
 				<p><font color="grey">${boardData.created}</font> </p>
 				
@@ -467,14 +475,14 @@ $(document).ready(function() {
 		var targetUserNickname = (commentData.index == 0) ? "" : commentData.target_user_nickname + "님에게 답글";
 
         // 프로필 이미지 (아이콘)
-        var setProfileImg = myProfile(commentData.imgPath);
+        // var setProfileImg = myProfile(commentData.imgPath);
         
         
         // 댓글 작성자 본인일경우 (수정, 삭제 표시)
 		if (  userIdentity == commentData.user  ) {
 						row += `					
 							<div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
-								<div class="profileImageIcon" style="background-image: url('${setProfileImg}'); box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
+								<div class="profileImageIcon comment_profileImg${commentData.identity}" style="box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
 										<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 										<sub style="color:grey">${commentData.created}</sub>	
 										<small style="color: silver; display: block;">${targetUserNickname}</small>
@@ -494,7 +502,7 @@ $(document).ready(function() {
         } else {
 						row += `										
 						    <div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
-                              <div class="profileImageIcon" style="background-image: url('${setProfileImg}'); "></div>
+                              <div class="profileImageIcon comment_profileImg${commentData.identity}" style=""></div>
 								<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 								<sub style="color:grey">${commentData.created}</sub>	
 								<small style="color: silver; display: block;">${targetUserNickname}</small>

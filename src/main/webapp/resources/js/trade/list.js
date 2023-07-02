@@ -28,7 +28,12 @@ $(document).ready(function() {
 				  
 						for( var i=0; i<data.length; i++ ) {
 							$(".main-content").append( getComponentByBoard(data[i]) );
-							$("#" + data[i].identity + " > .content-left").css("background-image", `url('display?fileName=${data[i].imgPath}')`);              
+
+                            // 물건 사진 표시                            
+                            var setProfilePath = getProfilePath( data[i].imgPath );   
+                            var setProfileTargetClass = ".content-wrapper" + data[i].identity + " > .content-left";
+                            getProfileImage(setProfilePath, setProfileTargetClass);
+
 						} // ~ for 반복문 끝
 		   					  
 						$(".content-wrapper").off("click");
@@ -90,7 +95,9 @@ $(document).ready(function() {
 					
 					row += `
 					<h4 style="display: inline-block;"><i class="fa-solid fa-camera"> 미리보기</i></h4>
-						<div class="picture" style="background-image: url('display?fileName=${data.imgPath}'); width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: cover; background-position: center; "></div>
+						<div class="picture" 
+								 style=" width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: contain; background-position: center; ">
+						</div>
 					<hr><br>
 					
 					<div class="trade-info">
@@ -129,6 +136,12 @@ $(document).ready(function() {
 
 					//=> 위에서 적어놨던 태그들이 화면에 표시되는 순간
 					$(".trade-info-wrapper").html(row);
+                    var setComtentProfilePath = getProfilePath( data.imgPath );   
+                    var setComtentProfileTargetClass = ".picture";
+                    //getProfileImage(setComtentProfilePath, setComtentProfileTargetClass);
+                    setContentImage(setComtentProfilePath, setComtentProfileTargetClass);
+
+
 
 					//=> 표시된 태그들중에서,  관심목록 버튼에 대한 클릭시 효과 넣어주기
 					$(".insert-btn").off("click");

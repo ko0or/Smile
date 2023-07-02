@@ -37,11 +37,15 @@ $(document).ready(function() {
 
 			icon: 'success',
 			title: '등록된 사진 보기',
-			html: `<img src="display?fileName=`+$(this).attr('id')+`">`,
+			html: `<div class="picture" style="width: 100%;    height: 400px; background-repeat: no-repeat;    background-size: contain; background-position: center;">`,
 			width: 900 ,
 			showCancelButton: false,
 			confirmButtonText: '확인'
 		})
+		
+        var setComtentProfilePath = getProfilePath( $(this).attr("id") );   
+        var setComtentProfileTargetClass = ".picture";
+        getProfileImage(setComtentProfilePath, setComtentProfileTargetClass);
 
 	}) // ~ 사진 보여주기 버튼 이벤트 끝 -!
 	

@@ -38,5 +38,6 @@ var searchByBoardIdentity = ${searchByBoardIdentity};
 var searchByLikeUser = ${searchByLikeUser};
 var imgPath = "${ user.imgPath }";
 </script>
+<script src="../resources/js/common/profileImg.js"></script>
 <script src="../resources/js/feed/list.js"></script>
 </html>
