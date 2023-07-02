@@ -177,6 +177,13 @@ $(document).ready(function() {
 						// 현재 URL 가져오기
 						var currentURL = window.location.href;
 						// 변경할 주소
+						
+						if ( $(this).attr("style").indexOf("display?fileName=") >= 0 ) {
+							var newAddress = $(this).attr("style").match(/url\(['"]?([^'"]+)['"]?\)/)[1];
+							window.open( newAddress );
+							return;
+						}
+						
 						var newAddress = $(this).attr("style").match(/url\(['"]?([^'"]+)['"]?\)/)[1];
 						// URL 분할
 						var urlParts = currentURL.split("/");

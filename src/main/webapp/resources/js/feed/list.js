@@ -502,7 +502,7 @@ $(document).ready(function() {
         } else {
 						row += `										
 						    <div class="feed-comments${commentData.identity} feed-comments" style="margin-bottom: 70px; text-align:left; margin-left:  ${marginLeftSet}; ">
-                              <div class="profileImageIcon comment_profileImg${commentData.identity}" style=""></div>
+                              <div class="profileImageIcon comment_profileImg${commentData.identity}" style="box-shadow: 0px 0px 5px rgba(0,0,0,0.15);"></div>
 								<h4 style="display: inline" id="${commentData.user}">${commentData.nickname}</h4>
 								<sub style="color:grey">${commentData.created}</sub>	
 								<small style="color: silver; display: block;">${targetUserNickname}</small>
