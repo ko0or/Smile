@@ -60,7 +60,7 @@ public class ChattingRoomController {
 //			user가 없으면(로그인 안돼있으면) 로그인창으로 보내기
 			user.toString();
 		} catch (Exception e) {
-			return "/user/login";
+			return "redirect:/user/login";
 		}
 //		임시로 판매자와 내 정보가 같으면(내 글 문의하기 눌렀을 경우) 로그인 창으로 보내기
 		if(Integer.parseInt(params.get("seller")) == user.getIdentity()) {
@@ -87,7 +87,7 @@ public class ChattingRoomController {
 			model.addAttribute("user", user);
 			model.addAttribute("room", roomDto);
 			model.addAttribute("list", list);
-			return "/trade/chatContent";			
+			return "redirect:/chat/chatContent?board="+ roomDto.getBoard()  +"&buyer="+roomDto.getBuyer();			
 		}
 	}
 	

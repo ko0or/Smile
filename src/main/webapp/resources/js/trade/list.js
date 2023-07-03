@@ -195,7 +195,12 @@ $(document).ready(function() {
 					})
 					
 					$("#go-chat").click(function () {
-	       				 window.open('../chatroom/write?board='+data.identity+'&seller='+data.user)
+						var productPrice = parseInt(data.price.replace(/,/g, ""));
+						 if ( userPoint >= productPrice ) {
+	       				 	window.open('../chatroom/write?board='+data.identity+'&seller='+data.user)
+	       				 } else {
+	       				 	alert("포인트가 부족합니다");
+	       				 }
 	    			 })
 					
 				} // ~~ success 콜백 함수 끝

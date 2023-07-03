@@ -39,7 +39,8 @@
 << ============================================================================================= 
 -->
 <script>
-	var user = "${user}";
+	var user = "${userIdentity}";
+	var userPoint = ${userPoint};
 	var show = "${show}";
  	var searchByNickname = ${searchByNickname};
 	var searchByBoardIdentity = ${searchByBoardIdentity};

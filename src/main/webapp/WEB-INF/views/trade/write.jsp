@@ -60,7 +60,7 @@
 			<!-- ★ 대면 결제여부 선택 -->
 			<h1>(선택사항) 구매자와 만나실 장소를 선택해주세요</h1>
 			<p>원치 않으실경우 비대면결제로 진행하실 수 있습니다</p>
-			<sub><i>* 비대면 결제시 싱글페이 포인트가 충전되며, 충전된 포인트는 현금으로 입금 요청하실 수 있습니다.</i></sub>
+			<sub><i>거래는 싱글페이 포인트로 진행되며, 보유한 포인트는 현금으로 입금 요청하실 수 있습니다.</i></sub>
 			<div class="form-check form-switch mt-5">
 		  		<input name="contacted" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
 		  		<label class="form-check-label" for="flexSwitchCheckDefault">비대면 결제여부</label>

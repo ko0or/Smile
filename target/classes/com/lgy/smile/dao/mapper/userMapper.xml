@@ -22,9 +22,15 @@
 	<update id="pointUp" parameterType="hashmap">
 		UPDATE user SET point=point + #{point} where id = #{id}
 	</update>
+	<update id="pointUpByUserIdentity" parameterType="hashmap">
+		UPDATE user SET point=point + #{point} where identity = #{userIdentity}
+	</update>
 	
 	<update id="pointDown" parameterType="hashmap">
 		UPDATE user SET point=point - #{point} where id = #{id}
+	</update>
+	<update id="pointDownByUserIdentity" parameterType="hashmap">
+		UPDATE user SET point=point - #{point} where identity = #{userIdentity}
 	</update>
   	
   	<select id="getPoint" resultType="String" parameterType="hashmap">

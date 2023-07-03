@@ -231,7 +231,7 @@ public class UserController {
 		
 	// 회원정보 조회화면
 	@GetMapping("/info")
-	public String userInfo(HttpSession session, Model model) {
+	public String userInfo(@RequestParam HashMap<String, String> params, HttpSession session, Model model) {
 		log.info("GET방식으로 info 사이트로 들어옴");
 		
 		// userInfo 세션이 null 이면 로그인 화면으로 이동
@@ -239,9 +239,14 @@ public class UserController {
 			return "redirect:login";
 		// userInfo 세션이 null 이 아니면 회원정보 화면으로 이동
 		}else {
-			UserDto user = (UserDto) session.getAttribute("userInfo");
+			UserDto user = devUtils.getUserInfo(session);
+			params.put("id", user.getId());
+			UserDto userInfoUpdate = userService.login( params );
+			
 			log.info("회원정보 조회화면에서 user 가진 정보 확인해보기(imgPath 추가) ===> "+user);
-			model.addAttribute("user", user);
+			model.addAttribute("user", userInfoUpdate);
+			session.setAttribute("userInfo", userInfoUpdate);
+			
 			return "user/info";
 		}
 	}

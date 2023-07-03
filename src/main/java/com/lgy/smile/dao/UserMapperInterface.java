@@ -25,8 +25,9 @@ public interface UserMapperInterface {
 	// 포인트 충전 처리 (id 기준으로 포인트 금액 업데이트)
 	public void pointUp(HashMap<String, String> params);
 	
-	// 포인트 차감 처리 (id 기준으로 포인트 금액 업데이트)
-	public void pointDown(HashMap<String, String> params);
+	// 포인트 충전+차감 처리 (identity 기준으로 포인트 금액 업데이트)
+	public void pointUpByUserIdentity(HashMap<String, String> params);
+	public void pointDownByUserIdentity(HashMap<String, String> params);
 	
 	// 포인트 가져오기 (identity 값을 기준으로 DB조회 -> point 를 String 으로 리턴)
 	public String getPoint(HashMap<String, String> params);

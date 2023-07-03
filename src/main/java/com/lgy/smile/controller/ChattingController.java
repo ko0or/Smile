@@ -92,6 +92,7 @@ public class ChattingController {
 		//=> 페이지 표시에 필요한 정보들 조회
 		ChattingRoomDto roomDto = chattingRoomService.contentView(params);
 		int roomNum = roomDto.getIdentity();
+		
 		ArrayList<ChattingDto> list = chattingService.contentView(roomNum);
 		UserDto user = devUtils.getUserInfo(session);
 		
@@ -110,7 +111,10 @@ public class ChattingController {
 		model.addAttribute("room", roomDto);
 		model.addAttribute("list", list);
 		model.addAttribute("count", list.size());
-		model.addAttribute("tradeStatus", list.get( list.size()-1 ).getTradeStatus() );
+		
+		if ( list.size() > 0 ) {
+			model.addAttribute("tradeStatus", list.get( list.size()-1 ).getTradeStatus() );
+		}
 		
 		//=> 그리고 프로필 이미지도 넘겨주기 (구매자, 판매자)
 		params.put("userIdentity", String.valueOf(roomDto.getBuyer()));
@@ -156,7 +160,7 @@ public class ChattingController {
 	}
 	
 	@PostMapping("/tradeStatusUpdate")
-	public ResponseEntity<Void> tradeStatusUpdate(@RequestParam HashMap<String, String> params) {
+	public ResponseEntity<Void> tradeStatusUpdate(@RequestParam HashMap<String, String> params, HttpSession session) {
 		
 		//=> 거래 진행 상태 업데이트 하기
 		chattingService.tradeStatusUpdate(params);		
@@ -173,15 +177,22 @@ public class ChattingController {
 			 
 			 // (1) buyer 찾아서 point 차감 
 			 params.put("point", price);
-			 params.put("id", buyerIdentity);
-			 userService.pointDown(params);
+			 params.put("userIdentity", buyerIdentity);
+			 userService.pointDownByUserIdentity(params);
 			 
 			 // (2) seller 찾아서 point 올려주기
-			 params.replace("id", sellerIdentity);
-			 userService.pointUp(params);			 
+			 params.replace("userIdentity", sellerIdentity);
+			 userService.pointUpByUserIdentity(params);			 
 			
 			// (3) trade 게시판 삭제하기
 			 tradeService.tradeSuccess(params);
+			 
+			 // (4) 세션 정보 새로고침
+			 UserDto user = devUtils.getUserInfo(session);
+			 params.remove("identity");			 
+			 String newPoint = userService.getPoint(params, session);
+			 user.setPoint(newPoint);
+			 session.setAttribute("userInfo", user);
 			 
 		}
 		

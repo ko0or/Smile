@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.TradeDto;
+import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.TradeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,18 @@ public class TradeController {
 		//ArrayList<TradeDto> list = tradeService.list();
 		//model.addAttribute("list", list);
 		//
-		model.addAttribute("user", devUtils.getUserIdentityToString(session) );
+		
+		if ( devUtils.isLogin(session) == true ) {			
+			UserDto user = devUtils.getUserInfo(session);
+			model.addAttribute("userIdentity", user.getIdentity() );					
+			int point = Integer.parseInt( user.getPoint().replaceAll(",", "") );
+			model.addAttribute("userPoint", point  );				
+			
+		} else {
+			model.addAttribute("userIdentity", -1 );					
+			model.addAttribute("userPoint", -1 );				
+			
+		}
 		
 		//수정 삭제버튼 글 안으로 옮김
 		//model.addAttribute("show", "block" ); //톱니바퀴 표시
