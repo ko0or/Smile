@@ -117,7 +117,7 @@ $(document).ready(function() {
 						  <option value="tosspayments">토스페이먼츠</option> 
 						</select>
 						 
-						<input type="number" value="1000" step="1000" id="swal-input1" class="swal2-input" style="width: 300px; margin: 10px 0px;"> 
+						<input type="number" min="0" value="1000" step="1000" id="swal-input1" class="swal2-input" style="width: 300px; margin: 10px 0px;"> 
 					</div>`,
 
 					confirmButtonText: '확인',

@@ -123,7 +123,8 @@ $(document).ready(function() {
 				    confirmButtonText: '확인'
 				})
 			   .then(function(){
-			   		location.href = "/smile/user/info";
+			   		//location.href = "/smile/user/info";
+			   		location.href =  urlConverter("user/info");
 			   })
 		   }
 		   ,error : function(){
@@ -167,7 +168,8 @@ $(document).ready(function() {
 				   ,url: "unregister"
 				   ,success: function(data){
 					   console.log("success!!!!!")
-					   location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+					   //location.href = "/smile/main/list";		// 컨트롤러의 URL 로 이동
+					   location.href =  urlConverter("main/list");
 				   }
 				  , error: function(){
 					  console.log("error!!!!!")
