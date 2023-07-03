@@ -41,7 +41,7 @@ public class NoticeCommentController {
 		
 //		identity==null이냐는 분기처리를 한 이유는 ajax에서 댓글에는 identity를 사용하지 않았기 떄문에 null로 분기처리 해줌
 		if (params.get("identity")==null) {
-			// 그래서 그냥 댓글
+			// 댓글
 			commentService.writecomment(params, session);
 			
 		} else {
@@ -56,7 +56,7 @@ public class NoticeCommentController {
 	
 	// ★ notice(공지) 댓글 읽기
 	@GetMapping("/read")
-//	제네릭에 타입은 리턴하는 메소드의 타입
+//	제네릭에 타입에는 리턴하는 메소드의 타입
 	public ResponseEntity< ArrayList<NoticeCommentDto> > noticeRead(Model model, @RequestParam HashMap<String, String> params, HttpSession session) {
 		
 		return ResponseEntity.status(HttpStatus.OK).body( commentService.contentViewcomment(params) );

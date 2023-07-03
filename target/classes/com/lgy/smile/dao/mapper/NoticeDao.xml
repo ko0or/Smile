@@ -35,7 +35,6 @@
     
     <select id="contentView" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeDto">
          select identity, title, content, created, view, user from board_notice where identity=#{identity}
-
     </select>
     
     <update id="modify" parameterType="hashmap">
