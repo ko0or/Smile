@@ -18,7 +18,7 @@
     </insert>
     
 <!--     댓글을 보기 위해 쓰는 select문 =>(SELECT nickname FROM smile.user WHERE identity = comment.target_user) "target_user_nickname" -->
-<!-- 	를 사용한 이유는 대댓글에 대댓글을 쓸때 OO님에게 답글의 OO님의 닉네임 값을 가져가기 위함 -->
+<!-- 	엘리야스 를 사용한 이유는 대댓글에 대댓글을 쓸때 OO님에게 답글의 OO님의 닉네임 값을 가져가기 위함 -->
 <!-- AND board.identity = comment.board 게시글을 묶고 -->
 <!--  AND user.identity = comment.user 유저 정보를 묶는다 -->
      <select id="contentViewcomment" parameterType="hashmap" resultType="com.lgy.smile.dto.NoticeCommentDto">
@@ -41,6 +41,7 @@
 
     </select>
     
+<!--     댓글 수정 -->
     <update id="modifycomment" parameterType="hashmap">
 		update comment_notice set content = #{content} 
 		 where identity=#{identity}

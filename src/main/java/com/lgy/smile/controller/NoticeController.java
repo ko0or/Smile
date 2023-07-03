@@ -113,8 +113,8 @@ public class NoticeController {
 		
 //		로그인을 했다면
 		if (user != null) {
-//		그 유저 정보에 identity값을 model에 넣어서 userIdentity 값으로 가지고 간다
-			model.addAttribute("userIdentity", devUtils.getUserInfo(session).getIdentity());
+//		그 유저 정보에 identity값을 userIdentity 로 사용
+			model.addAttribute("userIdentity", devUtils.getUserIdentityToString(session));
 			
 		}else {
 //			로그인을 하지 않았다면(getUserInfo)메소드에  값이 null인 거임 그럼 -1(identity값이 pk이라서 음수일수없으니까)

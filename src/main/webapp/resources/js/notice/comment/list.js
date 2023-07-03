@@ -11,7 +11,6 @@ $(document).ready(function() {
                //read에 identityurl을 값을 가지고 와서 보여줌 = boardIdentity( jsp파일에서 만들었던 변수)
                //url이 read인 이유는 댓글을 달아도 그자리에 있어서
                url : "comment/read?identity="+boardIdentity ,
-               
                method : "GET" ,
                success : function( data ) {
                   
@@ -39,7 +38,7 @@ $(document).ready(function() {
                      }
                   }
                   
-                  // 밑에 댓글 작성란 row에 넣어준다 왜 냐하면 row에 data의 값을 하나씩 넣어 주기 때문에 댓글도 하나씩 넣어 줘야 한다.
+                  // 밑에 댓글 작성란 row에 넣어준다 왜냐하면 row에 data의 값을 하나씩 넣어 주기 때문에 댓글도 하나씩 넣어 줘야 한다.
                   row += `
                   <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 50px;">
                      <div class="form-floating" style="flex: 11;">
