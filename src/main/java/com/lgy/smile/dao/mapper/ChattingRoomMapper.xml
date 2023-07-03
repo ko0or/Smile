@@ -29,13 +29,22 @@
   	</select>
   	
   	<select id="contentView" resultType="com.lgy.smile.dto.ChattingRoomDto" parameterType="hashmap">
-	    SELECT * 
-	    FROM chattingroom
-	    WHERE board = #{board} AND buyer = #{buyer}
+		SELECT 
+			room.*  ,
+		    trade.price
+		FROM 
+			smile.chattingroom room ,
+		    smile.board_trade trade
+		WHERE 
+			(room.board = #{board} AND room.buyer = #{buyer})
+		    AND trade.identity = room.board
   	</select>
 
     <delete id="delete" parameterType="hashmap">
 		DELETE FROM chattingroom WHERE board = #{board} AND seller = #{seller} 
     </delete>
+    
+    
+
 
 </mapper>

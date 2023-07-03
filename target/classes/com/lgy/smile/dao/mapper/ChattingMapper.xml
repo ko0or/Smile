@@ -16,18 +16,31 @@
   	</select>
   	
   	<select id="contentView" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
-	    SELECT * 
-	    FROM chatting
-	    WHERE chattingroom = #{chattingroom}
-  	</select>
-  	
-  	<select id="countCheck" resultType="int" parameterType="int">
-	    SELECT 
-			COUNT(identity) "count"
+		SELECT 
+			chat.* ,
+		    trade.status "tradeStatus"
+		    
 		FROM 
-			smile.chatting
+			smile.chatting chat ,
+		    smile.board_trade  trade
 		WHERE 
 			chattingroom = #{chattingroom}
+		    AND trade.identity = chat.board
+  	</select>
+  	
+  	<select id="countCheck" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
+		
+		SELECT 
+			COUNT(trade.identity) "count" ,
+		    trade.status "tradeStatus"
+		    
+		FROM 
+			smile.chatting chat ,
+		    smile.board_trade trade
+		
+		WHERE 
+			chattingroom = #{chattingroom}
+		    AND trade.identity = chat.board
   	</select>
   	
   	<select id="lastContent" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
@@ -53,6 +66,18 @@
 			identity = ${userIdentity}
   	</select>
   	
+  	
+  	
+  	
+  	
+	<update id="tradeStatusUpdate" parameterType="hashmap">
+    	UPDATE 
+    		smile.board_trade
+    	SET
+    		status = #{status}
+    	WHERE
+    		identity = #{identity}
+    </update>
   	
 
 </mapper>

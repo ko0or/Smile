@@ -135,3 +135,13 @@
 	.input-area > #submitBtn {
 		flex: 1;
 	}
+	
+	
+	
+	
+	
+	.tradeInfo {
+		display: flex;
+	    justify-content: space-between;
+	    margin: 40px 5px 5px 5px;
+	}
