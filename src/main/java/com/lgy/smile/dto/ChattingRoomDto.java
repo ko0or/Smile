@@ -12,4 +12,5 @@ public class ChattingRoomDto {
 	private int board;
 	private int seller;
 	private int buyer;
+	private int price;
 }

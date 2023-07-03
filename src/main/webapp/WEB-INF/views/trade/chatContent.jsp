@@ -12,6 +12,21 @@
 <style>@import '../resources/css/trade/chatContent.css'</style> 
 <section>
 <h1 align="center">1:1 대화</h1>
+<div class="tradeInfo">
+	<div class="left">
+		<h4>진행 상태 : 
+			<span class="wait" style="color: black;">거래 대기중</span>
+			- <span class="request" style="color: grey;">구매 요청</span>
+			- <span class="proceeding" style="color: grey;">거래 진행중</span>
+			- <span class="confirmed" style="color: grey;">거래 완료</span>	
+		</h4>
+	</div>
+
+	<div class="right">
+		<button id="next" class="btn btn-secondary" disabled>다음 단계로</button>
+	</div>
+</div>
+
 <c:set var="now" value="<%=new java.util.Date()%>" />
 <c:set var="nowDate"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></c:set>
 	<div class="wrap">
@@ -88,10 +103,15 @@
 	// 대화중인 채팅방 정보
 	var count = ${count};
 	var roomNum = ${room.identity};
+	var tradeBoardIdentity = ${room.board};
+	var tradeStatus = "${tradeStatus}";
+
 	
 	// (우측)에는 로그인한 유저의 프로필을 보여주고
 	var myIdentity = ${user.identity};
 	var myImgPath = "${user.imgPath}";
+	var buyerIdentity = ${room.buyer};
+	var sellerIdentity = ${room.seller};
 	
 	// (좌측)에는 내 정보와 다른 유저 프로필 보여주기
 	var opponentIdentity;
@@ -104,8 +124,119 @@
 		opponentImgPath = "${sellerImgPath}";
 	}
 
+	
+	// 타이머에서 0.3초마다 최신 status 를 받아오면서, 아래 함수를 호출함 (status 상태에 따른 화면 표시)
+	function tradeStatusShow() {			
+		
+		//=> 진행 단계 텍스트 색상 표시
+		$(".wait, .request, .proceeding, .confirmed").css("color", "grey");
+		if ( tradeStatus === "wait" ) { $(".wait").css("color", "black"); } 
+		else if ( tradeStatus === "request" ) { $(".request").css("color", "black"); } 
+		else if ( tradeStatus === "proceeding" ) { $(".proceeding").css("color", "black"); } 
+		else if ( tradeStatus === "confirmed" ) { $(".confirmed").css("color", "black"); } 
+		
+		//=> 버튼 클릭 가능 여부 설정
+		if ( tradeStatus === "wait" && (myIdentity == buyerIdentity)) {
+			// 진행 단계가 "거래 대기중" 이면서,  내가 구매자일경우  다음 단계 버튼을 보여줌 ( 판매자는 x )
+			$("#next").removeClass("btn-secondary");
+			$("#next").addClass("btn-primary");
+			$("#next").prop("disabled", false);
+			
+		} else if ( tradeStatus === "request" && (myIdentity == sellerIdentity)) {
+			// 진행 단계가 "구매 요청" 이면서, 내가 판매자일경우 다음 단계 버튼을 보여줌 ( 구매자는 x )
+			$("#next").removeClass("btn-secondary");
+			$("#next").addClass("btn-primary");
+			$("#next").prop("disabled", false);			
+		
+		} else if ( tradeStatus === "proceeding" && (myIdentity == buyerIdentity)) {
+			// 진행 단계가 "거래 진행" 이면서, 내가 구매자일경우 다음 단계 버튼을 보여줌 ( 판매자는 x ) 
+			$("#next").removeClass("btn-secondary");
+			$("#next").addClass("btn-primary");
+			$("#next").prop("disabled", false);
+			
+		} else if ( tradeStatus === "confirmed" ) {
+			// 여기가 끝 
+			$("#next").removeClass("btn-secondary");
+			$("#next").addClass("btn-primary");
+			$("#next").prop("disabled", false);
+		
+		} else {
+			// 위에 해당되지 않을경우 (기본 값)
+			$("#next").removeClass("btn-primary");
+			$("#next").addClass("btn-secondary");
+			$("#next").prop("disabled", true);
+		}
+	}
+	
 
+	$(document).ready(function(){
+		
+		
+		//=> 진행 단계에서 다음 버튼을 눌렀을때 
+		$("#next").click(function(){
+			
+			// 거래 대기 상태에서 눌렀다면 ?  == > 거래 진행상태로 변경 + 판매자에게만 다음 버튼이 보이게끔 함
+			if ( tradeStatus === "wait" && (myIdentity == buyerIdentity)) {
+				tradeStatus = "request";
+				
+				$.ajax({
+					method : "POST",
+					url : "tradeStatusUpdate",
+					data : { 
+						"status" : "request" ,
+						"identity" : tradeBoardIdentity,
+						"board" : tradeBoardIdentity,
+						"buyer" : buyerIdentity
+					}
+				})
+				
+				
+			// 진행 단계가 "구매 요청" 이면서, 내가 판매자일경우 다음 단계 버튼을 보여줌 ( 구매자는 x )
+			} else if ( tradeStatus === "request" ) {
+				tradeStatus = "proceeding";
+			
+				$.ajax({
+					method : "POST",
+					url : "tradeStatusUpdate",
+					data : { 
+						"status" : "proceeding" ,
+						"identity" : tradeBoardIdentity,
+						"board" : tradeBoardIdentity,
+						"buyer" : buyerIdentity
+					}
+				})
+				
+			// 진행 단계가 "거래 진행" 이면서, 내가 구매자일경우 다음 단계 버튼을 보여줌 ( 판매자는 x ) 
+			} else if ( tradeStatus === "proceeding" ) {
+				tradeStatus = "confirmed";
+				
+				$.ajax({
+					method : "POST",
+					url : "tradeStatusUpdate",
+					data : { 
+						"status" : "confirmed" ,
+						"identity" : tradeBoardIdentity,
+						"board" : tradeBoardIdentity,
+						"buyer" : buyerIdentity
+					}
+				})
+				
+			// 여기가 끝 
+			// } else if ( tradeStatus === "confirmed" ) {
+				
+			
+			// 위에 해당되지 않을경우 (기본 값)
+			} else {
+				alert("오류");
+			}			
+		}) // ~ 다음 진행 단계 버튼 이벤트 끝
+		
+		
+		tradeStatusShow();
 
+		
+	})
+	
 
 </script>
 <script src="../resources/js/trade/chatContent.js"></script>

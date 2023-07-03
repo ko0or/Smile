@@ -199,6 +199,12 @@ public class TradeService implements TradeMapperInterface {
 		return true;
 	}
 
+	//=> ★ trade(중고 거래)   ===>  (거래 완료시)글 삭제
+	public void tradeSuccess(@RequestParam HashMap<String, String> params) {
+		TradeMapperInterface dao = sqlSession.getMapper(TradeMapperInterface.class);
+		dao.delete(params);
+	}
+	
 	//=> ★ trade(중고 거래) 글 삭제
 	@Override
 	public boolean delete(@RequestParam HashMap<String, String> params, HttpSession session) {

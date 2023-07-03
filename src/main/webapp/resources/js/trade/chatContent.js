@@ -128,7 +128,10 @@ $(document).ready(function(){
                "roomNum" : roomNum			    			
          } ,
          success : function ( dto ) {
+         
+         
             if ( dto != "" ) {
+         		tradeStatus = dto.tradeStatus;
                
                //=> (중요) 카운트를 갱신해주고
                count = dto.count;		
@@ -190,6 +193,18 @@ $(document).ready(function(){
 
 	  //=> 채팅 보낸 시간 포지션 자동으로 잡아주기
       setSendTimePosition();
+      
+      
+      $.ajax({
+      	url : "statusCheck",
+      	data : { "roomNum" : roomNum },
+      	success : function( newStatus ) {      
+      		tradeStatus = newStatus;
+      		tradeStatusShow(); 
+  		}
+      	
+      })
+      
       
    }, 300);
 

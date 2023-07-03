@@ -22,6 +22,8 @@ import com.lgy.smile.dto.ChattingRoomDto;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
+import com.lgy.smile.service.TradeService;
+import com.lgy.smile.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,11 +32,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/chat")
 public class ChattingController {
 	
-	@Autowired
-	ChattingService chattingService;
-	
-	@Autowired
-	ChattingRoomService chattingRoomService;
+	@Autowired private ChattingService chattingService;	
+	@Autowired private ChattingRoomService chattingRoomService;	
+	@Autowired private UserService userService;
+	@Autowired private TradeService tradeService;
 	
 	@Autowired
 	DevUtils devUtils;
@@ -93,7 +94,7 @@ public class ChattingController {
 		int roomNum = roomDto.getIdentity();
 		ArrayList<ChattingDto> list = chattingService.contentView(roomNum);
 		UserDto user = devUtils.getUserInfo(session);
-
+		
 		//=> 비 로그인 상태에서 접근 요청시 로그인 화면으로 보내기
 		if ( devUtils.isLogin(session) == false ) {
 			return "redirect:/user/login";
@@ -109,6 +110,7 @@ public class ChattingController {
 		model.addAttribute("room", roomDto);
 		model.addAttribute("list", list);
 		model.addAttribute("count", list.size());
+		model.addAttribute("tradeStatus", list.get( list.size()-1 ).getTradeStatus() );
 		
 		//=> 그리고 프로필 이미지도 넘겨주기 (구매자, 판매자)
 		params.put("userIdentity", String.valueOf(roomDto.getBuyer()));
@@ -129,7 +131,8 @@ public class ChattingController {
 		int roomNum = Integer.parseInt(params.get("roomNum"));
 		
 		// 그 게시글에 있는 채팅 갯수를 확인한다 (현재 기준)
-		int newCount = chattingService.countCheck(roomNum);
+		ChattingDto countAndStatus = chattingService.countCheck(roomNum);
+		int newCount = countAndStatus.getCount();
 		
 		// 그리고, 기존 갯수와 비교 (기존)
 		int oldCount = Integer.parseInt(params.get("count"));
@@ -142,5 +145,46 @@ public class ChattingController {
 		
 		// 새로운 소식이 없을때는 아무것도 안보냄
 		 return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	@GetMapping("/statusCheck")
+	public ResponseEntity< String > statusCheck(@RequestParam HashMap<String, String> params) {
+		
+		int roomNum = Integer.parseInt(params.get("roomNum"));
+		String tradeStatus = chattingService.countCheck(roomNum).getTradeStatus();		
+		return ResponseEntity.status(HttpStatus.OK).body( tradeStatus );
+	}
+	
+	@PostMapping("/tradeStatusUpdate")
+	public ResponseEntity<Void> tradeStatusUpdate(@RequestParam HashMap<String, String> params) {
+		
+		//=> 거래 진행 상태 업데이트 하기
+		chattingService.tradeStatusUpdate(params);		
+		
+		
+		//=> 만약, 요청받은 상태가 거래 완료일 경우 실행
+		if ( params.get("status").equals("confirmed") == true ) {
+
+			// (0) 필요한 정보 준비하기
+			 ChattingRoomDto roomDto = chattingRoomService.contentView(params);
+			 String buyerIdentity = devUtils.intToString(roomDto.getBuyer());
+			 String sellerIdentity = devUtils.intToString(roomDto.getSeller()); 
+			 String price = devUtils.intToString(roomDto.getPrice());
+			 
+			 // (1) buyer 찾아서 point 차감 
+			 params.put("point", price);
+			 params.put("id", buyerIdentity);
+			 userService.pointDown(params);
+			 
+			 // (2) seller 찾아서 point 올려주기
+			 params.replace("id", sellerIdentity);
+			 userService.pointUp(params);			 
+			
+			// (3) trade 게시판 삭제하기
+			 tradeService.tradeSuccess(params);
+			 
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

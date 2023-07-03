@@ -52,7 +52,7 @@ public class ChattingService implements ChattingInterface{
 	}
 
 	@Override
-	public int countCheck(int chattingroom) {
+	public ChattingDto countCheck(int chattingroom) {
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
 		return dao.countCheck(chattingroom);
 	}
@@ -62,4 +62,12 @@ public class ChattingService implements ChattingInterface{
 		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
 		return dao.lastContent(chattingroom);
 	}
+
+	
+	@Override
+	public void tradeStatusUpdate(HashMap<String, String> params) {
+		ChattingInterface dao = sqlSession.getMapper(ChattingInterface.class);
+		dao.tradeStatusUpdate(params);
+	}
+	
 }

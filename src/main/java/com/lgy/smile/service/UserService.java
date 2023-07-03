@@ -126,6 +126,23 @@ public class UserService implements UserMapperInterface {
 		
 		log.info("UserService ===> pointUp ===> end");
 	}
+//=================== 포인트 차감 =========================================================================== >
+	
+	// 입력된 포인트 금액(amount)을 쿼리로 DB에 업데이트
+	@Override
+	public void pointDown(HashMap<String, String> params) {
+		log.info("UserService ===> pointDown ===> start");
+		
+		String id = params.get("id");			// 기준이 되는 이메일 주소
+		String point = params.get("point");		// 추가할 포인트 금액
+		log.info("id ===> " +id);
+		log.info("point ===> " +point);
+		
+		UserMapperInterface userDao = sqlSession.getMapper(UserMapperInterface.class);
+		userDao.pointDown(params);
+		
+		log.info("UserService ===> pointDown ===> end");
+	}
 	
 	@Override
 	public String getPoint(HashMap<String, String> params) {
