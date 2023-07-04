@@ -49,4 +49,58 @@
 				WHERE identity = #{identity}
 	</delete>  	
   	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	<!-- (채팅 메시지 알람) 전송하고자하는  알람이 이미 존재하는지 검사 -->
+  	<select id="chatDuplicatedCheck" resultType="com.lgy.smile.dto.NotificationDto" parameterType="hashmap">
+	  	SELECT 
+			COUNT(notification.identity) "count" ,
+	    	notification.identity "notificationIdentity" ,
+	    	chattingroom.board "boardIdentity" ,
+	    	chattingroom.buyer "buyerIdentity"		    
+	FROM
+			smile.notification notification ,
+	    	smile.chattingroom chattingroom
+	WHERE
+			notification.user = #{receiver} 
+			AND chattingroom.identity = #{chattingroom} 
+			AND (
+				notification.user = chattingroom.buyer 
+	        	OR notification.user = chattingroom.seller
+			)
+  	</select>
+  	
+  	
+  	<!-- sender님이 msg를 보냈습니다 (created) 누르면 url_path 로 이동 -->
+  	<insert id="chatNotificationCreate">
+		INSERT INTO smile.notification VALUES(
+			null, #{msg}, #{sendtime}, #{url_path}, #{receiver}, null, null, #{senderIdentity}
+		)
+  	</insert>
+  	
+  	<!-- 이미 알람이 있는 상태면, 알람 내용만 바꿔치기 ! -->
+  	<update id="chatNotificationUpdate">
+  		UPDATE smile.notification 
+  		SET 
+  			msg=#{msg} 
+  			, created=#{sendtime} 
+  		WHERE 
+  			identity = #{notificationIdentity}
+  			
+  			
+  	</update>
+  	
+  	
+  	
+  	
 </mapper>

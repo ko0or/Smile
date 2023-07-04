@@ -100,11 +100,20 @@ $(document).ready(function(){
 	//=> ☆ 위에있는 callNotifications 가 호출하는 함수 ▼
 	function getComponent( data ) {
 		
+		var msgType;
+		console.log(data);
+		if ( data.url_path.indexOf("chat/chatContent?board=") >= 0 ) {
+			msgType = "님이 대화를 보냈습니다.";
+		} else {
+			msgType = "님이 댓글을 남겼습니다.";		
+		}
+		 
+		
 		return `
 	
         		<div class="alert alert-light alert-dismissible fade show" role="alert" style="text-align:left;">
 					<div class="notificationItems" id="${data.url_path}">
-						<b>${data.senderNickname}</b>님이 댓글을 남겼습니다.<br>
+						<b>${data.senderNickname}</b>${msgType}<br>
 						    <div style="display: block; margin-top: 10px;"><sub>${data.created}</sub></div><br>
 						    <div style="white-space: pre-line; display: block;">${data.msg}</div>
 					</div>

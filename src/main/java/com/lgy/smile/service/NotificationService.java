@@ -63,13 +63,43 @@ public class NotificationService implements NotificationMapperInterface {
 		dao.delete(params);
 	}
 
+	/* ============================================================================================================================================== >> */
+	
+	
+	/* ★ 채팅 알람 관련 */ @Override
+	public NotificationDto chatDuplicatedCheck(HashMap<String, String> params) {
+		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
+		return dao.chatDuplicatedCheck(params);
+	}
+	
+	/* ★ 채팅 알람 관련 */ @Override
+	public void chatNotificationCreate(HashMap<String, String> params) {
+		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
+		dao.chatNotificationCreate(params);
+	}
+	
+	/* ★ 채팅 알람 관련 */ @Override
+	public void chatNotificationUpdate(HashMap<String, String> params) {
+		NotificationMapperInterface dao = sqlSession.getMapper(NotificationMapperInterface.class);
+		dao.chatNotificationUpdate(params);
+	}
+	
+	
+	
+	
+	
 
 
+	/* ============================================================================================================================================== >> */
 	
 	/* ☆ 매퍼 호출용 */
 	@Override public ArrayList<NotificationDto> list(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return null; }
 	@Override public int count(HashMap<String, String> params) { /* TODO Auto-generated method stub */ return -1; }
 
+	
+	
+	
+	
 	
 	
 	

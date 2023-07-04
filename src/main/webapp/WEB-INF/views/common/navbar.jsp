@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <meta name="viewport" content="width=device-width, initial-scale=1">
  
- <div class="notification" style="position: fixed; right: 40px; top: 30px; cursor: pointer; display: none;">
+ <div class="notification" style="position: fixed; right: 40px; top: 30px; cursor: pointer; display: none; z-index: 999;">
  	  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
     	0
     	<span class="visually-hidden">unread messages</span>

@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lgy.smile.common.DevUtils;
 import com.lgy.smile.dto.ChattingDto;
 import com.lgy.smile.dto.ChattingRoomDto;
+import com.lgy.smile.dto.NotificationDto;
 import com.lgy.smile.dto.UserDto;
 import com.lgy.smile.service.ChattingRoomService;
 import com.lgy.smile.service.ChattingService;
+import com.lgy.smile.service.NotificationService;
 import com.lgy.smile.service.TradeService;
 import com.lgy.smile.service.UserService;
 
@@ -36,9 +38,8 @@ public class ChattingController {
 	@Autowired private ChattingRoomService chattingRoomService;	
 	@Autowired private UserService userService;
 	@Autowired private TradeService tradeService;
-	
-	@Autowired
-	DevUtils devUtils;
+	@Autowired private NotificationService notificationService;
+	@Autowired private DevUtils devUtils;
 	
 //	채팅 전체 목록 불러오는 메소드
 	@GetMapping("/getChattings")
@@ -57,9 +58,34 @@ public class ChattingController {
 	
 //	채팅 작성 메소드
 	@PostMapping("/write")
-	public String chattingWrite(@RequestParam HashMap<String, String> params) {
+	public ResponseEntity<Void> chattingWrite(@RequestParam HashMap<String, String> params) {
 		chattingService.write(params);
-		return "/write";
+		
+		// chatDuplicatedCheck 결과(카운트 0이냐 아니냐)에 따라   INSERT 혹은 UPDATE 진행 ㄱㄱ
+		NotificationDto notificationDto = notificationService.chatDuplicatedCheck(params);
+		int count = notificationDto.getCount();
+		log.info("@@# notificationDto  => " + notificationDto.toString() );
+		
+		String boardIdentity = params.get("board");
+		String sellerIdentity = params.get("seller");
+		String sendIdentity = params.get("senderIdentity");
+		String receiverIdentity = params.get("receiverIdentity");
+		
+		String buyerIdentity = (  sellerIdentity.equals(sendIdentity) == true ) ? receiverIdentity : sendIdentity;
+		params.put("buyer", buyerIdentity);
+		
+		
+		if ( count == 0 ) {
+			params.put("url_path", "chat/chatContent?board="+boardIdentity+"&buyer="+buyerIdentity);
+			notificationService.chatNotificationCreate(params);
+		} else {
+			String notificationIdentity = String.valueOf(notificationDto.getNotificationIdentity());
+			params.put("notificationIdentity", notificationIdentity);
+			notificationService.chatNotificationUpdate(params);
+		}
+		
+		
+		return new ResponseEntity(HttpStatus.OK);
 	}
 	
 //	채팅작성 테스트페이지

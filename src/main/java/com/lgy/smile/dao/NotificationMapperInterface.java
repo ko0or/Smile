@@ -20,4 +20,10 @@ public interface NotificationMapperInterface {
 	//=> ★ 알람 목록
 	public ArrayList<NotificationDto> list(HashMap<String, String> params);
 	public ArrayList<NotificationDto> list(HashMap<String, String> params, HttpSession session);
+	
+	
+	//=> 댓글 알람 관련 ★
+	public NotificationDto chatDuplicatedCheck(HashMap<String, String> params);
+	public void chatNotificationCreate(HashMap<String, String> params);
+	public void chatNotificationUpdate(HashMap<String, String> params);
 }
