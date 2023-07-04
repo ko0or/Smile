@@ -82,7 +82,7 @@ public class MainService implements MainBoardMapperInterface {
 		
 		//=> ☆ 가져온 정보가 서로 일치할때만 수정되도록 처리
 		if ( loginUserIdentity  == authorUserIdentity ) { 		
-			dao.delete(params);
+			dao.modify(params);
 			return true;
 		}
 		
