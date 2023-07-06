@@ -69,7 +69,7 @@ public class ChattingController {
 		String boardIdentity = params.get("board");
 		String sellerIdentity = params.get("seller");
 		String sendIdentity = params.get("senderIdentity");
-		String receiverIdentity = params.get("receiverIdentity");
+		String receiverIdentity = params.get("receiver");
 		
 		String buyerIdentity = (  sellerIdentity.equals(sendIdentity) == true ) ? receiverIdentity : sendIdentity;
 		params.put("buyer", buyerIdentity);
@@ -163,9 +163,10 @@ public class ChattingController {
 		
 		// 게시글 번호를 받고
 		int roomNum = Integer.parseInt(params.get("roomNum"));
+		params.put("chattingroom", params.get("roomNum"));
 		
 		// 그 게시글에 있는 채팅 갯수를 확인한다 (현재 기준)
-		ChattingDto countAndStatus = chattingService.countCheck(roomNum);
+		ChattingDto countAndStatus = chattingService.countCheck(params);
 		int newCount = countAndStatus.getCount();
 		
 		// 그리고, 기존 갯수와 비교 (기존)
@@ -185,7 +186,7 @@ public class ChattingController {
 	public ResponseEntity< String > statusCheck(@RequestParam HashMap<String, String> params) {
 		
 		int roomNum = Integer.parseInt(params.get("roomNum"));
-		String tradeStatus = chattingService.countCheck(roomNum).getTradeStatus();		
+		String tradeStatus = chattingService.countCheck(params).getTradeStatus();		
 		return ResponseEntity.status(HttpStatus.OK).body( tradeStatus );
 	}
 	

@@ -15,6 +15,6 @@ public interface ChattingInterface {
 	
 	public String getImgPath(HashMap<String, String> params);
 	
-	public ChattingDto countCheck(int chattingroom);
+	public ChattingDto countCheck(HashMap<String, String> params);
 	public void tradeStatusUpdate(HashMap<String, String> params);
 }

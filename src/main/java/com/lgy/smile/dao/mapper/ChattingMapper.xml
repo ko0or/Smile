@@ -28,7 +28,7 @@
 		    AND trade.identity = chat.board
   	</select>
   	
-  	<select id="countCheck" resultType="com.lgy.smile.dto.ChattingDto" parameterType="int">
+  	<select id="countCheck" resultType="com.lgy.smile.dto.ChattingDto" parameterType="hashmap">
 		
 		SELECT 
 			COUNT(trade.identity) "count" ,
