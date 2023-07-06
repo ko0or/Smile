@@ -144,6 +144,8 @@ public class ChattingController {
 		
 		if ( list.size() > 0 ) {
 			model.addAttribute("tradeStatus", list.get( list.size()-1 ).getTradeStatus() );
+		} else {
+			model.addAttribute("tradeStatus", "wait" );
 		}
 		
 		//=> 그리고 프로필 이미지도 넘겨주기 (구매자, 판매자)
@@ -186,7 +188,9 @@ public class ChattingController {
 	public ResponseEntity< String > statusCheck(@RequestParam HashMap<String, String> params) {
 		
 		int roomNum = Integer.parseInt(params.get("roomNum"));
-		String tradeStatus = chattingService.countCheck(params).getTradeStatus();		
+		params.put("chattingroom", params.get("roomNum"));
+		String tradeStatus = chattingService.countCheck(params).getTradeStatus();
+		
 		return ResponseEntity.status(HttpStatus.OK).body( tradeStatus );
 	}
 	

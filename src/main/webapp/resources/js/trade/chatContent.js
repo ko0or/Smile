@@ -193,8 +193,7 @@ $(document).ready(function(){
 
 	  //=> 채팅 보낸 시간 포지션 자동으로 잡아주기
       setSendTimePosition();
-      
-      
+
       $.ajax({
       	url : "statusCheck",
       	data : { "roomNum" : roomNum },
