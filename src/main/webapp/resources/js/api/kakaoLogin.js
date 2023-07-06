@@ -38,9 +38,9 @@ function kakaoLogin() {
                 // API 요청이 성공했을 때 실행되는 콜백함수 (res 매개변수에 응답 데이터가 전달됨)
                 , success: res => {
                     const kakao_account = res.kakao_account;
-                    console.log( "카카오 간편 로그인 성공 ============= >>" );
-                    console.log( kakao_account.email );
-                    console.log( "해당 카카오 계정으로 우리 사이트에 가입되어있는지 확인 = >>" );
+                    //console.log( "카카오 간편 로그인 성공 ============= >>" );
+                    //console.log( kakao_account.email );
+                    //console.log( "해당 카카오 계정으로 우리 사이트에 가입되어있는지 확인 = >>" );
                     
                     // jQuery의 AJAX를 사용하여 서버에 HTTP GET 요청(사이트 가입 여부 확인요청)을 보내는 함수
                     $.ajax({
@@ -49,18 +49,20 @@ function kakaoLogin() {
                        ,url: "kakaoEmailCheck"
                        ,dataType: "json"
                        ,success : function(data){
-                       		console.log("success" + data);	// [object Object]
-                       		console.log("success" + data.exists); // true
-                       		console.log("성공이라는 건 데이터를 받았다는 뜻이지");
+                       		//console.log("success" + data);	// [object Object]
+                       		//console.log("success" + data.exists); // true
+                       		//console.log("성공이라는 건 데이터를 받았다는 뜻이지");
                        		
                        		if(data.exists){	// true 이면 로그인 처리
-                       			console.log("데이터 받는데 성공했고 받은 값이 true 이므로 로그인 처리하겠음");
-                       			location.href = "/smile/main/list";
+                       			//console.log("데이터 받는데 성공했고 받은 값이 true 이므로 로그인 처리하겠음");
+                       			//location.href = "/smile/main/list";
+                       			location.href = urlConverter("main/list");
                        			
                        		}else {
-                       			console.log("데이터 받는데 성공했고 받은 값이 false 이므로 회원가입 페이지로 넘어가겠음");
-                       			console.log("id값은? " + kakao_account.email);
-                       			location.href = "/smile/user/createAccount?id="+kakao_account.email;
+                       			//console.log("데이터 받는데 성공했고 받은 값이 false 이므로 회원가입 페이지로 넘어가겠음");
+                       			//console.log("id값은? " + kakao_account.email);
+                       			//location.href = "/smile/user/createAccount?id="+kakao_account.email;
+                       			location.href = urlConverter("user/createAccount?id="+kakao_account.email);
                        		}
                        }//ajax success
                     })//ajax
