@@ -122,6 +122,10 @@ public class ChattingController {
 		ArrayList<ChattingDto> list = chattingService.contentView(roomNum);
 		UserDto user = devUtils.getUserInfo(session);
 		
+		
+		log.info("roomDto => " + roomDto.toString() );
+		log.info("list => " + list.toString());
+		
 		//=> 비 로그인 상태에서 접근 요청시 로그인 화면으로 보내기
 		if ( devUtils.isLogin(session) == false ) {
 			return "redirect:/user/login";
